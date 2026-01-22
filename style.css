@@ -1,0 +1,684 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* 强制始终显示滚动条，避免出现/消失时页面抖动 */
+  overflow-y: scroll;
+}
+
+/* 从作品页带 #projects-section 返回时，先暂时隐藏页面，等脚本准备好后再显示，避免看到顶部闪一下 */
+html.start-at-projects body {
+  visibility: hidden;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  background-color: #fafafa;
+  color: #111111;
+}
+
+/* 锁定滚动：首页动画未完成时 */
+body.lock-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+body.unlock-scroll {
+  overflow-y: auto;
+  height: auto;
+}
+
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 当解锁滚动后，viewport 不再固定高度 */
+body.unlock-scroll .viewport {
+  position: relative;
+  height: 100vh;
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #fafafa;
+}
+
+.photo-shell {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #fafafa;
+  overflow: hidden;
+  z-index: 2; /* 遮罩在上层，用它来"盖住"底部文字 */
+}
+
+.hero-photo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* 始终按初始视口大小铺满，蒙版缩小时只是裁切更多画面 */
+  display: block;
+  opacity: 1;
+  transition: opacity 0.7s ease-in-out; /* 0.7秒的交叉淡化时间 */
+}
+
+/* 两张图片层叠在一起 */
+.hero-photo-1 {
+  z-index: 1;
+}
+
+.hero-photo-2 {
+  z-index: 2;
+}
+
+/* 标题文字统一样式 */
+.title-text {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* 黑色标题：在白色区域，z-index 在遮罩下面 */
+.title-black {
+  position: absolute;
+  top: 26px;
+  left: 40px;
+  right: 40px;
+  z-index: 1;
+  pointer-events: none;
+  color: #111111;
+}
+
+/* 白色标题：在 photo-shell 里面，和图片一起被裁切 */
+.title-white {
+  position: absolute;
+  top: 26px;
+  left: 40px;
+  right: 40px;
+  z-index: 3;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+/* 文字公共样式：始终保持在外面白色区域，由图片遮罩来决定露出多少 */
+.meta {
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  z-index: 1;
+}
+
+.site-title {
+  margin: 0;
+}
+
+.meta-bottom-left {
+  left: 40px;
+  bottom: 24px;
+  color: #111111;
+}
+
+.meta-bottom-center {
+  right: 40px;
+  bottom: 24px;
+  transform: none;
+  text-align: right;
+  white-space: nowrap;
+  color: #111111;
+}
+
+@media (max-width: 768px) {
+  .title-black,
+  .title-white {
+    left: 20px;
+    right: 20px;
+  }
+
+  .title-text {
+    font-size: 22px;
+  }
+
+  .meta-bottom-left,
+  .meta-bottom-right {
+    bottom: 16px;
+  }
+
+  .meta-bottom-left {
+    left: 20px;
+  }
+
+  .meta-bottom-right {
+    right: 20px;
+  }
+
+  .meta-bottom-center {
+    display: none;
+  }
+}
+
+/* ========== 空白过渡区域 ========== */
+.spacer-section {
+  width: 100%;
+  height: 80px;
+  background-color: transparent;
+}
+
+/* ========== 只有标签的板块 ========== */
+.tabs-only-section {
+  width: 100%;
+  padding: 20px 0;
+  background-color: transparent;
+}
+
+.tabs-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+}
+
+/* 左侧导航按钮 */
+.nav-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  padding: 12px 32px 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #999999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.nav-tab:hover {
+  color: #111111;
+}
+
+.nav-tab.active {
+  color: #111111;
+}
+
+/* 右侧视图切换按钮 */
+.view-tabs {
+  display: flex;
+  gap: 0;
+}
+
+/* ========== 项目展示区域 ========== */
+.projects-section {
+  width: 100%;
+  background-color: transparent;
+  padding: 0 0 20px 0;
+}
+
+.projects-container {
+  display: flex;
+  width: 100%;
+  height: 85vh;
+  max-height: 85vh;
+}
+
+/* 左侧预览区域 */
+.project-preview {
+  width: 30%;
+  padding: 0 40px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: transparent;
+}
+
+.preview-image-wrapper {
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  background-color: #fafafa;
+  position: relative;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fafafa;
+}
+
+.preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.preview-description {
+  margin: 0;
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* ========== 列表页样式 ========== */
+.list-page {
+  display: flex;
+  padding: 40px 40px 60px;
+  gap: 60px;
+}
+
+.list-image-panel {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+.list-image-wrapper {
+  width: 100%;
+  background-color: #fafafa;
+}
+
+.list-main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.list-table-panel {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.project-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  table-layout: fixed;
+}
+
+.project-list-table thead {
+  border-bottom: 1px solid #dddddd;
+}
+
+.project-list-table th,
+.project-list-table td {
+  padding: 14px 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-list-table th.col-year,
+.project-list-table td.col-year {
+  width: 80px;
+}
+
+.project-list-table th.col-title,
+.project-list-table td.col-title {
+  width: 50%;
+}
+
+.project-list-table th.col-location,
+.project-list-table td.col-location {
+  width: 30%;
+}
+
+.project-list-table tbody tr {
+  border-bottom: 1px solid #eeeeee;
+  cursor: pointer;
+}
+
+.project-list-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+#project-list-body tr:first-child td {
+  border-top: none;
+}
+
+/* 列表表头固定在顶部 */
+.project-list-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fafafa;
+  z-index: 1;
+}
+
+#year-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+#year-arrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+}
+
+/* 右侧列表和列表页的滚动条更细、更淡 */
+.list-table-panel::-webkit-scrollbar,
+.map-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list-table-panel::-webkit-scrollbar-track,
+.map-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list-table-panel::-webkit-scrollbar-thumb,
+.map-list-container::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+  border-radius: 3px;
+}
+
+.view-tab {
+  background: none;
+  border: none;
+  padding: 12px 12px 12px 12px;
+  font-size: 15px;
+  color: #999999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.view-tab:last-child {
+  padding-right: 0;
+}
+
+.view-tab:hover {
+  color: #111111;
+}
+
+.view-tab.active {
+  color: #111111;
+  font-weight: 500;
+}
+
+/* 项目分类下拉菜单 */
+.category-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.category-btn {
+  background: none;
+  border: none;
+  padding: 12px 24px 12px 12px;
+  font-size: 15px;
+  color: #111111;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
+  font-weight: 500;
+  position: relative;
+}
+
+.category-btn::after {
+  content: '▼';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #999999;
+  transition: transform 0.2s ease;
+}
+
+.category-dropdown.open .category-btn::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.category-btn:hover {
+  color: #000000;
+}
+
+.category-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  display: none;
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.category-dropdown.open .category-menu {
+  display: block;
+}
+
+.category-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.category-item:hover {
+  background-color: #f5f5f5;
+}
+
+.category-item.active {
+  color: #111111;
+  font-weight: 500;
+  background-color: #fafafa;
+}
+
+.category-item:first-child {
+  border-radius: 4px 4px 0 0;
+}
+
+.category-item:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+/* 右侧地图区域 */
+.project-map {
+  width: 70%;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px 40px 40px;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  background-color: #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 600px;
+  border: 1px solid #d0d0d0;
+}
+
+.map-list-container {
+  flex: 1;
+  margin-top: 0;
+  display: none; /* 默认隐藏，点击 List 时显示 */
+  overflow-y: auto;
+  min-height: 600px; /* 保持与地图模式相同高度，避免切换时整体高度变化 */
+}
+
+.images-grid {
+  display: none; /* 点击 Images 时显示 */
+  padding: 40px 40px 60px;
+  width: 100%;
+  box-sizing: border-box;
+  column-gap: 24px;          /* 每张图左右间距 */
+  row-gap: 32px;             /* 每张图上下间距 */
+  grid-template-columns: repeat(5, minmax(0, 1fr)); /* 一排 5 张图 */
+  height: 85vh;              /* 和 projects-container 一样高 */
+  max-height: 85vh;
+  overflow-y: auto;          /* 显示不下的图通过滚动查看 */
+  grid-auto-rows: max-content; /* 每一行高度由内容撑开，不压缩 */
+}
+
+/* Images 视图的滚动条样式（和列表一样窄一点） */
+.images-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.images-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.images-grid::-webkit-scrollbar-thumb {
+  background-color: #d0d0d0;
+  border-radius: 3px;
+}
+
+.image-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  aspect-ratio: 4 / 3; /* 固定缩略图比例，保持行高一致 */
+  width: 100%;         /* 让图片按列宽自适应 */
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.image-card:hover img {
+  filter: brightness(0.6);
+}
+
+.image-card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 14px 16px;
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
+  opacity: 0;                 /* 默认不显示文字 */
+  transition: opacity 0.25s ease;
+}
+
+.image-card-overlay h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.image-card-overlay p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* 悬浮时才显示文字信息 */
+.image-card:hover .image-card-overlay {
+  opacity: 1;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.map-bg {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d0d0d0 0%, #e8e8e8 100%);
+}
+
+/* Mapbox 地图标记样式 */
+.map-marker {
+  position: relative;
+}
+
+.map-marker.active {
+  box-shadow: 0 4px 16px rgba(74, 108, 247, 0.8) !important;
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .spacer-section {
+    height: 50px;
+  }
+
+  .tabs-container {
+    padding: 0 20px;
+  }
+
+  .nav-tab {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  .view-tab {
+    padding: 12px 16px;
+  }
+
+  .projects-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .project-preview {
+    width: 100%;
+    padding: 0 20px 40px 20px;
+  }
+
+  .project-map {
+    width: 100%;
+    min-height: 60vh;
+    padding: 0 20px 20px 20px;
+  }
+}
+
+

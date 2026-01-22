@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <script>
+      // 如果是从作品页面带锚点回来的，先在 <html> 上打一个标记，用于在样式里暂时隐藏页面避免看到顶部闪一下
+      if (
+        window.location.hash === '#projects-section' ||
+        window.location.hash === '#projects-section-list' ||
+        window.location.hash === '#projects-section-images'
+      ) {
+        document.documentElement.classList.add('start-at-projects');
+      }
+    </script>
+    <title>Qingyan Zhu Photographer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Mapbox GL JS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+  </head>
+  <body class="lock-scroll">
+    <main class="viewport">
+      <div class="frame">
+        <!-- 黑色标题：在白色区域，被遮罩盖住/露出 -->
+        <header class="title-black">
+          <h1 class="title-text">Qingyan Zhu Photographer</h1>
+        </header>
+
+        <!-- 图片蒙版：包含图片和白色标题，一起被裁切 -->
+        <div class="photo-shell">
+          <img
+            class="hero-photo hero-photo-1"
+            src="./img/home/1/01.webp"
+            alt="Hero Image 1"
+          />
+          <img
+            class="hero-photo hero-photo-2"
+            src="./img/home/1/02.webp"
+            alt="Hero Image 2"
+            style="opacity: 0;"
+          />
+          
+          <!-- 白色标题：和图片一起被遮罩裁切 -->
+          <div class="title-white">
+            <h1 class="title-text">Qingyan Zhu Photographer</h1>
+          </div>
+        </div>
+
+        <!-- 底部信息，同样在外部白色区域 -->
+        <footer class="meta-row">
+          <section class="meta meta-bottom-left">
+            <p>Xi’an CCBD</p>
+          </section>
+
+          <section class="meta meta-bottom-center">
+            <p>by Heatherwick Studio. Photographed in 2024</p>
+          </section>
+        </footer>
+      </div>
+    </main>
+
+    <!-- 空白过渡区域 -->
+    <section class="spacer-section"></section>
+
+    <!-- 第一个板块：左侧 Work/About，右侧 Map/List/Images 标签 -->
+    <section class="tabs-only-section">
+      <div class="tabs-container">
+        <div class="nav-tabs">
+          <button class="nav-tab active" data-page="work">Work</button>
+          <button class="nav-tab" data-page="about">About</button>
+        </div>
+        <div class="view-tabs">
+          <button class="view-tab active" data-view="map">Map</button>
+          <button class="view-tab" data-view="list" id="view-list-tab">List</button>
+          <button class="view-tab" data-view="images" id="view-images-tab">Images</button>
+          <!-- 项目分类下拉菜单 -->
+          <div class="category-dropdown" id="category-dropdown">
+            <button class="category-btn" id="category-btn">All</button>
+            <div class="category-menu" id="category-menu">
+              <div class="category-item active" data-category="all">All</div>
+              <div class="category-item" data-category="architecture">Architecture</div>
+              <div class="category-item" data-category="small-scale">Small-Scale</div>
+              <div class="category-item" data-category="interior">Interior</div>
+              <div class="category-item" data-category="commercial">Commercial</div>
+              <div class="category-item" data-category="workspace">Workspace</div>
+              <div class="category-item" data-category="residential">Residential</div>
+              <div class="category-item" data-category="hospitality">Hospitality</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第二个板块：左边缩略图+信息，右侧 Map/List/Images 视图 -->
+    <section class="projects-section" id="projects-section">
+      <div class="projects-container">
+        <!-- 左侧：预览图和信息 -->
+        <div class="project-preview">
+          <div class="preview-image-wrapper">
+            <img 
+              id="preview-image" 
+              src="./img/DJI_20241211112556_0707_D.webp" 
+              alt="Project Preview"
+              class="preview-image"
+            />
+          </div>
+          <div class="preview-info">
+            <h2 id="preview-title" class="preview-title">Xi'an CCBD</h2>
+            <p id="preview-description" class="preview-description">by Heatherwick Studio. Photographed in 2024</p>
+          </div>
+        </div>
+
+        <!-- 右侧：地图和项目点 / 列表视图 -->
+        <div class="project-map">
+          <!-- 地图视图 -->
+          <div class="map-container" id="map-container">
+            <!-- Mapbox 地图 -->
+            <div id="map"></div>
+            <!-- 项目点标记会通过 JS 添加到地图上 -->
+          </div>
+
+          <!-- 列表视图（仅右侧区域切换） -->
+          <div class="map-list-container" id="map-list-container">
+            <table class="project-list-table">
+              <thead>
+                <tr>
+                  <th class="col-year">Year</th>
+                  <th class="col-title">Project</th>
+                  <th class="col-location">Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-project-id="0">
+                  <td class="col-year">2025</td>
+                  <td class="col-title">Xi'an CCBD</td>
+                  <td class="col-location">Xi'an</td>
+                </tr>
+                <tr data-project-id="1">
+                  <td class="col-year">2024</td>
+                  <td class="col-title">Shanghai Tower</td>
+                  <td class="col-location">Shanghai</td>
+                </tr>
+                <tr data-project-id="2">
+                  <td class="col-year">2024</td>
+                  <td class="col-title">Beijing Daxing Airport</td>
+                  <td class="col-location">Beijing</td>
+                </tr>
+                <tr data-project-id="3">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Guangzhou Opera House</td>
+                  <td class="col-location">Guangzhou</td>
+                </tr>
+                <tr data-project-id="4">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Shenzhen Bay</td>
+                  <td class="col-location">Shenzhen</td>
+                </tr>
+                <tr data-project-id="5">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Chengdu IFS</td>
+                  <td class="col-location">Chengdu</td>
+                </tr>
+                <tr data-project-id="6">
+                  <td class="col-year">2022</td>
+                  <td class="col-title">Hangzhou Olympic Center</td>
+                  <td class="col-location">Hangzhou</td>
+                </tr>
+                <tr data-project-id="7">
+                  <td class="col-year">2022</td>
+                  <td class="col-title">Nanjing Zifeng Tower</td>
+                  <td class="col-location">Nanjing</td>
+                </tr>
+                <tr data-project-id="8">
+                  <td class="col-year">2022</td>
+                  <td class="col-title">Wuhan Greenland Center</td>
+                  <td class="col-location">Wuhan</td>
+                </tr>
+                <tr data-project-id="9">
+                  <td class="col-year">2022</td>
+                  <td class="col-title">Chongqing Raffles City</td>
+                  <td class="col-location">Chongqing</td>
+                </tr>
+                <tr data-project-id="10">
+                  <td class="col-year">2022</td>
+                  <td class="col-title">Suzhou Museum</td>
+                  <td class="col-location">Suzhou</td>
+                </tr>
+                <tr data-project-id="11">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Onoma Hotel</td>
+                  <td class="col-location">Hong Kong</td>
+                </tr>
+                <tr data-project-id="12">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Taipei Modern Residence</td>
+                  <td class="col-location">Taipei</td>
+                </tr>
+                <tr data-project-id="13">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Macau Waterfront</td>
+                  <td class="col-location">Macau</td>
+                </tr>
+                <tr data-project-id="14">
+                  <td class="col-year">2023</td>
+                  <td class="col-title">Sanya Coastal Resort</td>
+                  <td class="col-location">Sanya</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images 视图：全宽缩略图网格（初始隐藏，点击 Images 时显示） -->
+      <div class="images-grid" id="images-grid">
+        <!-- 缩略图内容由 script.js 根据 projects 数据自动填充 -->
+      </div>
+    </section>
+
+    <!-- 用于从作品页返回时滚动到首页底部 List 视图的锚点 -->
+    <div id="projects-section-list"></div>
+    
+    <!-- 用于从作品页返回时滚动到首页底部 Images 视图的锚点 -->
+    <div id="projects-section-images"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+

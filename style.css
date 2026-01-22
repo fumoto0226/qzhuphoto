@@ -104,7 +104,7 @@ body.unlock-scroll .viewport {
 /* 黑色标题：在白色区域，z-index 在遮罩下面 */
 .title-black {
   position: absolute;
-  top: 26px;
+  top: 23px;
   left: 40px;
   right: 40px;
   z-index: 1;
@@ -115,7 +115,7 @@ body.unlock-scroll .viewport {
 /* 白色标题：在 photo-shell 里面，和图片一起被裁切 */
 .title-white {
   position: absolute;
-  top: 26px;
+  top: 23px;
   left: 40px;
   right: 40px;
   z-index: 3;

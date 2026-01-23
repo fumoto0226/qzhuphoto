@@ -177,6 +177,13 @@
       // 正常进入首页时，确保在顶部；从作品页带锚点返回时，不再强制滚到顶部，避免闪一下
       if (!startAtProjects) {
         window.scrollTo(0, 0);
+        // 解锁后自动平滑滚动到项目区域
+        setTimeout(() => {
+          const projectsSection = document.getElementById('projects-section');
+          if (projectsSection) {
+            projectsSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
       }
     } else if (progress < 0.98 && isUnlocked) {
       // 往回滚到 98% 以下时重新锁定
@@ -242,11 +249,76 @@
 
   // 鼠标滚轮触发（包含触摸板手势）：
   // 向下滚动 -> 收起；向上滚动 -> 还原为全屏
+  let scrollToProjectsPending = false;
+  
   window.addEventListener("wheel", (event) => {
-    // 在 Images 视图时，完全不接管滚轮，让图片容器自己滚
-    if (document.body.classList.contains('images-mode')) return;
-    
     if (Math.abs(event.deltaY) < 0.1) return;
+    
+    // 如果 Images 视图正在显示，处理 Images 页面的强制滚动
+    if (document.body.classList.contains('images-mode')) {
+      // 在顶部向下滚动时，直接滚到 Images 区域
+      if (window.scrollY <= 1 && event.deltaY > 0 && isUnlocked) {
+        event.preventDefault();
+        const imagesAnchor = document.getElementById('projects-section-images');
+        if (imagesAnchor) {
+          imagesAnchor.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      // 在 Images 区域向上滚动到顶部时，平滑滚回首页顶部
+      else if (window.scrollY > 0 && event.deltaY < 0) {
+        // 检查是否在图片网格区域滚动
+        const target = event.target;
+        const isInImagesGrid = target.closest('.images-grid');
+        
+        // 如果在图片网格内，不触发回到首页（让图片网格自己滚动）
+        if (isInImagesGrid) {
+          return;
+        }
+        
+        const tabsSection = document.querySelector('.tabs-only-section');
+        if (tabsSection) {
+          const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
+          // 如果滚动到接近 tabs 区域顶部且向上滚动
+          if (window.scrollY <= tabsTop + 100) {
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      }
+      return;
+    }
+    
+    // 如果 About 页面正在显示，处理 About 页面的强制滚动
+    const aboutSection = document.getElementById('about-section');
+    if (aboutSection && aboutSection.style.display !== 'none') {
+      // 在顶部向下滚动时，直接滚到 About 区域
+      if (window.scrollY <= 1 && event.deltaY > 0 && isUnlocked) {
+        event.preventDefault();
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      // 在 About 区域向上滚动到顶部时，平滑滚回首页顶部
+      else if (window.scrollY > 0 && event.deltaY < 0) {
+        // 检查是否在 About 文字区域滚动
+        const target = event.target;
+        const isInAboutText = target.closest('.about-text-panel');
+        
+        // 如果在文字区域内，不触发回到首页
+        if (isInAboutText) {
+          return;
+        }
+        
+        const tabsSection = document.querySelector('.tabs-only-section');
+        if (tabsSection) {
+          const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
+          // 如果滚动到接近 tabs 区域顶部且向上滚动
+          if (window.scrollY <= tabsTop + 100) {
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      }
+      return;
+    }
 
     const factor = 0.0009; // 滚动灵敏度
 
@@ -255,8 +327,13 @@
       event.preventDefault();
       const delta = event.deltaY * factor;
       setTargetProgress(targetProgress + delta);
+      
+      // 当动画接近完成且向下滚动时，标记需要滚动到项目区域
+      if (event.deltaY > 0 && targetProgress > 0.95 && !scrollToProjectsPending) {
+        scrollToProjectsPending = true;
+      }
     }
-    // 如果已解锁，在页面顶部向上滚动时，控制动画还原
+    // 如果已解锁，在页面顶部时控制动画
     else if (window.scrollY <= 1) {
       // 向上滚动：还原全屏
       if (event.deltaY < 0 && targetProgress > 0) {
@@ -270,8 +347,39 @@
         const delta = event.deltaY * factor;
         setTargetProgress(targetProgress + delta);
       }
+      // 已经解锁且在顶部，向下滚动时直接滚到项目区域
+      else if (event.deltaY > 0 && targetProgress >= 1) {
+        event.preventDefault();
+        const projectsSection = document.getElementById('projects-section');
+        if (projectsSection) {
+          projectsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
     }
-    // 正常情况下，使用浏览器原生滚动（不拦截）
+    // 在项目区域向上滚动时，检测是否需要滚回首页
+    else if (window.scrollY > 0 && event.deltaY < 0) {
+      // 检查鼠标是否在地图、列表或图片网格区域
+      const target = event.target;
+      const isInMapArea = target.closest('.map-container') || target.closest('#map');
+      const isInListArea = target.closest('.map-list-container');
+      const isInImagesArea = target.closest('.images-grid');
+      
+      // 如果鼠标在地图/列表/图片区域，不触发回到首页
+      if (isInMapArea || isInListArea || isInImagesArea) {
+        return;
+      }
+      
+      const tabsSection = document.querySelector('.tabs-only-section');
+      if (tabsSection) {
+        const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
+        // 如果滚动到接近 tabs 区域顶部（项目区域的上方）且向上滚动
+        if (window.scrollY <= tabsTop + 100) {
+          event.preventDefault();
+          // 直接平滑滚到页面顶部，不停在中间
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    }
   }, { passive: false }); // 改为 passive: false 以便可以 preventDefault
 
   // 触摸设备：手指滑动也触发

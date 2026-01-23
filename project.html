@@ -62,17 +62,30 @@
     (function() {
       var params = new URLSearchParams(window.location.search);
       var from = params.get('from');
+      var category = params.get('category');
       var backLink = document.getElementById('back-link');
       if (!backLink) return;
+
+      function withCategory(url) {
+        if (!category || category === 'all') return url;
+        var hashIndex = url.indexOf('#');
+        if (hashIndex === -1) {
+          return url + '?category=' + encodeURIComponent(category);
+        } else {
+          var base = url.slice(0, hashIndex);
+          var hash = url.slice(hashIndex);
+          return base + '?category=' + encodeURIComponent(category) + hash;
+        }
+      }
 
       if (from === 'fullList') {
         backLink.href = 'list.html#list-bottom';
       } else if (from === 'indexList') {
-        backLink.href = 'index.html#projects-section-list';
+        backLink.href = withCategory('index.html#projects-section-list');
       } else if (from === 'indexImages') {
-        backLink.href = 'index.html#projects-section-images';
+        backLink.href = withCategory('index.html#projects-section-images');
       } else {
-        backLink.href = 'index.html#projects-section';
+        backLink.href = withCategory('index.html#projects-section');
       }
     })();
   </script>

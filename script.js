@@ -295,6 +295,124 @@
   );
 })();
 
+// ========== 项目分类筛选（必须最先初始化，供其他模块使用）==========
+(() => {
+  let currentCategory = 'all';
+  
+  // 初始化：根据 URL 中的分类参数恢复状态
+  const params = new URLSearchParams(window.location.search);
+  const urlCategory = params.get('category') || 'all';
+  
+  console.log('🔍 分类模块初始化');
+  console.log('  当前 URL:', window.location.href);
+  console.log('  URL 参数 category:', urlCategory);
+  
+  const validCategories = [
+    'all',
+    'architecture',
+    'small-scale',
+    'interior',
+    'commercial',
+    'workspace',
+    'residential',
+    'hospitality'
+  ];
+  
+  if (validCategories.includes(urlCategory)) {
+    currentCategory = urlCategory;
+    console.log('  ✅ 设置当前分类为:', currentCategory);
+  } else {
+    console.log('  ⚠️ 无效分类，使用默认值 all');
+  }
+  
+  // ⚠️ 关键：先导出函数，确保其他模块能用（即使 DOM 还没准备好）
+  window.getCurrentCategory = () => currentCategory;
+  window.getFilteredProjects = (projectsList, category) => {
+    if (category === 'all') return projectsList;
+    return projectsList.filter(p => p.categories && p.categories.includes(category));
+  };
+  
+  // 然后再处理 UI 更新（如果 DOM 元素不存在就跳过 UI 部分）
+  const categoryBtn = document.getElementById('category-btn');
+  const categoryDropdown = document.getElementById('category-dropdown');
+  const categoryMenu = document.getElementById('category-menu');
+  const categoryItems = document.querySelectorAll('.category-item');
+  
+  if (!categoryBtn || !categoryDropdown || !categoryMenu) {
+    console.warn('分类 UI 元素未找到，跳过 UI 初始化，但分类功能已可用');
+    return; // 只是跳过 UI 部分，函数已经导出了
+  }
+  
+  // 根据当前分类刷新按钮文字和选中状态
+  console.log('  🎨 更新 UI，当前分类:', currentCategory);
+  categoryItems.forEach(item => {
+    const cat = item.dataset.category;
+    if (cat === currentCategory) {
+      item.classList.add('active');
+      categoryBtn.textContent = item.textContent;
+      console.log('    设置按钮文字为:', item.textContent);
+    } else {
+      item.classList.remove('active');
+    }
+  });
+  
+  // 点击分类按钮展开/收起菜单
+  categoryBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    categoryDropdown.classList.toggle('open');
+  });
+  
+  // 点击页面其他地方关闭菜单
+  document.addEventListener('click', () => {
+    categoryDropdown.classList.remove('open');
+  });
+  
+  // 阻止菜单内部点击事件冒泡
+  categoryMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  
+  // 更新 URL 中的分类参数（不刷新页面）
+  function updateCategoryInUrl(category) {
+    const url = new URL(window.location.href);
+    if (category === 'all') {
+      url.searchParams.delete('category');
+    } else {
+      url.searchParams.set('category', category);
+    }
+    window.history.replaceState({}, '', url.toString());
+  }
+  
+  // 分类项点击事件
+  categoryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const category = item.dataset.category;
+      
+      // 更新选中状态
+      categoryItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      
+      // 更新按钮文字
+      categoryBtn.textContent = item.textContent;
+      
+      // 关闭菜单
+      categoryDropdown.classList.remove('open');
+      
+      // 应用筛选
+      currentCategory = category;
+      updateCategoryInUrl(category);
+      filterProjects(category);
+    });
+  });
+  
+  // 筛选项目函数
+  function filterProjects(category) {
+    // 触发自定义事件，通知其他模块更新筛选
+    const event = new CustomEvent('categoryChanged', { detail: { category } });
+    document.dispatchEvent(event);
+  }
+})();
+
 // ========== 项目展示区域交互 ==========
 (() => {
   // 项目数据（包含经纬度和分类）
@@ -341,6 +459,21 @@
 
   // 地图加载完成后添加标记
   map.on('load', () => {
+    // 尝试恢复保存的地图状态
+    const savedState = sessionStorage.getItem('mapState');
+    if (savedState) {
+      try {
+        const mapState = JSON.parse(savedState);
+        console.log('📍 恢复地图状态:', mapState);
+        map.setCenter([mapState.center.lng, mapState.center.lat]);
+        map.setZoom(mapState.zoom);
+        // 恢复后清除保存的状态
+        sessionStorage.removeItem('mapState');
+      } catch (e) {
+        console.error('恢复地图状态失败:', e);
+      }
+    }
+    
     initializeMarkers();
   });
   
@@ -352,7 +485,9 @@
     
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+    console.log('🗺️ 地图初始化，当前分类:', category);
     const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
+    console.log('  筛选后项目数:', filteredProjects.length);
     
     filteredProjects.forEach((project, index) => {
       // 创建自定义标记元素
@@ -379,9 +514,19 @@
         .setLngLat(project.coordinates)
         .addTo(map);
 
-      // 点击标记时跳转到作品页面
+      // 点击标记时跳转到作品页面，并带上当前分类
       el.addEventListener('click', () => {
-        window.location.href = 'project.html?from=map';
+        const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+        // 保存当前地图状态到 sessionStorage
+        const mapState = {
+          center: map.getCenter(),
+          zoom: map.getZoom()
+        };
+        sessionStorage.setItem('mapState', JSON.stringify(mapState));
+        console.log('💾 保存地图状态:', mapState);
+        
+        const url = `project.html?from=map&category=${encodeURIComponent(category)}`;
+        window.location.href = url;
       });
 
       markers.push({ marker, el, projectId: project.id });
@@ -441,7 +586,9 @@
     
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+    console.log('📋 列表渲染，当前分类:', category);
     const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
+    console.log('  筛选后项目数:', filteredProjects.length);
     const sorted = [...filteredProjects].sort((a, b) => b.year - a.year); // 年份从大到小
     
     mapListBody.innerHTML = '';
@@ -460,9 +607,11 @@
         switchProject(project.id);
       });
 
-      // 点击进入作品页面（从首页右侧 List 进入）
+      // 点击进入作品页面（从首页右侧 List 进入），带上当前分类
       tr.addEventListener('click', () => {
-        window.location.href = 'project.html?from=indexList';
+        const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+        const url = `project.html?from=indexList&category=${encodeURIComponent(category)}`;
+        window.location.href = url;
       });
 
       mapListBody.appendChild(tr);
@@ -508,9 +657,11 @@
         </div>
       `;
 
-      // 点击进入作品页面（从 Images 视图进入）
+      // 点击进入作品页面（从 Images 视图进入），带上当前分类
       card.addEventListener('click', () => {
-        window.location.href = 'project.html?from=indexImages';
+        const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+        const url = `project.html?from=indexImages&category=${encodeURIComponent(category)}`;
+        window.location.href = url;
       });
 
       imagesGrid.appendChild(card);
@@ -625,66 +776,42 @@
   }
 })();
 
-// ========== 项目分类筛选 ==========
+// ========== 顶部 Work / About 切换 ==========
 (() => {
-  const categoryBtn = document.getElementById('category-btn');
-  const categoryDropdown = document.getElementById('category-dropdown');
-  const categoryMenu = document.getElementById('category-menu');
-  const categoryItems = document.querySelectorAll('.category-item');
-  
-  let currentCategory = 'all';
-  
-  if (!categoryBtn || !categoryDropdown || !categoryMenu) return;
-  
-  // 点击分类按钮展开/收起菜单
-  categoryBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    categoryDropdown.classList.toggle('open');
-  });
-  
-  // 点击页面其他地方关闭菜单
-  document.addEventListener('click', () => {
-    categoryDropdown.classList.remove('open');
-  });
-  
-  // 阻止菜单内部点击事件冒泡
-  categoryMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-  
-  // 分类项点击事件
-  categoryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const category = item.dataset.category;
-      
-      // 更新选中状态
-      categoryItems.forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      
-      // 更新按钮文字
-      categoryBtn.textContent = item.textContent;
-      
-      // 关闭菜单
-      categoryDropdown.classList.remove('open');
-      
-      // 应用筛选
-      currentCategory = category;
-      filterProjects(category);
-    });
-  });
-  
-  // 筛选项目函数
-  function filterProjects(category) {
-    // 触发自定义事件，通知其他模块更新筛选
-    const event = new CustomEvent('categoryChanged', { detail: { category } });
-    document.dispatchEvent(event);
+  const workTab = document.querySelector('.nav-tab[data-page="work"]');
+  const aboutTab = document.querySelector('.nav-tab[data-page="about"]');
+  const projectsSection = document.getElementById('projects-section');
+  const aboutSection = document.getElementById('about-section');
+  const viewTabs = document.querySelector('.view-tabs');
+
+  if (!workTab || !aboutTab || !projectsSection || !aboutSection || !viewTabs) return;
+
+  function showWork() {
+    workTab.classList.add('active');
+    aboutTab.classList.remove('active');
+    projectsSection.style.display = 'block';
+    aboutSection.style.display = 'none';
+    viewTabs.style.display = 'flex';
   }
-  
-  // 导出当前分类，供其他模块使用
-  window.getCurrentCategory = () => currentCategory;
-  window.getFilteredProjects = (projectsList, category) => {
-    if (category === 'all') return projectsList;
-    return projectsList.filter(p => p.categories && p.categories.includes(category));
-  };
+
+  function showAbout() {
+    workTab.classList.remove('active');
+    aboutTab.classList.add('active');
+    projectsSection.style.display = 'none';
+    aboutSection.style.display = 'block';
+    viewTabs.style.display = 'none';
+  }
+
+  workTab.addEventListener('click', () => {
+    showWork();
+  });
+
+  aboutTab.addEventListener('click', () => {
+    showAbout();
+  });
+
+  // 默认进入首页显示 Work 视图
+  showWork();
 })();
+
 

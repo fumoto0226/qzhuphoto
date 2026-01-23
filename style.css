@@ -522,7 +522,8 @@ body.unlock-scroll .viewport {
   background-color: transparent;
   display: flex;
   flex-direction: column;
-  padding: 0 40px 40px 40px;
+  padding: 0 40px 20px 40px;
+  height: 100%;
 }
 
 .map-container {
@@ -531,8 +532,9 @@ body.unlock-scroll .viewport {
   background-color: #e5e5e5;
   border-radius: 4px;
   overflow: hidden;
-  min-height: 600px;
   border: 1px solid #d0d0d0;
+  height: 100%;
+  width: 100%;
 }
 
 .map-list-container {
@@ -540,7 +542,7 @@ body.unlock-scroll .viewport {
   margin-top: 0;
   display: none; /* 默认隐藏，点击 List 时显示 */
   overflow-y: auto;
-  min-height: 600px; /* 保持与地图模式相同高度，避免切换时整体高度变化 */
+  height: 100%;
 }
 
 .images-grid {
@@ -645,6 +647,116 @@ body.unlock-scroll .viewport {
   box-shadow: 0 4px 16px rgba(74, 108, 247, 0.8) !important;
 }
 
+/* ========== About 页面 ========== */
+.about-section {
+  width: 100%;
+  background-color: #fafafa;
+  display: none; /* 默认隐藏，点击 About 时显示 */
+  padding: 0 0 20px 0;          /* 和 projects-section 保持一致 */
+}
+
+.about-section .about-wrapper {
+  height: 85vh;                 /* 固定高度，和 projects-container 一致 */
+  max-height: 85vh;
+  overflow: hidden;             /* 防止整体滚动 */
+  padding: 0 40px;
+}
+
+.about-container {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.about-text-panel {
+  flex: 0 0 45%;                /* 左侧文字区域占 45% */
+  max-height: 100%;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #333333;
+  padding-right: 40px;
+  scrollbar-width: none;        /* Firefox 隐藏滚动条 */
+  -ms-overflow-style: none;     /* IE/Edge 隐藏滚动条 */
+}
+
+.about-text-panel p {
+  margin: 0 0 16px;
+}
+
+.about-subheading {
+  margin: 32px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.about-year-heading {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.about-sidebar {
+  flex: 0 0 55%;                /* 右侧信息栏占 55%，给照片更多右移空间 */
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-left: 60px;           /* 通过左内边距把照片往右推 */
+}
+
+.about-portraits {
+  display: flex;
+  flex-direction: row;          /* 两张图片并排显示 */
+  gap: 20px;
+  justify-content: flex-start;  /* 左对齐 */
+}
+
+.about-portrait {
+  flex: 0 0 auto;               /* 不拉伸，由图片自身尺寸决定 */
+  margin: 0;
+}
+
+.about-portrait img {
+  display: block;
+  width: 220px;                 /* 固定宽度 */
+  height: auto;
+  object-fit: contain;          /* 保持图片原始比例，不裁剪 */
+}
+
+.about-portrait-caption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #555555;
+  text-align: left;             /* 名字左对齐 */
+}
+
+.about-contact {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #333333;
+}
+
+.about-contact p {
+  margin: 0 0 6px;
+}
+
+.about-text-panel::-webkit-scrollbar {
+  width: 0;                     /* WebKit 隐藏滚动条 */
+  height: 0;
+}
+
+.about-text-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.about-text-panel::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 3px;
+}
+
+
 /* 响应式 */
 @media (max-width: 1024px) {
   .spacer-section {
@@ -672,6 +784,26 @@ body.unlock-scroll .viewport {
   .project-preview {
     width: 100%;
     padding: 0 20px 40px 20px;
+  }
+
+  .about-section {
+    padding: 24px 20px 40px;
+  }
+
+  .about-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .about-sidebar {
+    flex: none;
+    max-width: none;
+    width: 100%;
+  }
+
+  .about-text-panel {
+    max-height: none;
+    overflow-y: visible;
   }
 
   .project-map {

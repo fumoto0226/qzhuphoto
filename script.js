@@ -228,6 +228,11 @@
 
   // 点击首页视口区域：切换状态
   viewport.addEventListener("click", (event) => {
+    // 如果点击的是语言切换按钮或其内部元素，不触发全屏动画
+    if (event.target.closest('.language-switch')) {
+      return;
+    }
+    
     // 只在锁定状态下或在页面顶部时响应点击
     if (!isUnlocked || window.scrollY <= 1) {
       const target = targetProgress < 0.5 ? 1 : 0;

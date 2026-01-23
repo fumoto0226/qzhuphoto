@@ -1,63 +1,38 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project - Qingyan Zhu Photographer</title>
+  <title>Xi'an CCBD - Qingyan Zhu Photographer</title>
   <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: #000000;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .project-container {
-      text-align: center;
-      padding: 40px;
-    }
-
-    .project-container h1 {
-      font-size: 32px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      margin-bottom: 20px;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 30px;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 14px;
-      letter-spacing: 0.02em;
-      padding: 10px 20px;
-      border: 1px solid #ffffff;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .back-link:hover {
-      background-color: #ffffff;
-      color: #000000;
-    }
-  </style>
+  <link rel="stylesheet" href="./project.css" />
 </head>
 <body>
-  <div class="project-container">
-    <h1>Project Page</h1>
-    <p>Content coming soon...</p>
-    <a href="index.html#projects-section" id="back-link" class="back-link">Back</a>
+  <!-- 返回按钮 -->
+  <a href="index.html#projects-section" id="back-link" class="back-btn">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+  <!-- 项目信息 -->
+  <div class="project-info">
+    <h1 class="project-title">Xi'an Central </h1>
   </div>
+
+  <!-- 主图展示区域 -->
+  <div class="main-image-container">
+    <img id="main-image" src="./img/home/1/01.webp" alt="Project Image" class="main-image">
+  </div>
+
+  <!-- 底部缩略图滚动条 -->
+  <div class="thumbnail-strip">
+    <div class="thumbnail-container" id="thumbnail-container">
+      <!-- 缩略图会通过 JS 动态生成 -->
+    </div>
+  </div>
+
+  <script src="./project.js"></script>
   <script>
     (function() {
       var params = new URLSearchParams(window.location.search);
@@ -91,4 +66,3 @@
   </script>
 </body>
 </html>
-

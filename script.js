@@ -1,5 +1,12 @@
+// 全局：根据视口宽度判断当前是否为手机端视图（窄屏）
+const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
+
 (() => {
   const body = document.body;
+  const isTouchDevice =
+    'ontouchstart' in window ||
+    (navigator && (navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0));
+  body.classList.add(isMobileViewport ? "is-mobile" : "is-desktop");
   const viewport = document.querySelector(".viewport");
   const startAtProjects = 
     window.location.hash === '#projects-section' || 
@@ -12,8 +19,8 @@
   let rafId = null;
   let isUnlocked = false; // 是否已解锁页面滚动
 
-  // 首页图片数据
-  const heroImages = [
+  // 首页图片数据（桌面端）
+  const heroImagesDesktop = [
     {
       src: './img/home/1/01.webp',
       location: 'Xi\'an CCBD',
@@ -71,39 +78,90 @@
     }
   ];
 
+  // 首页图片数据（手机端，使用 home/2 目录下 5 张图）
+  const heroImagesMobile = [
+    {
+      src: './img/home/2/01.webp',
+      location: "Xi'an CCBD",
+      description: 'by Heatherwick Studio. Photographed in 2024'
+    },
+    {
+      src: './img/home/2/02.webp',
+      location: 'Project 02',
+      description: 'Photographed in 2024'
+    },
+    {
+      src: './img/home/2/03.webp',
+      location: 'Project 03',
+      description: 'Photographed in 2024'
+    },
+    {
+      src: './img/home/2/04.webp',
+      location: 'Project 04',
+      description: 'Photographed in 2024'
+    },
+    {
+      src: './img/home/2/05.webp',
+      location: 'Project 05',
+      description: 'Photographed in 2024'
+    }
+  ];
+
+  const heroImages = isMobileViewport ? heroImagesMobile : heroImagesDesktop;
+
   let currentImageIndex = 0;
   let imageChangeInterval = null;
   let isPhoto1Active = true; // 标记当前显示的是哪一张图片
 
-  // 更新首页图片和文字（双图交叉淡化）
+  // 更新首页图片和文字（双图交叉淡化 - 桌面端；单图切换 - 手机端）
   function updateHeroImage(index) {
     const heroPhoto1 = document.querySelector('.hero-photo-1');
     const heroPhoto2 = document.querySelector('.hero-photo-2');
     const metaBottomLeft = document.querySelector('.meta-bottom-left p');
     const metaBottomCenter = document.querySelector('.meta-bottom-center p');
 
-    if (!heroPhoto1 || !heroPhoto2 || !metaBottomLeft || !metaBottomCenter) return;
-
     const imageData = heroImages[index];
     
-    if (isPhoto1Active) {
-      // 当前显示图片1，准备切换到图片2
-      heroPhoto2.src = imageData.src; // 先加载图片2
-      heroPhoto2.style.opacity = '1';  // 图片2淡入
-      heroPhoto1.style.opacity = '0';  // 图片1淡出
+    if (isMobileViewport) {
+      // 手机端：双图交叉淡化（和桌面端一样的效果）
+      if (!heroPhoto1 || !heroPhoto2) return;
+      
+      if (isPhoto1Active) {
+        heroPhoto2.src = imageData.src;
+        heroPhoto2.style.opacity = '1';
+        heroPhoto1.style.opacity = '0';
+      } else {
+        heroPhoto1.src = imageData.src;
+        heroPhoto1.style.opacity = '1';
+        heroPhoto2.style.opacity = '0';
+      }
+      
+      isPhoto1Active = !isPhoto1Active;
     } else {
-      // 当前显示图片2，准备切换到图片1
-      heroPhoto1.src = imageData.src; // 先加载图片1
-      heroPhoto1.style.opacity = '1';  // 图片1淡入
-      heroPhoto2.style.opacity = '0';  // 图片2淡出
+      // 桌面端：双图交叉淡化
+      if (!heroPhoto1 || !heroPhoto2) return;
+      
+      if (isPhoto1Active) {
+        // 当前显示图片1，准备切换到图片2
+        heroPhoto2.src = imageData.src; // 先加载图片2
+        heroPhoto2.style.opacity = '1';  // 图片2淡入
+        heroPhoto1.style.opacity = '0';  // 图片1淡出
+      } else {
+        // 当前显示图片2，准备切换到图片1
+        heroPhoto1.src = imageData.src; // 先加载图片1
+        heroPhoto1.style.opacity = '1';  // 图片1淡入
+        heroPhoto2.style.opacity = '0';  // 图片2淡出
+      }
+      
+      // 切换激活状态
+      isPhoto1Active = !isPhoto1Active;
     }
     
-    // 更新文字
-    metaBottomLeft.textContent = imageData.location;
-    metaBottomCenter.textContent = imageData.description;
-    
-    // 切换激活状态
-    isPhoto1Active = !isPhoto1Active;
+    // 更新文字（桌面端才有这些元素）
+    if (metaBottomLeft && metaBottomCenter) {
+      metaBottomLeft.textContent = imageData.location;
+      metaBottomCenter.textContent = imageData.description;
+    }
   }
 
   // 启动自动切换
@@ -126,7 +184,7 @@
     }
   }
 
-  // 页面加载后启动图片轮播
+  // 页面加载后启动图片轮播（桌面端和手机端都轮播）
   window.addEventListener('load', () => {
     startImageRotation();
   });
@@ -152,6 +210,16 @@
   }
 
   function applyProgress() {
+    // 手机端不再使用缩放遮罩动画，直接保持解锁状态
+    if (isMobileViewport) {
+      if (!isUnlocked) {
+        isUnlocked = true;
+        body.classList.remove("lock-scroll");
+        body.classList.add("unlock-scroll");
+      }
+      return;
+    }
+
     const target = getFrameTarget();
     const top = target.top * progress;
     const bottom = target.bottom * progress;
@@ -220,21 +288,31 @@
   }
 
   // 初始状态：正常从顶部进入是全屏；如果带 #projects-section 相关锚点，则直接处于缩小完成并解锁滚动
-  if (startAtProjects) {
-    progress = 1;
-    targetProgress = 1;
+  if (!isMobileViewport) {
+    if (startAtProjects) {
+      progress = 1;
+      targetProgress = 1;
+      isUnlocked = true;
+      body.classList.remove("lock-scroll");
+      body.classList.add("unlock-scroll");
+      applyProgress();
+      // 注意：移除 start-at-projects 的逻辑已经移到视图切换模块统一处理
+    } else {
+      // 初始为全屏
+      setProgressImmediate(0);
+    }
+  } else {
+    // 手机端：不做缩放动画，直接解锁
     isUnlocked = true;
     body.classList.remove("lock-scroll");
     body.classList.add("unlock-scroll");
-    applyProgress();
-    // 注意：移除 start-at-projects 的逻辑已经移到视图切换模块统一处理
-  } else {
-    // 初始为全屏
-    setProgressImmediate(0);
   }
 
-  // 点击首页视口区域：切换状态
+  // 点击首页视口区域：桌面端用于切换动画（手机端单独处理）
   viewport.addEventListener("click", (event) => {
+    if (isMobileViewport) {
+      return;
+    }
     // 如果点击的是语言切换按钮或其内部元素，不触发全屏动画
     if (event.target.closest('.language-switch')) {
       return;
@@ -247,6 +325,76 @@
     }
   });
 
+  // 手机端：点击画面或箭头 / 上下滑动，自动在首页顶部和下方导航之间"对齐"滚动
+  if (isMobileViewport) {
+    const tabsSection = document.querySelector('.tabs-only-section');
+    const spacerSection = document.querySelector('.spacer-section');
+    const mobileFrame = document.querySelector('.mobile-view .frame');
+    let lastScrollY = window.scrollY;
+    let isAutoScrolling = false;
+    window.disableMobileAutoScroll = false; // 全局标记，用于暂时禁用自动对齐
+
+    function scrollToNextSection() {
+      if (!tabsSection) return;
+      // 滚动到标签栏顶部 (offsetTop)，确保标签栏刚好在视口顶部
+      const top = tabsSection.offsetTop;
+      isAutoScrolling = true;
+      window.scrollTo({ top, behavior: 'smooth' });
+      setTimeout(() => {
+        isAutoScrolling = false;
+      }, 500);
+    }
+
+    function scrollToTopSection() {
+      // 确保滚动到页面最顶部 (0)
+      isAutoScrolling = true;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        isAutoScrolling = false;
+      }, 500);
+    }
+
+    if (mobileFrame) {
+      mobileFrame.addEventListener('click', (event) => {
+        // 如果点击的是语言切换按钮，不触发翻页
+        if (event.target.closest('.language-switch')) {
+          return;
+        }
+        scrollToNextSection();
+      }, { passive: true });
+    }
+
+    if (spacerSection) {
+      spacerSection.addEventListener('click', () => {
+        scrollToNextSection();
+      }, { passive: true });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!tabsSection || isAutoScrolling || window.disableMobileAutoScroll) {
+        lastScrollY = window.scrollY;
+        return;
+      }
+
+      const targetTop = tabsSection.offsetTop;
+      const y = window.scrollY;
+      const delta = y - lastScrollY;
+
+      // 中间区域：自动对齐到顶部或 tabs 区
+      if (y > 10 && y < targetTop - 10) {
+        if (delta > 0) {
+          // 向下滚动，自动对齐到 tabs 区
+          scrollToNextSection();
+        } else if (delta < 0) {
+          // 向上滚动，自动对齐回首页顶部
+          scrollToTopSection();
+        }
+      }
+
+      lastScrollY = y;
+    });
+  }
+
   // 鼠标滚轮触发（包含触摸板手势）：
   // 向下滚动 -> 收起；向上滚动 -> 还原为全屏
   let scrollToProjectsPending = false;
@@ -256,6 +404,17 @@
     
     // 如果 Images 视图正在显示，处理 Images 页面的强制滚动
     if (document.body.classList.contains('images-mode')) {
+      // 检查是否在图片网格区域滚动
+      const target = event.target;
+      const isInImagesGrid = target.closest('.images-grid');
+      
+      // 如果在图片网格内滚动，完全交给网格自己处理，不触发页面滚动
+      if (isInImagesGrid) {
+        // 阻止事件冒泡，防止触发页面级滚动
+        event.stopPropagation();
+        return;
+      }
+      
       // 在顶部向下滚动时，直接滚到 Images 区域
       if (window.scrollY <= 1 && event.deltaY > 0 && isUnlocked) {
         event.preventDefault();
@@ -264,17 +423,8 @@
           imagesAnchor.scrollIntoView({ behavior: 'smooth' });
         }
       }
-      // 在 Images 区域向上滚动到顶部时，平滑滚回首页顶部
+      // 在 Images 区域外向上滚动到顶部时，平滑滚回首页顶部
       else if (window.scrollY > 0 && event.deltaY < 0) {
-        // 检查是否在图片网格区域滚动
-        const target = event.target;
-        const isInImagesGrid = target.closest('.images-grid');
-        
-        // 如果在图片网格内，不触发回到首页（让图片网格自己滚动）
-        if (isInImagesGrid) {
-          return;
-        }
-        
         const tabsSection = document.querySelector('.tabs-only-section');
         if (tabsSection) {
           const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
@@ -553,6 +703,9 @@
   const previewTitle = document.getElementById("preview-title");
   const previewDescription = document.getElementById("preview-description");
 
+  // 手机端：记录上一次“点亮”的项目 ID，用于实现“第一次点击只显示信息，第二次点击进入作品页”
+  let lastTappedProjectIdMobile = null;
+
   // 初始化 Mapbox 地图
   mapboxgl.accessToken = 'pk.eyJ1IjoiZnVtb3RvIiwiYSI6ImNtYXhqbGZ4bDBiOWwybHB3a3R5dmk3Z2kifQ.vXgn2UF6HVT0cnnQRmLO1A';
   
@@ -627,19 +780,38 @@
         .setLngLat(project.coordinates)
         .addTo(map);
 
-      // 点击标记时跳转到作品页面，并带上当前分类
+      // 点击标记：手机端（窄屏）第一次点击只切换预览，第二次点击才进入作品页；电脑端（宽屏）一次点击直接进入作品页
       el.addEventListener('click', () => {
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-        // 保存当前地图状态到 sessionStorage
-        const mapState = {
-          center: map.getCenter(),
-          zoom: map.getZoom()
-        };
-        sessionStorage.setItem('mapState', JSON.stringify(mapState));
-        console.log('💾 保存地图状态:', mapState);
-        
         const url = `project.html?from=map&category=${encodeURIComponent(category)}`;
-        window.location.href = url;
+
+        // 使用视口宽度判断手机 / 电脑，而不是是否支持触摸，
+        // 避免带触摸屏的电脑也走“二次点击”逻辑
+        if (isMobileViewport) {
+          // 第二次点击同一个点：进入作品页
+          if (lastTappedProjectIdMobile === project.id) {
+            const mapState = {
+              center: map.getCenter(),
+              zoom: map.getZoom()
+            };
+            sessionStorage.setItem('mapState', JSON.stringify(mapState));
+            console.log('💾 保存地图状态:', mapState);
+            window.location.href = url;
+          } else {
+            // 第一次点击：仅切换预览与高亮，不跳转
+            lastTappedProjectIdMobile = project.id;
+            switchProject(project.id);
+          }
+        } else {
+          // 桌面端：保持原逻辑，直接保存状态并跳转
+          const mapState = {
+            center: map.getCenter(),
+            zoom: map.getZoom()
+          };
+          sessionStorage.setItem('mapState', JSON.stringify(mapState));
+          console.log('💾 保存地图状态:', mapState);
+          window.location.href = url;
+        }
       });
 
       markers.push({ marker, el, projectId: project.id });
@@ -693,6 +865,7 @@
 
   // 右侧列表视图与项目预览联动（根据项目数据自动渲染，并按年份排序）
   const mapListBody = document.querySelector('#map-list-container tbody');
+  const previewViewAllBtn = document.getElementById('preview-view-all-btn');
   
   function renderListView() {
     if (!mapListBody) return;
@@ -720,11 +893,25 @@
         switchProject(project.id);
       });
 
-      // 点击进入作品页面（从首页右侧 List 进入），带上当前分类
+      // 点击行：手机端（窄屏）第一次点击只切换预览，第二次点击进入作品页；电脑端（宽屏）直接进入作品页
       tr.addEventListener('click', () => {
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
         const url = `project.html?from=indexList&category=${encodeURIComponent(category)}`;
-        window.location.href = url;
+
+        if (isMobileViewport) {
+          const pid = project.id;
+          if (lastTappedProjectIdMobile === pid) {
+            // 第二次点击同一行：进入作品页
+            window.location.href = url;
+          } else {
+            // 第一次点击：只更新预览，不跳转
+            lastTappedProjectIdMobile = pid;
+            switchProject(pid);
+          }
+        } else {
+          // 桌面端：保持原逻辑
+          window.location.href = url;
+        }
       });
 
       mapListBody.appendChild(tr);
@@ -733,12 +920,42 @@
     // 如果有项目，显示第一个
     if (sorted.length > 0) {
       switchProject(sorted[0].id);
+
+      // 默认情况下，“View All” 按钮跳到当前列表中的第一个项目所属作品页
+      if (previewViewAllBtn) {
+        const firstProject = sorted[0];
+        previewViewAllBtn.dataset.projectId = String(firstProject.id);
+      }
     }
   }
   
   // 初始渲染
   if (mapListBody) {
     renderListView();
+  }
+
+  // 预览图右上角 “View All” 按钮：跳转到当前选中项目的作品页
+  if (previewViewAllBtn) {
+    previewViewAllBtn.addEventListener('click', () => {
+      const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+
+      // 优先使用按钮上记录的 projectId（随着列表渲染/选择更新）
+      let projectId = previewViewAllBtn.dataset.projectId
+        ? Number(previewViewAllBtn.dataset.projectId)
+        : (lastTappedProjectIdMobile ?? null);
+
+      // 如果还没有记录，用当前预览标题去匹配一个项目（兜底）
+      if (projectId == null) {
+        const currentTitle = previewTitle ? previewTitle.textContent : '';
+        const found = projects.find(p => p.title === currentTitle);
+        if (found) projectId = found.id;
+      }
+
+      const url = `project.html?from=indexPreview&category=${encodeURIComponent(category)}` +
+        (projectId != null ? `&id=${encodeURIComponent(projectId)}` : '');
+
+      window.location.href = url;
+    });
   }
   
   // 监听分类变化事件
@@ -764,18 +981,54 @@
       card.className = 'image-card';
       card.innerHTML = `
         <img src="${project.image}" alt="${project.title}" />
+        <button class="image-card-view-all" type="button">View All</button>
         <div class="image-card-overlay">
           <h3>${project.title}</h3>
           <p>${project.description}</p>
         </div>
       `;
 
-      // 点击进入作品页面（从 Images 视图进入），带上当前分类
-      card.addEventListener('click', () => {
+      // 手机端和桌面端不同的点击逻辑：
+      // - 电脑端（宽屏）：悬浮显示信息，点击直接进入作品页
+      // - 手机端（窄屏）：第一次点击显示信息（高亮当前卡片），第二次点击进入作品页
+      const viewAllBtn = card.querySelector('.image-card-view-all');
+
+      // 卡片点击：手机端两次点击进入，电脑端一次点击进入
+      card.addEventListener('click', (event) => {
+        // 如果点击的是右上角 View All 按钮，交给按钮自己的监听处理
+        if (event.target && event.target.closest('.image-card-view-all')) {
+          return;
+        }
+
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
         const url = `project.html?from=indexImages&category=${encodeURIComponent(category)}`;
-        window.location.href = url;
+
+        if (isMobileViewport) {
+          const pid = project.id;
+          // 第二次点击同一项目：进入作品页
+          if (lastTappedProjectIdMobile === pid && card.classList.contains('active')) {
+            window.location.href = url;
+          } else {
+            // 第一次点击（或点击另一个项目）：仅高亮当前卡片并记录 ID，不跳转
+            lastTappedProjectIdMobile = pid;
+            document.querySelectorAll('.image-card').forEach((c) => c.classList.remove('active'));
+            card.classList.add('active');
+          }
+        } else {
+          // 桌面端：保持原逻辑，点击直接进入作品页
+          window.location.href = url;
+        }
       });
+
+      // 右上角 “View All” 按钮：无论手机还是桌面，直接进入对应作品页
+      if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', (event) => {
+          event.stopPropagation(); // 不触发卡片自身的点击逻辑
+          const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+          const url = `project.html?from=indexImagesViewAll&category=${encodeURIComponent(category)}`;
+          window.location.href = url;
+        });
+      }
 
       imagesGrid.appendChild(card);
     });
@@ -840,19 +1093,40 @@
 
   mapTab.addEventListener('click', () => {
     showMap();
-    if (window.location.hash.startsWith('#projects-section')) {
+    // 切换视图时，暂时关闭手机端的自动对齐滚动，避免误触发滚回首页/首屏
+    if (typeof window !== 'undefined') {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
+    // 仅桌面端更新 hash，用于从作品详情页返回时定位
+    if (!isMobileViewport && window.location.hash.startsWith('#projects-section')) {
       window.location.hash = '#projects-section';
     }
   });
   listTab.addEventListener('click', () => {
     showList();
-    if (window.location.hash.startsWith('#projects-section')) {
+    if (typeof window !== 'undefined') {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
+    if (!isMobileViewport && window.location.hash.startsWith('#projects-section')) {
       window.location.hash = '#projects-section-list';
     }
   });
   imagesTab.addEventListener('click', () => {
     showImages();
-    if (window.location.hash.startsWith('#projects-section')) {
+    if (typeof window !== 'undefined') {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
+    // 手机端不改 hash，避免锚点跳转带来的自动滚动；桌面端仍然保留
+    if (!isMobileViewport && window.location.hash.startsWith('#projects-section')) {
       window.location.hash = '#projects-section-images';
     }
   });
@@ -905,6 +1179,15 @@
     projectsSection.style.display = 'block';
     aboutSection.style.display = 'none';
     viewTabs.style.display = 'flex';
+    document.body.classList.remove('about-mode');
+    
+    // 暂时禁用手机端自动对齐，避免跳转到顶部
+    if (window.disableMobileAutoScroll !== undefined) {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
   }
 
   function showAbout() {
@@ -913,9 +1196,19 @@
     projectsSection.style.display = 'none';
     aboutSection.style.display = 'block';
     viewTabs.style.display = 'none';
+    document.body.classList.add('about-mode');
+    
+    // 暂时禁用手机端自动对齐，避免跳转到顶部
+    if (window.disableMobileAutoScroll !== undefined) {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
   }
 
-  workTab.addEventListener('click', () => {
+  workTab.addEventListener('click', (event) => {
+    event.preventDefault();    // 阻止默认跳转行为
     showWork();
   });
 

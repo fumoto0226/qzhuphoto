@@ -58,11 +58,28 @@ body {
 /* 主图展示区域 */
 .main-image-container {
   flex: 1;
+  display: block;               /* 使用普通块级容器，避免 flex 布局导致轨道水平居中计算异常 */
+  padding: 80px 40px 40px;      /* 上边距80px，避开标题区域 */
+  overflow: hidden;
+  position: relative;           /* 为左右箭头提供定位参考 */
+}
+
+.carousel-track {
+  display: flex;
+  width: 300%;                  /* 三个面板：上一张 / 当前 / 下一张 */
+  height: 100%;
+  margin-left: -100%;           /* 默认让中间面板居中显示 */
+  will-change: transform;
+}
+
+.carousel-item {
+  width: 33.3333%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 40px 40px;      /* 上边距80px，避开标题区域 */
-  overflow: hidden;
+  padding: 0 40px;              /* 每张大图左右各留 15px，图与图之间总共 30px 间距 */
+  box-sizing: border-box;
 }
 
 .main-image {
@@ -72,6 +89,9 @@ body {
   height: auto;
   object-fit: contain;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
 }
 
 /* 底部缩略图滚动条 */
@@ -89,7 +109,7 @@ body {
   padding: 10px 40px;           /* 减小内边距 */
   z-index: 50;
   display: flex;
-  justify-content: center;      /* 居中对齐 */
+  justify-content: flex-start;  /* 从左对齐，避免左右两侧被裁切 */
   align-items: center;
 }
 
@@ -97,7 +117,7 @@ body {
   display: flex;
   gap: 6px;                     /* 减少2px，从8px改为6px */
   align-items: center;
-  justify-content: center;      /* 容器内居中 */
+  justify-content: flex-start;  /* 容器内从左对齐 */
 }
 
 .thumbnail {
@@ -110,6 +130,9 @@ body {
   flex-shrink: 0;
   object-fit: cover;            /* 裁剪成正方形 */
   transform: scale(1);
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
 }
 
 .thumbnail:hover {
@@ -142,6 +165,88 @@ body {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+/* 左右悬浮翻页箭头（覆盖在主图上方） */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;                  /* 提高点击区域，但只显示细箭头本身 */
+  height: 44px;
+  border: none;
+  background: none;             /* 去掉背景填充色，仅保留箭头 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  padding: 0;
+  outline: none;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.nav-arrow-left {
+  left: 52px;   /* 与主图 padding 对齐，略向内缩一点 */
+}
+
+.nav-arrow-right {
+  right: 52px;
+  transform: translateY(-50%) scaleX(-1); /* 右箭头水平翻转 */
+}
+
+.nav-arrow:hover {
+  transform: translateY(-50%) scale(1.04);
+}
+
+.nav-arrow-right:hover {
+  transform: translateY(-50%) scaleX(-1) scale(1.04); /* 右箭头悬浮时也保持翻转 */
+}
+
+.nav-arrow-icon {
+  width: 20px;
+  height: auto;
+  opacity: 0.3;                 /* 默认更透明 */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+
+.nav-arrow:hover .nav-arrow-icon {
+  opacity: 1;                   /* 悬浮时变成不透明 */
+}
+
+/* 移动端：箭头移到缩略图上方 */
+@media (max-width: 768px) {
+  .nav-arrow {
+    width: 36px;                    /* 缩小按钮尺寸 */
+    height: 36px;
+    top: auto;                      /* 取消垂直居中 */
+    bottom: 80px;                   /* 定位在缩略图上方，距离缩小 */
+    transform: none;
+  }
+
+  .nav-arrow-left {
+    left: 16px;
+  }
+
+  .nav-arrow-right {
+    right: 16px;
+    transform: scaleX(-1);          /* 保持水平翻转 */
+  }
+  
+  /* 手机端取消悬浮效果，避免向上位移 */
+  .nav-arrow:hover {
+    transform: none;
+  }
+  
+  .nav-arrow-right:hover {
+    transform: scaleX(-1);          /* 右箭头悬浮时也保持翻转，不位移 */
+  }
+  
+  .nav-arrow-icon {
+    width: 16px;                    /* 缩小箭头图标 */
+  }
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .back-btn {
@@ -160,11 +265,15 @@ body {
   }
 
   .main-image-container {
-    padding: 60px 20px 20px;    /* 移动端也保留上边距 */
+    padding: 70px 0 130px;      /* 移动端：上方增加间距避免和返回箭头/标题重合，左右去掉 padding 让图片铺满 */
+  }
+  
+  .carousel-item {
+    padding: 0 15px;            /* 移动端：减少左右间距，让图片更宽 */
   }
 
   .thumbnail-strip {
-    padding: 8px 20px;
+    padding: 8px 12px;          /* 手机端左右缩小一点，避免缩略图被裁切 */
     height: 72px;
   }
 
@@ -173,13 +282,10 @@ body {
     width: 26px;
   }
 
-  .thumbnail:hover {
-    /* 只改变透明度，不改变尺寸 */
-  }
-
   .thumbnail.active {
     height: 36px;
     width: 36px;
   }
 }
+
 

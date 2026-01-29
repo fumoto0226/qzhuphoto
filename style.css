@@ -174,6 +174,107 @@ body.unlock-scroll .viewport {
   opacity: 0.6;
 }
 
+/* ========= 手机端专用：首页取消缩放遮罩，改为居中大图 ========= */
+body.is-mobile .viewport {
+  height: auto;
+  min-height: 100vh;      /* 视觉上至少一屏高，不随地址栏滑动缩放 */
+  overflow: visible;      /* 允许自然滚动，避免视口高度变化导致“放大”感 */
+  display: flex;
+  flex-direction: column;
+}
+
+body.is-mobile .frame {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px 0;      /* 底部从 20px 减少到 0px，减少与下方空白 */
+  min-height: 0;
+}
+
+body.is-mobile .title-black {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  padding-top: 0;
+  padding-bottom: 16px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* 手机端：隐藏首页原语言切换按钮 */
+body.is-mobile .language-switch {
+  display: none;
+}
+
+/* 手机端：首页右上角 Logo，向上移动5px */
+body.is-mobile .top-logo {
+  position: absolute;
+  top: 20px;                    /* 从 25px 减少到 20px，向上移动 5px (2px+3px) */
+  right: 20px;
+  z-index: 10;
+}
+
+body.is-mobile .logo-image {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+
+/* 取消蒙版绝对定位，让图片正常排版（固定竖版比例，不随视口高度变化） */
+body.is-mobile .photo-shell {
+  position: relative;
+  flex: 0 0 auto;              /* 不参与高度拉伸，按自身内容高度 */
+  width: 100%;
+  padding-top: 155%;           /* 稍微加高，让图片+箭头更接近填满首屏 */
+  overflow: hidden;
+  background-color: transparent;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* 主图改为竖版裁剪，完全跟随固定比例容器，不再受滚动影响 */
+body.is-mobile .hero-photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: opacity 0.7s ease-in-out;
+  transform: none !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+/* 手机端第一张图 */
+body.is-mobile .hero-photo-1 {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* 手机端第二张图（轮播用） */
+body.is-mobile .hero-photo-2 {
+  display: block !important;
+  opacity: 0;
+  z-index: 2;
+}
+
+/* 只保留左上角黑色标题，白字标题在手机端隐藏 */
+body.is-mobile .title-white {
+  display: none;
+}
+
+/* 手机端去掉底部两行介绍小字 */
+body.is-mobile .meta-row {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .title-black,
   .title-white {
@@ -210,6 +311,36 @@ body.unlock-scroll .viewport {
   background-color: transparent;
 }
 
+/* 手机端：减少空白区域高度 20px */
+body.is-mobile .spacer-section {
+  display: none;  /* 手机端首页和导览页之间的空白区域不再需要，直接隐藏 */
+}
+
+body.is-desktop .spacer-section {
+  height: 80px;
+}
+
+body.is-mobile .scroll-arrow {
+  width: 24px;
+  height: 24px;
+  border-left: 2px solid #999999;
+  border-bottom: 2px solid #999999;
+  transform: rotate(-45deg);
+  flex-shrink: 0;
+  margin: 20px auto 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+body.is-mobile .scroll-arrow:hover {
+  border-color: #666666;
+}
+
+/* 桌面端隐藏箭头 */
+body.is-desktop .scroll-arrow {
+  display: none;
+}
+
 /* ========== 只有标签的板块 ========== */
 .tabs-only-section {
   width: 100%;
@@ -222,6 +353,7 @@ body.unlock-scroll .viewport {
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
+  position: relative;                   /* 为分类下拉的绝对定位提供参考 */
 }
 
 /* 左侧导航按钮 */
@@ -299,6 +431,28 @@ body.unlock-scroll .viewport {
   background-color: #fafafa;
 }
 
+/* 预览图右上角“View All”按钮基础样式（默认桌面端隐藏） */
+.preview-view-all-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  cursor: pointer;
+  display: none; /* 默认不显示，后面在手机端单独打开 */
+  z-index: 5;
+}
+
+.preview-view-all-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 .preview-info {
   display: flex;
   flex-direction: column;
@@ -347,6 +501,20 @@ body.unlock-scroll .viewport {
 .list-table-panel {
   flex: 1;
   overflow-y: auto;
+  position: relative;
+}
+
+/* 为 list-table-panel 添加顶部遮罩，防止滚动时内容从顶部露出 */
+.list-table-panel::before {
+  content: '';
+  position: sticky;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-color: #fafafa;
+  z-index: 10;
+  display: block;
 }
 
 .project-list-table {
@@ -403,6 +571,20 @@ body.unlock-scroll .viewport {
   top: 0;
   background-color: #fafafa;
   z-index: 1;
+  box-shadow: 0 1px 0 0 #dddddd;
+}
+
+/* 为了防止滚动时内容从表头上方露出，添加顶部遮罩 */
+.project-list-table::before {
+  content: '';
+  position: sticky;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #fafafa;
+  z-index: 2;
+  display: block;
 }
 
 #year-header {
@@ -480,7 +662,7 @@ body.unlock-scroll .viewport {
 .category-btn::after {
   content: '▼';
   position: absolute;
-  right: 8px;
+  right: 6px;                        /* 略向右移动，避免遮挡文字 */
   top: 50%;
   transform: translateY(-50%);
   font-size: 10px;
@@ -567,6 +749,20 @@ body.unlock-scroll .viewport {
   display: none; /* 默认隐藏，点击 List 时显示 */
   overflow-y: auto;
   height: 100%;
+  position: relative;
+}
+
+/* 为了防止滚动时内容从列表顶部露出，添加顶部遮罩层 */
+.map-list-container::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #fafafa;
+  z-index: 10;
+  display: block;
 }
 
 .images-grid {
@@ -606,6 +802,28 @@ body.unlock-scroll .viewport {
   width: 100%;         /* 让图片按列宽自适应 */
 }
 
+/* Images 视图右上角“View All”按钮 —— 每张小图右上角 */
+.image-card-view-all {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  cursor: pointer;
+  display: none; /* 默认隐藏，手机端再打开 */
+  z-index: 5;
+}
+
+.image-card-view-all:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
 .image-card img {
   width: 100%;
   height: 100%;
@@ -614,7 +832,8 @@ body.unlock-scroll .viewport {
   transition: filter 0.3s ease;
 }
 
-.image-card:hover img {
+.image-card:hover img,
+.image-card.active img {
   filter: brightness(0.6);
 }
 
@@ -643,8 +862,9 @@ body.unlock-scroll .viewport {
   opacity: 0.9;
 }
 
-/* 悬浮时才显示文字信息 */
-.image-card:hover .image-card-overlay {
+/* 悬浮 / 激活时才显示文字信息 */
+.image-card:hover .image-card-overlay,
+.image-card.active .image-card-overlay {
   opacity: 1;
 }
 
@@ -695,7 +915,7 @@ body.unlock-scroll .viewport {
 }
 
 .about-text-panel {
-  flex: 0 0 45%;                /* 左侧文字区域占 45% */
+  flex: 1;                      /* 占满整个容器 */
   max-height: 100%;
   overflow-y: auto;
   font-size: 14px;
@@ -722,44 +942,48 @@ body.unlock-scroll .viewport {
   font-weight: 600;
 }
 
+/* 桌面端：about-sidebar 隐藏（内容已合并到 about-text-panel） */
 .about-sidebar {
-  flex: 0 0 55%;                /* 右侧信息栏占 55%，给照片更多右移空间 */
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  padding-left: 60px;           /* 通过左内边距把照片往右推 */
+  display: none;
 }
 
+/* 人物照片在文本内（桌面端隐藏，手机端显示在最上方） */
 .about-portraits {
-  display: flex;
-  flex-direction: row;          /* 两张图片并排显示 */
+  display: none;                /* 桌面端隐藏 */
+  flex-direction: row;
   gap: 20px;
-  justify-content: flex-start;  /* 左对齐 */
+  justify-content: flex-start;
+  margin-bottom: 24px;
 }
 
 .about-portrait {
-  flex: 0 0 auto;               /* 不拉伸，由图片自身尺寸决定 */
+  flex: 0 0 auto;
   margin: 0;
 }
 
 .about-portrait img {
   display: block;
-  width: 220px;                 /* 固定宽度 */
+  width: 220px;
   height: auto;
-  object-fit: contain;          /* 保持图片原始比例，不裁剪 */
+  object-fit: contain;
 }
 
 .about-portrait-caption {
   margin-top: 8px;
   font-size: 13px;
   color: #555555;
-  text-align: left;             /* 名字左对齐 */
+  text-align: left;
 }
 
+/* 联系方式在文本内（桌面端隐藏，手机端显示在最下方） */
 .about-contact {
+  display: none;                /* 桌面端隐藏 */
   font-size: 13px;
   line-height: 1.8;
   color: #333333;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
 }
 
 .about-contact p {
@@ -811,29 +1035,221 @@ body.unlock-scroll .viewport {
   }
 
   .about-section {
-    padding: 24px 20px 40px;
+    padding: 0;
+    background-color: #fafafa;
+  }
+
+  .about-section .about-wrapper {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding: 0 16px 24px 16px;
   }
 
   .about-container {
     flex-direction: column;
-    gap: 32px;
-  }
-
-  .about-sidebar {
-    flex: none;
-    max-width: none;
-    width: 100%;
+    gap: 0;
+    height: auto;
   }
 
   .about-text-panel {
     max-height: none;
     overflow-y: visible;
+    padding-right: 0;
+  }
+
+  /* 手机端显示人物照片和联系方式 */
+  .about-portraits {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 24px;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .about-portrait {
+    flex: 0 0 auto;
+  }
+
+  .about-portrait img {
+    width: auto;
+    max-width: calc(50vw - 24px);  /* 每张图最大宽度，确保两张能并排 */
+    height: auto;
+  }
+
+  .about-contact {
+    display: block;
   }
 
   .project-map {
     width: 100%;
     min-height: 60vh;
     padding: 0 20px 20px 20px;
+  }
+}
+
+/* 更窄屏（手机）下的作品区精简布局 */
+@media (max-width: 768px) {
+  /* 给 tabs-only-section 增加下边距，为语言切换按钮和分类按钮预留空间 */
+  .tabs-only-section {
+    padding: 20px 0 57px 0;     /* 底部保持 57px */
+  }
+
+  /* About 模式下，减少下方绿色区域高度到 5px */
+  body.about-mode .tabs-only-section {
+    padding: 20px 0 5px 0;
+  }
+
+  /* 顶部 tabs 与下方图片左右边缘对齐 */
+  .tabs-container {
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    position: relative;
+  }
+
+  /* 手机端标签栏中的语言切换按钮：默认在Works下方左侧 */
+  .language-switch-tabs {
+    position: absolute;
+    top: 100%;
+    left: 16px;
+    margin-top: 4px;
+    z-index: 10;
+    display: block;            /* 手机端显示 */
+  }
+
+  .language-switch-tabs .lang-btn {
+    background: none;
+    border: none;
+    padding: 8px 0;
+    font-size: 16px;
+    color: #111111;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+
+  /* About 模式下，语言切换按钮移到右上角与 Works / About 并排 */
+  body.about-mode .language-switch-tabs {
+    position: static;
+    margin-top: 0;
+    margin-left: auto;
+    padding-left: 12px;
+  }
+
+  body.about-mode .language-switch-tabs .lang-btn {
+    padding: 9px 0;            /* 与 nav-tab 高度对齐 */
+    color: #999999;            /* 与未激活的 tab 颜色一致 */
+  }
+
+  .nav-tabs {
+    gap: 6px;                         /* Works / About 间距略增 */
+  }
+
+  .nav-tab {
+    padding: 9px 10px 9px 0;          /* 上下稍微大一点，字也稍微大一点 */
+    font-size: 16px;
+  }
+
+  .view-tabs {
+    display: flex;
+    flex-wrap: nowrap;                /* Map / List / Images 不换行，保持在第一行 */
+    column-gap: 6px;                  /* Map / List / Images 间距略增，但仍然紧凑 */
+  }
+
+  .view-tab {
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  /* 分类下拉单独一行，靠右对齐图片右边缘 */
+  .category-dropdown {
+    position: absolute;               /* 从正常流中脱离，不影响第一行 */
+    top: 100%;                        /* 定位在 tabs-container 第一行的下方 */
+    right: 16px;                      /* 和图片右边缘对齐 */
+    margin-top: 4px;
+    z-index: 10;
+  }
+
+  .category-btn {
+    padding: 8px 18px 8px 8px;        /* 右侧多留一点空间给三角形 */
+    font-size: 14px;
+  }
+
+  .projects-container {
+    height: auto;
+  }
+
+  .project-preview {
+    padding: 0 16px 19px 16px;    /* padding-bottom 从 24px 减少到 19px，减少 5px */
+    gap: 16px;
+  }
+
+  .preview-image-wrapper {
+    aspect-ratio: 16/9;      /* 进一步降低高度，避免和分类按钮重叠 */
+  }
+
+  .preview-title {
+    font-size: 18px;
+  }
+
+  .preview-description {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .project-map {
+    min-height: calc(42vh + 15px);        /* 三种视图统一使用同一块可见区域高度 */
+    padding: 0 16px 6px 16px;             /* 底部略收紧一些，减少与下方空白 */
+  }
+
+  .map-container,
+  .map-list-container {
+    max-height: calc(42vh + 15px);        /* Map / List 与 Images 使用相同高度 */
+  }
+
+  /* Images 视图高度与 Map/List 保持一致（手机端） */
+  .images-grid {
+    /* 模仿 .project-map 的高度和 padding 结构 */
+    min-height: calc(42vh + 15px) !important;  /* 与 .project-map 的 min-height 一致 */
+    height: auto;
+    padding: 0 16px 6px 16px;             /* 与 .project-map 的 padding 完全一致 */
+    box-sizing: border-box;               /* padding 计入总高度 */
+    display: grid;                        /* 使用网格布局 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));  /* 一排 2 张图 */
+    column-gap: 12px;
+    row-gap: 16px;
+    overflow-y: auto;                     /* 图片较多时可在该区域内部滚动 */
+    align-content: start;                 /* 图片从顶部开始排列 */
+  }
+
+  /* 手机端才显示“View All”按钮 */
+  .preview-view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 手机端：仅在图片被激活（信息已展开）时，才显示小图右上角的 View All 按钮 */
+  .image-card.active .image-card-view-all {
+    display: inline-flex !important;  /* 强制覆盖默认的 display: none */
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* 桌面端隐藏标签栏中的语言切换按钮 */
+@media (min-width: 769px) {
+  .language-switch-tabs {
+    display: none;           /* 桌面端隐藏标签栏中的语言切换按钮 */
+  }
+
+  .top-logo {
+    display: none;           /* 桌面端隐藏首页右上角 logo */
   }
 }
 

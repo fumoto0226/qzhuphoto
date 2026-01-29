@@ -1,0 +1,1 @@
+// This file is no longer used. The app has been migrated to index.html with Vanilla JS.

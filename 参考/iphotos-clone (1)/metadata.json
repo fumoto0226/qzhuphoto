@@ -1,0 +1,5 @@
+{
+  "name": "iPhotos Clone",
+  "description": "A high-fidelity replica of the iOS Photos app featuring a responsive grid, smooth animations, and AI-powered 'Visual Look Up' using Gemini.",
+  "requestFramePermissions": []
+}

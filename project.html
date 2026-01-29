@@ -20,9 +20,33 @@
     <h1 class="project-title">Xi'an Central </h1>
   </div>
 
-  <!-- 主图展示区域 -->
+  <!-- 主图展示区域（采用三面板轨道结构：上一张 / 当前 / 下一张） -->
   <div class="main-image-container">
-    <img id="main-image" src="./img/program/001/_MG_4607.webp" alt="Project Image" class="main-image">
+    <!-- 左右悬浮箭头，用于点击翻页（效果与拖动一致） -->
+    <button class="nav-arrow nav-arrow-left" id="arrow-prev" type="button" aria-label="Previous image">
+      <img src="./img/icon01.svg" alt="" class="nav-arrow-icon">
+    </button>
+    <button class="nav-arrow nav-arrow-right" id="arrow-next" type="button" aria-label="Next image">
+      <img src="./img/icon01.svg" alt="" class="nav-arrow-icon">
+    </button>
+    <div class="carousel-track" id="carousel-track">
+      <div class="carousel-item" id="panel-prev">
+        <img src="" alt="" class="main-image" draggable="false">
+      </div>
+      <div class="carousel-item" id="panel-curr">
+        <!-- 中间这一张保持 id="main-image"，兼容现有 JS 逻辑 -->
+        <img
+          id="main-image"
+          src="./img/program/001/_MG_4607.webp"
+          alt="Project Image"
+          class="main-image"
+          draggable="false"
+        >
+      </div>
+      <div class="carousel-item" id="panel-next">
+        <img src="" alt="" class="main-image" draggable="false">
+      </div>
+    </div>
   </div>
 
   <!-- 底部缩略图滚动条 -->

@@ -28,6 +28,14 @@ body {
   color: #111111;
 }
 
+/* 中文状态下，整体字体稍微缩小，避免错位 */
+body.lang-zh .nav-tab,
+body.lang-zh .view-tab,
+body.lang-zh .category-btn,
+body.lang-zh .category-item {
+  font-size: 0.95em;
+}
+
 /* 锁定滚动：首页动画未完成时 */
 body.lock-scroll {
   overflow: hidden;
@@ -915,13 +923,14 @@ body.is-desktop .scroll-arrow {
   height: 85vh;                 /* 固定高度，和 projects-container 一致 */
   max-height: 85vh;
   overflow: hidden;             /* 防止整体滚动 */
-  padding: 0 40px;
+  padding: 0 40px 0 40px;
+  padding-right: 50px;          /* 右侧边距增加 10px (从 40px 到 50px) */
   position: relative;           /* 作为 About 右上角中文按钮的定位容器（桌面端） */
 }
 
 .about-container {
   display: flex;
-  gap: 60px;
+  gap: 70px;                    /* 左右两板块中间间距增加 10px (从 60px 到 70px) */
   align-items: flex-start;
   height: 100%;
   width: 100%;
@@ -957,12 +966,12 @@ body.is-desktop .scroll-arrow {
 
 /* 桌面端 About 右侧固定人物照片 + 联系方式侧栏 */
 .about-sidebar {
-  flex: 0 0 420px;              /* 加宽侧栏，让两张照片可以并排显示 */
-  max-width: 420px;
+  flex: 0 0 500px;              /* 扩大宽度 30px (从 420px 到 450px) */
+  max-width: 500px;
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 90px;                    /* 增加间距，让联系方式往下移动 40px (从 32px 到 72px) */
   font-size: 13px;
   color: #333333;
 }
@@ -970,13 +979,14 @@ body.is-desktop .scroll-arrow {
 .about-sidebar-portraits {
   display: flex;
   flex-direction: row;          /* 照片在桌面端并排 */
-  gap: 20px;
+  gap: 25px;                    /* 照片之间间距增加 5px (从 20px 到 25px) */
   align-items: flex-start;
 }
 
 .about-sidebar-portraits .about-portrait {
   margin: 0;
   flex: 1 1 0;
+  max-width: 230px;             /* 限制每张照片的最大宽度，使其缩小一点点 */
 }
 
 .about-sidebar-portraits .about-portrait img {
@@ -993,8 +1003,7 @@ body.is-desktop .scroll-arrow {
 }
 
 .about-sidebar-contact {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 16px;
+  padding-top: 0;               /* 移除上边距（之前是 16px） */
   line-height: 1.7;
 }
 
@@ -1092,19 +1101,25 @@ body.is-desktop .scroll-arrow {
   .about-section {
     padding: 0;
     background-color: #fafafa;
+    height: calc(100vh - 70px);   /* 再增加 30px 可见高度（原来是 100vh - 100px） */
+    overflow: hidden;             /* 防止外部滚动 */
   }
 
   .about-section .about-wrapper {
-    height: auto;
-    max-height: none;
-    overflow: visible;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;              /* 内部滚动 */
+    overflow-x: hidden;
     padding: 0 16px 24px 16px;
+    -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
+    overscroll-behavior: contain;  /* 防止滚动穿透到页面级别 */
   }
 
   .about-container {
     flex-direction: column;
     gap: 0;
     height: auto;
+    min-height: 100%;              /* 确保内容至少填满容器 */
   }
 
   .about-text-panel {
@@ -1156,9 +1171,13 @@ body.is-desktop .scroll-arrow {
     padding: 20px 0 57px 0;     /* 底部保持 57px */
   }
 
-  /* About 模式下，减少下方绿色区域高度到 5px */
+  /* About 模式下，减少下方绿色区域高度到 5px，并固定在顶部 */
   body.about-mode .tabs-only-section {
+    position: sticky;
+    top: 0;
     padding: 20px 0 5px 0;
+    background-color: #fafafa;  /* 确保背景不透明，覆盖滚动内容 */
+    z-index: 10;                /* 确保在内容上方 */
   }
 
   /* 顶部 tabs 与下方图片左右边缘对齐 */
@@ -1263,20 +1282,23 @@ body.is-desktop .scroll-arrow {
   }
 
   .project-map {
-    min-height: calc(42vh + 15px);        /* 三种视图统一使用同一块可见区域高度 */
+    min-height: calc(42vh + 5px);         /* 整体减少 5px (从 10px 改为 5px) */
     padding: 0 16px 6px 16px;             /* 底部略收紧一些，减少与下方空白 */
   }
 
   .map-container,
   .map-list-container {
-    max-height: calc(42vh + 15px);        /* Map / List 与 Images 使用相同高度 */
+    max-height: calc(42vh + 5px);         /* 整体减少 5px (从 10px 改为 5px) */
+    padding: 0 16px 6px 16px;             /* 统一底部 padding，与 .project-map 一致 */
   }
 
-  /* Images 视图高度与 Map/List 保持一致（手机端） */
+  /* Images 视图高度：匹配整个 Map/List 区域（包括预览图+内容） */
+  /* 预览图约为视口宽度的16:9 + 标题描述约80px + gap 35px + 内容区域(42vh + 10px) */
+  /* 简化计算：让 images-grid 占据与整体相当的高度 */
   .images-grid {
-    /* 模仿 .project-map 的高度和 padding 结构 */
-    min-height: calc(42vh + 15px) !important;  /* 与 .project-map 的 min-height 一致 */
-    height: auto;
+    height: calc(100vh - 140px) !important;      /* 增加 20px (从 -200px 改为 -180px) */
+    max-height: calc(100vh - 140px) !important;  /* 限制最大高度 */
+    min-height: calc(100vh - 140px) !important;  /* 最小高度也设置，确保固定 */
     padding: 0 16px 6px 16px;             /* 与 .project-map 的 padding 完全一致 */
     box-sizing: border-box;               /* padding 计入总高度 */
     display: grid;                        /* 使用网格布局 */

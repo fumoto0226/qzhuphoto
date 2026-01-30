@@ -23,58 +23,80 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   const heroImagesDesktop = [
     {
       src: './img/home/1/01.webp',
-      location: 'Xi\'an CCBD',
-      description: 'by Heatherwick Studio. Photographed in 2024'
+      location: 'Shanghai International Exchange Plaza',
+      locationZh: '上海金融交易广场',
+      description: 'Designed by FGP Atelier + Jahn/',
+      descriptionZh: '委托方：FGP Atelier + Jahn/'
     },
     {
       src: './img/home/1/02.webp',
-      location: 'Shanghai Tower',
-      description: 'Modern Architecture. Photographed in 2024'
+      location: 'Shanghai International Exchange Plaza',
+      locationZh: '上海金融交易广场',
+      description: 'Designed by FGP Atelier + Jahn/',
+      descriptionZh: '委托方：FGP Atelier + Jahn/'
     },
     {
       src: './img/home/1/03.webp',
-      location: 'Beijing Daxing Airport',
-      description: 'by Zaha Hadid Architects. Photographed in 2024'
+      location: 'Shenzhen Gate',
+      locationZh: '深圳汇隆商务中心',
+      description: 'Designed by FGP Atelier',
+      descriptionZh: '委托方：FGP Atelier'
     },
     {
       src: './img/home/1/04.webp',
-      location: 'Chongqing Jiefangbei',
-      description: 'Urban Landscape. Photographed in 2024'
+      location: 'Peng\'s House',
+      locationZh: '启东彭宅',
+      description: 'Designed by L&M Design Lab',
+      descriptionZh: '委托方：立木设计'
     },
     {
       src: './img/home/1/05.webp',
-      location: 'Guangzhou Opera House',
-      description: 'by Zaha Hadid Architects. Photographed in 2024'
+      location: 'Xuhui District New Archives Center',
+      locationZh: '徐汇区档案馆新馆',
+      description: 'Designed by Atelier Archmixing',
+      descriptionZh: '委托方：阿科米星建筑设计事务所'
     },
     {
       src: './img/home/1/06.webp',
-      location: 'Shenzhen Bay Bridge',
-      description: 'Infrastructure Photography. Photographed in 2024'
+      location: 'Tian An Clubhouse',
+      locationZh: '常州天安会所',
+      description: 'Designed by HATCH Architects',
+      descriptionZh: '委托方：汉齐建筑'
     },
     {
       src: './img/home/1/07.webp',
-      location: 'Hangzhou Olympic Center',
-      description: 'Sports Architecture. Photographed in 2024'
+      location: 'Resting Loop with Views',
+      locationZh: '重庆环（绿屏石瀑布站）',
+      description: 'Designed by HCCH Studio',
+      descriptionZh: '委托方：合筑建筑'
     },
     {
       src: './img/home/1/08.webp',
-      location: 'Nanjing Zifeng Tower',
-      description: 'Skyscraper Photography. Photographed in 2024'
+      location: 'Wave Breaker by the Sea',
+      locationZh: '临港浪花消波块驿站',
+      description: 'Designed by HCCH Studio',
+      descriptionZh: '委托方：合筑建筑'
     },
     {
       src: './img/home/1/09.webp',
-      location: 'Wuhan Greenland Center',
-      description: 'Contemporary Architecture. Photographed in 2024'
+      location: 'Xi\'an CCBD',
+      locationZh: '西安万象城',
+      description: 'Designed by Heatherwick Studio',
+      descriptionZh: '委托方：Heatherwick Studio'
     },
     {
       src: './img/home/1/10.webp',
-      location: 'Chengdu IFS',
-      description: 'Commercial Complex. Photographed in 2024'
+      location: 'Asset Management Company Office',
+      locationZh: '资产管理公司室内',
+      description: 'Designed by HCCH Studio',
+      descriptionZh: '委托方：合筑建筑'
     },
     {
       src: './img/home/1/11.webp',
-      location: 'Suzhou Museum',
-      description: 'by I.M. Pei. Photographed in 2024'
+      location: 'Cave Teahouse & Tree tavern',
+      locationZh: '石室茶室 树洞酒馆',
+      description: 'Designed by ARC Z + Practice on Earch',
+      descriptionZh: '委托方：ARC Z + 采一建筑'
     }
   ];
 
@@ -159,8 +181,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     // 更新文字（桌面端才有这些元素）
     if (metaBottomLeft && metaBottomCenter) {
-      metaBottomLeft.textContent = imageData.location;
-      metaBottomCenter.textContent = imageData.description;
+      // 检查当前语言状态
+      const isZh = document.body.classList.contains('lang-zh');
+      metaBottomLeft.textContent = isZh && imageData.locationZh ? imageData.locationZh : imageData.location;
+      metaBottomCenter.textContent = isZh && imageData.descriptionZh ? imageData.descriptionZh : imageData.description;
     }
   }
 
@@ -372,6 +396,12 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     window.addEventListener('scroll', () => {
       if (!tabsSection || isAutoScrolling || window.disableMobileAutoScroll) {
+        lastScrollY = window.scrollY;
+        return;
+      }
+
+      // 如果在 About 模式下，不触发自动对齐滚动
+      if (document.body.classList.contains('about-mode')) {
         lastScrollY = window.scrollY;
         return;
       }
@@ -1218,6 +1248,133 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
   // 默认进入首页显示 Work 视图
   showWork();
+})();
+
+// ========== 语言切换功能 ==========
+(function initLanguageSwitch() {
+  let currentLang = 'en'; // 默认英文
+
+  // 获取所有语言切换按钮
+  const langSwitchBtns = document.querySelectorAll('.lang-switch-btn');
+  
+  // 切换语言函数
+  function switchLanguage() {
+    currentLang = currentLang === 'en' ? 'zh' : 'en';
+    
+    // 更新所有带有 data-en 和 data-zh 属性的元素
+    const translatableElements = document.querySelectorAll('[data-en][data-zh]');
+    translatableElements.forEach(element => {
+      const enText = element.getAttribute('data-en');
+      const zhText = element.getAttribute('data-zh');
+      element.textContent = currentLang === 'en' ? enText : zhText;
+    });
+    
+    // 在 body 上添加/移除语言类，用于 CSS 调整
+    if (currentLang === 'zh') {
+      document.body.classList.add('lang-zh');
+      document.body.classList.remove('lang-en');
+    } else {
+      document.body.classList.add('lang-en');
+      document.body.classList.remove('lang-zh');
+    }
+    
+    // 更新首页图片文字（如果当前在首页）
+    updateHomeImageText();
+    
+    // 保存语言偏好到 localStorage
+    localStorage.setItem('preferredLanguage', currentLang);
+  }
+  
+  // 更新首页图片文字的函数
+  function updateHomeImageText() {
+    const metaBottomLeft = document.querySelector('.meta-bottom-left p');
+    const metaBottomCenter = document.querySelector('.meta-bottom-center p');
+    if (!metaBottomLeft || !metaBottomCenter) return;
+    
+    // 获取当前显示的图片索引（通过检查图片src）
+    const heroPhoto1 = document.querySelector('.hero-photo-1');
+    const heroPhoto2 = document.querySelector('.hero-photo-2');
+    if (!heroPhoto1 || !heroPhoto2) return;
+    
+    // 确定当前显示的图片（opacity > 0 的那张）
+    const currentPhoto = heroPhoto1.style.opacity !== '0' && heroPhoto1.style.opacity !== '' ? heroPhoto1 : heroPhoto2;
+    const currentSrc = currentPhoto.src;
+    
+    // 在 heroImagesDesktop 中查找对应的图片数据
+    const heroImagesDesktop = [
+      { src: './img/home/1/01.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
+      { src: './img/home/1/02.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
+      { src: './img/home/1/03.webp', location: 'Shenzhen Gate', locationZh: '深圳汇隆商务中心', description: 'Designed by FGP Atelier', descriptionZh: '委托方：FGP Atelier' },
+      { src: './img/home/1/04.webp', location: 'Peng\'s House', locationZh: '启东彭宅', description: 'Designed by L&M Design Lab', descriptionZh: '委托方：立木设计' },
+      { src: './img/home/1/05.webp', location: 'Xuhui District New Archives Center', locationZh: '徐汇区档案馆新馆', description: 'Designed by Atelier Archmixing', descriptionZh: '委托方：阿科米星建筑设计事务所' },
+      { src: './img/home/1/06.webp', location: 'Tian An Clubhouse', locationZh: '常州天安会所', description: 'Designed by HATCH Architects', descriptionZh: '委托方：汉齐建筑' },
+      { src: './img/home/1/07.webp', location: 'Resting Loop with Views', locationZh: '重庆环（绿屏石瀑布站）', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
+      { src: './img/home/1/08.webp', location: 'Wave Breaker by the Sea', locationZh: '临港浪花消波块驿站', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
+      { src: './img/home/1/09.webp', location: 'Xi\'an CCBD', locationZh: '西安万象城', description: 'Designed by Heatherwick Studio', descriptionZh: '委托方：Heatherwick Studio' },
+      { src: './img/home/1/10.webp', location: 'Asset Management Company Office', locationZh: '资产管理公司室内', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
+      { src: './img/home/1/11.webp', location: 'Cave Teahouse & Tree tavern', locationZh: '石室茶室 树洞酒馆', description: 'Designed by ARC Z + Practice on Earch', descriptionZh: '委托方：ARC Z + 采一建筑' }
+    ];
+    
+    // 查找匹配的图片数据（使用完整URL或相对路径匹配）
+    const imageData = heroImagesDesktop.find(img => 
+      currentSrc.includes(img.src) || currentSrc.endsWith(img.src.replace('./', ''))
+    );
+    
+    if (imageData) {
+      const isZh = currentLang === 'zh';
+      metaBottomLeft.textContent = isZh ? imageData.locationZh : imageData.location;
+      metaBottomCenter.textContent = isZh ? imageData.descriptionZh : imageData.description;
+    }
+  }
+  
+  // 为所有语言切换按钮绑定点击事件
+  langSwitchBtns.forEach(btn => {
+    btn.addEventListener('click', switchLanguage);
+  });
+  
+  // 页面加载时，检查是否有保存的语言偏好
+  const savedLang = localStorage.getItem('preferredLanguage');
+  if (savedLang && savedLang === 'zh') {
+    currentLang = 'en'; // 设置为 en，这样调用 switchLanguage 会切换到 zh
+    switchLanguage();
+  }
+})();
+
+// ========== 防止 About 页面内容滚动时触发页面滚动 ==========
+(function preventAboutScrollPropagation() {
+  const aboutWrapper = document.querySelector('.about-section .about-wrapper');
+  
+  if (!aboutWrapper) return;
+
+  let startY = 0;
+
+  // 记录起始触点位置
+  aboutWrapper.addEventListener('touchstart', function(e) {
+    if (!e.touches || e.touches.length !== 1) return;
+    startY = e.touches[0].clientY;
+  }, { passive: false });
+  
+  // 在顶部继续下拉 / 在底部继续上推时，阻止把滚动传给 window
+  aboutWrapper.addEventListener('touchmove', function(e) {
+    if (!e.touches || e.touches.length !== 1) return;
+
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY;
+
+    const scrollTop = this.scrollTop;
+    const scrollHeight = this.scrollHeight;
+    const offsetHeight = this.offsetHeight;
+    const isAtTop = scrollTop <= 0;
+    const isAtBottom = scrollTop + offsetHeight >= scrollHeight - 1;
+
+    // 在顶部向下拉，或在底部向上推时，阻止默认，避免滚动到页面
+    if ((isAtTop && deltaY > 0) || (isAtBottom && deltaY < 0)) {
+      e.preventDefault();
+    }
+
+    // 始终阻止事件冒泡，避免触发首页滚动逻辑
+    e.stopPropagation();
+  }, { passive: false });
 })();
 
 

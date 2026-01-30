@@ -65,7 +65,7 @@
 
           <!-- 右上角语言切换按钮（桌面端） -->
           <div class="language-switch">
-            <button class="lang-btn">中文</button>
+            <button class="lang-btn lang-switch-btn" data-en="中文" data-zh="English">中文</button>
           </div>
 
           <!-- 底部信息，同样在外部白色区域 -->
@@ -91,29 +91,29 @@
       <section class="tabs-only-section">
         <div class="tabs-container">
           <div class="nav-tabs">
-            <button class="nav-tab active" data-page="work">Works</button>
-            <button class="nav-tab" data-page="about">About</button>
+            <button class="nav-tab active" data-page="work" data-en="Works" data-zh="项目">Works</button>
+            <button class="nav-tab" data-page="about" data-en="About" data-zh="关于我们">About</button>
           </div>
           <!-- 手机端标签栏中的语言切换按钮：绝对定位在Works下方 -->
           <div class="language-switch-tabs">
-            <button class="lang-btn">中文</button>
+            <button class="lang-btn lang-switch-btn" data-en="中文" data-zh="English">中文</button>
           </div>
           <div class="view-tabs">
-            <button class="view-tab active" data-view="map">Map</button>
-            <button class="view-tab" data-view="list" id="view-list-tab">List</button>
-            <button class="view-tab" data-view="images" id="view-images-tab">Images</button>
+            <button class="view-tab active" data-view="map" data-en="Map" data-zh="地图">Map</button>
+            <button class="view-tab" data-view="list" id="view-list-tab" data-en="List" data-zh="列表">List</button>
+            <button class="view-tab" data-view="images" id="view-images-tab" data-en="Images" data-zh="图片">Images</button>
             <!-- 项目分类下拉菜单 -->
             <div class="category-dropdown" id="category-dropdown">
-              <button class="category-btn" id="category-btn">All</button>
+              <button class="category-btn" id="category-btn" data-en="All" data-zh="全部">All</button>
               <div class="category-menu" id="category-menu">
-                <div class="category-item active" data-category="all">All</div>
-                <div class="category-item" data-category="architecture">Architecture</div>
-                <div class="category-item" data-category="small-scale">Small-Scale</div>
-                <div class="category-item" data-category="interior">Interior</div>
-                <div class="category-item" data-category="commercial">Commercial</div>
-                <div class="category-item" data-category="workspace">Workspace</div>
-                <div class="category-item" data-category="residential">Residential</div>
-                <div class="category-item" data-category="hospitality">Hospitality</div>
+                <div class="category-item active" data-category="all" data-en="All" data-zh="全部">All</div>
+                <div class="category-item" data-category="architecture" data-en="Architecture" data-zh="建筑">Architecture</div>
+                <div class="category-item" data-category="small-scale" data-en="Small-Scale" data-zh="小体量">Small-Scale</div>
+                <div class="category-item" data-category="interior" data-en="Interior" data-zh="室内">Interior</div>
+                <div class="category-item" data-category="commercial" data-en="Commercial" data-zh="商业">Commercial</div>
+                <div class="category-item" data-category="workspace" data-en="Workspace" data-zh="办公">Workspace</div>
+                <div class="category-item" data-category="residential" data-en="Residential" data-zh="住宅">Residential</div>
+                <div class="category-item" data-category="hospitality" data-en="Hospitality" data-zh="酒店">Hospitality</div>
               </div>
             </div>
           </div>
@@ -261,7 +261,7 @@
       <!-- 第二个板块：左边缩略图+信息，右侧 Map/List/Images 视图 -->
       <section class="projects-section" id="projects-section">
         <!-- 桌面端 Works 左下角中文按钮 -->
-        <button class="lang-btn lang-btn-work-desktop">中文</button>
+        <button class="lang-btn lang-btn-work-desktop lang-switch-btn" data-en="中文" data-zh="English">中文</button>
         <div class="projects-container">
           <!-- 左侧：预览图和信息 -->
           <div class="project-preview">

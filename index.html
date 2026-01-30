@@ -126,7 +126,7 @@
           <div class="about-container">
             <!-- 单一文本面板：人物照片 + 文字 + 联系方式 -->
             <div class="about-text-panel">
-          <!-- 人物照片（手机端移到最上面） -->
+          <!-- 人物照片（手机端：在文字上方；桌面端：由右侧 about-sidebar 展示） -->
           <div class="about-portraits">
             <figure class="about-portrait">
               <img src="./img/QingyanZhu.webp" alt="Portrait of Qingyan Zhu" />
@@ -233,12 +233,35 @@
             <p>Instagram: qzhuphoto</p>
           </div>
         </div>
+
+        <!-- 桌面端右侧固定人物照片 + 联系方式侧栏 -->
+        <aside class="about-sidebar">
+          <div class="about-sidebar-portraits">
+            <figure class="about-portrait">
+              <img src="./img/QingyanZhu.webp" alt="Portrait of Qingyan Zhu" />
+              <figcaption class="about-portrait-caption">Qingyan Zhu</figcaption>
+            </figure>
+            <figure class="about-portrait">
+              <img src="./img/ZixiChen.webp" alt="Portrait of Zixi Chen" />
+              <figcaption class="about-portrait-caption">Zixi Chen</figcaption>
+            </figure>
           </div>
-        </div>
+          <div class="about-sidebar-contact">
+            <p>Cell: +86 1340204087</p>
+            <p>E-mail: qingyan@qzhuphoto.com</p>
+            <p>Red: 清言筑造</p>
+            <p>Instagram: qzhuphoto</p>
+          </div>
+        </aside>
+
+          </div> <!-- /.about-container -->
+        </div>   <!-- /.about-wrapper -->
       </section>
 
       <!-- 第二个板块：左边缩略图+信息，右侧 Map/List/Images 视图 -->
       <section class="projects-section" id="projects-section">
+        <!-- 桌面端 Works 左下角中文按钮 -->
+        <button class="lang-btn lang-btn-work-desktop">中文</button>
         <div class="projects-container">
           <!-- 左侧：预览图和信息 -->
           <div class="project-preview">

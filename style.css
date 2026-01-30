@@ -174,6 +174,11 @@ body.unlock-scroll .viewport {
   opacity: 0.6;
 }
 
+/* 默认隐藏桌面端专用的中文按钮（移动端不显示） */
+.lang-btn-work-desktop {
+  display: none;
+}
+
 /* ========= 手机端专用：首页取消缩放遮罩，改为居中大图 ========= */
 body.is-mobile .viewport {
   height: auto;
@@ -214,6 +219,12 @@ body.is-mobile .top-logo {
   top: 20px;                    /* 从 25px 减少到 20px，向上移动 5px (2px+3px) */
   right: 20px;
   z-index: 10;
+}
+
+/* 桌面端（body 标记为 is-desktop）始终隐藏手机 Logo，
+   即使窗口被压缩到窄宽度也不显示 */
+body.is-desktop .top-logo {
+  display: none !important;
 }
 
 body.is-mobile .logo-image {
@@ -393,6 +404,7 @@ body.is-desktop .scroll-arrow {
   width: 100%;
   background-color: transparent;
   padding: 0 0 20px 0;
+  position: relative;           /* 作为 Works 左下角中文按钮的定位容器（桌面端） */
 }
 
 .projects-container {
@@ -904,6 +916,7 @@ body.is-desktop .scroll-arrow {
   max-height: 85vh;
   overflow: hidden;             /* 防止整体滚动 */
   padding: 0 40px;
+  position: relative;           /* 作为 About 右上角中文按钮的定位容器（桌面端） */
 }
 
 .about-container {
@@ -942,9 +955,51 @@ body.is-desktop .scroll-arrow {
   font-weight: 600;
 }
 
-/* 桌面端：about-sidebar 隐藏（内容已合并到 about-text-panel） */
+/* 桌面端 About 右侧固定人物照片 + 联系方式侧栏 */
 .about-sidebar {
-  display: none;
+  flex: 0 0 420px;              /* 加宽侧栏，让两张照片可以并排显示 */
+  max-width: 420px;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-size: 13px;
+  color: #333333;
+}
+
+.about-sidebar-portraits {
+  display: flex;
+  flex-direction: row;          /* 照片在桌面端并排 */
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.about-sidebar-portraits .about-portrait {
+  margin: 0;
+  flex: 1 1 0;
+}
+
+.about-sidebar-portraits .about-portrait img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.about-sidebar-portraits .about-portrait-caption {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #555555;
+}
+
+.about-sidebar-contact {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+  line-height: 1.7;
+}
+
+.about-sidebar-contact p {
+  margin: 0 0 6px;
 }
 
 /* 人物照片在文本内（桌面端隐藏，手机端显示在最上方） */
@@ -1080,6 +1135,11 @@ body.is-desktop .scroll-arrow {
 
   .about-contact {
     display: block;
+  }
+
+  /* 移动端隐藏右侧固定侧栏，改为在文本内显示人物照片和联系方式 */
+  .about-sidebar {
+    display: none;
   }
 
   .project-map {
@@ -1250,6 +1310,33 @@ body.is-desktop .scroll-arrow {
 
   .top-logo {
     display: none;           /* 桌面端隐藏首页右上角 logo */
+  }
+
+  /* 桌面端隐藏首页右上角旧的中文按钮 */
+  .language-switch {
+    display: none;
+  }
+
+  /* 桌面端 Works 区域左下角中文按钮 */
+  .lang-btn-work-desktop {
+    display: block;              /* 桌面端显示 */
+    position: absolute;
+    left: 40px;
+    bottom: 32px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    padding: 0;
+    letter-spacing: 0.02em;
+    color: #111111;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+  
+  .lang-btn-work-desktop:hover {
+    opacity: 0.6;
   }
 }
 

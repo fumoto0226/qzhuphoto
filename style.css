@@ -187,6 +187,11 @@ body.unlock-scroll .viewport {
   display: none;
 }
 
+/* 默认隐藏桌面端 About 页面右上角语言切换按钮（移动端不显示） */
+.lang-btn-about-desktop {
+  display: none;
+}
+
 /* ========= 手机端专用：首页取消缩放遮罩，改为居中大图 ========= */
 body.is-mobile .viewport {
   height: auto;
@@ -457,7 +462,7 @@ body.is-desktop .scroll-arrow {
   top: 8px;
   right: 8px;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: 999px;
@@ -828,7 +833,7 @@ body.is-desktop .scroll-arrow {
   top: 8px;
   right: 8px;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: 999px;
@@ -917,6 +922,7 @@ body.is-desktop .scroll-arrow {
   background-color: #fafafa;
   display: none; /* 默认隐藏，点击 About 时显示 */
   padding: 0 0 20px 0;          /* 和 projects-section 保持一致 */
+  position: relative;           /* 为绝对定位的子元素提供参照 */
 }
 
 .about-section .about-wrapper {
@@ -1069,8 +1075,8 @@ body.is-desktop .scroll-arrow {
 }
 
 
-/* 响应式 */
-@media (max-width: 1024px) {
+/* 响应式 - 手机端布局 (≤768px) */
+@media (max-width: 768px) {
   .spacer-section {
     height: 50px;
   }
@@ -1162,10 +1168,8 @@ body.is-desktop .scroll-arrow {
     min-height: 60vh;
     padding: 0 20px 20px 20px;
   }
-}
 
-/* 更窄屏（手机）下的作品区精简布局 */
-@media (max-width: 768px) {
+  /* 手机端下的作品区精简布局 */
   /* 给 tabs-only-section 增加下边距，为语言切换按钮和分类按钮预留空间 */
   .tabs-only-section {
     padding: 20px 0 57px 0;     /* 底部保持 57px */
@@ -1358,6 +1362,28 @@ body.is-desktop .scroll-arrow {
   }
   
   .lang-btn-work-desktop:hover {
+    opacity: 0.6;
+  }
+
+  /* 桌面端 About 页面右上角语言切换按钮 */
+  .lang-btn-about-desktop {
+    display: block;              /* 桌面端显示 */
+    position: absolute;
+    right: 50px;                 /* 右边距对齐图片右侧 (与 about-wrapper 的 padding-right 一致) */
+    top: -48px;                  /* 负值让按钮上移，与"关于我们"垂直居中对齐 */
+    font-size: 14px;
+    background: none;
+    border: none;
+    padding: 0;
+    letter-spacing: 0.02em;
+    color: #111111;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+  
+  .lang-btn-about-desktop:hover {
     opacity: 0.6;
   }
 }

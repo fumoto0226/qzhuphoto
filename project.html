@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xi'an CCBD - Qingyan Zhu Photographer</title>
+  <title id="page-title">Loading...</title>
   <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
   <link rel="stylesheet" href="./project.css" />
 </head>
@@ -17,7 +17,7 @@
 
   <!-- 项目信息 -->
   <div class="project-info">
-    <h1 class="project-title">Xi'an Central </h1>
+    <h1 class="project-title" id="project-title">Loading...</h1>
   </div>
 
   <!-- 主图展示区域（采用三面板轨道结构：上一张 / 当前 / 下一张） -->
@@ -37,7 +37,7 @@
         <!-- 中间这一张保持 id="main-image"，兼容现有 JS 逻辑 -->
         <img
           id="main-image"
-          src="./img/program/001/_MG_4607.webp"
+          src=""
           alt="Project Image"
           class="main-image"
           draggable="false"
@@ -56,14 +56,27 @@
     </div>
   </div>
 
+  <!-- 项目数据配置 -->
+  <script>
+    window.currentProjectId = null;
+    window.currentProjectData = null;
+  </script>
+  <!-- 引入项目数据 -->
+  <script src="./projects-data.js"></script>
   <script src="./project.js"></script>
   <script>
     (function() {
       var params = new URLSearchParams(window.location.search);
+      var projectId = params.get('id');
       var from = params.get('from');
       var category = params.get('category');
       var backLink = document.getElementById('back-link');
       if (!backLink) return;
+
+      // 保存项目 ID 到全局变量，供 project.js 使用
+      if (projectId !== null) {
+        window.currentProjectId = parseInt(projectId, 10);
+      }
 
       function withCategory(url) {
         if (!category || category === 'all') return url;
@@ -83,6 +96,8 @@
         backLink.href = withCategory('index.html#projects-section-list');
       } else if (from === 'indexImages') {
         backLink.href = withCategory('index.html#projects-section-images');
+      } else if (from === 'map') {
+        backLink.href = withCategory('index.html#projects-section');
       } else {
         backLink.href = withCategory('index.html#projects-section');
       }

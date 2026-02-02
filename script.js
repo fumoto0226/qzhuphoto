@@ -708,33 +708,98 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
 // ========== 项目展示区域交互 ==========
 (() => {
-  // 项目数据（包含经纬度和分类）
-  const projects = [
-    { id: 0,  year: 2025, title: "Xi'an CCBD",                description: "by Heatherwick Studio. Photographed in 2024", image: "./img/home/1/01.webp", coordinates: [108.9398, 34.3416], location: "Xi'an", categories: ['architecture', 'commercial'] },
-    { id: 1,  year: 2024, title: "Shanghai Tower",            description: "Modern Skyscraper. Photographed in 2024",     image: "./img/home/1/02.webp", coordinates: [121.5050, 31.2333], location: "Shanghai", categories: ['architecture', 'workspace'] },
-    { id: 2,  year: 2024, title: "Beijing Daxing Airport",    description: "by Zaha Hadid Architects. Photographed in 2024", image: "./img/home/1/03.webp", coordinates: [116.4106, 39.5098], location: "Beijing", categories: ['architecture', 'commercial'] },
-    { id: 3,  year: 2023, title: "Guangzhou Opera House",     description: "Contemporary Architecture. Photographed in 2024", image: "./img/home/1/04.webp", coordinates: [113.3250, 23.1167], location: "Guangzhou", categories: ['architecture', 'interior'] },
-    { id: 4,  year: 2023, title: "Shenzhen Bay",              description: "Coastal Development. Photographed in 2024",  image: "./img/home/1/05.webp", coordinates: [113.9456, 22.5159], location: "Shenzhen", categories: ['architecture', 'residential'] },
-    { id: 5,  year: 2023, title: "Chengdu IFS",               description: "Urban Complex. Photographed in 2024",        image: "./img/home/1/06.webp", coordinates: [104.0668, 30.6624], location: "Chengdu", categories: ['commercial', 'interior'] },
-    { id: 6,  year: 2022, title: "Hangzhou Olympic Center",   description: "Sports Architecture. Photographed in 2024",  image: "./img/home/1/07.webp", coordinates: [120.2151, 30.2741], location: "Hangzhou", categories: ['architecture'] },
-    { id: 7,  year: 2022, title: "Nanjing Zifeng Tower",      description: "Iconic Landmark. Photographed in 2024",      image: "./img/home/1/08.webp", coordinates: [118.7789, 32.0609], location: "Nanjing", categories: ['architecture', 'workspace'] },
-    { id: 8,  year: 2022, title: "Wuhan Greenland Center",    description: "Under Construction. Photographed in 2024",   image: "./img/home/1/09.webp", coordinates: [114.2734, 30.5810], location: "Wuhan", categories: ['architecture', 'commercial'] },
-    { id: 9,  year: 2022, title: "Chongqing Raffles City",    description: "Horizontal Skyscraper. Photographed in 2024", image: "./img/home/1/10.webp", coordinates: [106.5804, 29.5657], location: "Chongqing", categories: ['architecture', 'residential'] },
-    { id:10,  year: 2022, title: "Suzhou Museum",             description: "by I.M. Pei. Photographed in 2024",          image: "./img/home/1/11.webp", coordinates: [120.6199, 31.3159], location: "Suzhou", categories: ['architecture', 'small-scale'] },
-    { id:11,  year: 2023, title: "Onoma Hotel",               description: "Hospitality Project. Photographed in 2023",  image: "./img/home/1/01.webp", coordinates: [114.1772, 22.3027], location: "Hong Kong", categories: ['hospitality', 'interior'] },
-    { id:12,  year: 2023, title: "Taipei Modern Residence",   description: "Residential Project. Photographed in 2023",  image: "./img/home/1/02.webp", coordinates: [121.5654, 25.0330], location: "Taipei", categories: ['residential', 'small-scale'] },
-    { id:13,  year: 2023, title: "Macau Waterfront",          description: "Retail & Leisure. Photographed in 2023",     image: "./img/home/1/03.webp", coordinates: [113.5439, 22.1987], location: "Macau", categories: ['commercial', 'architecture'] },
-    { id:14,  year: 2023, title: "Sanya Coastal Resort",      description: "Resort Hotel. Photographed in 2023",         image: "./img/home/1/04.webp", coordinates: [109.5119, 18.2528], location: "Sanya", categories: ['hospitality', 'residential'] },
-    { id:15,  year: 2021, title: "Seoul Riverside Gallery",   description: "Gallery by the river. Photographed in 2021", image: "./img/home/1/05.webp", coordinates: [126.9780, 37.5665], location: "Seoul", categories: ['small-scale', 'interior'] },
-    { id:16,  year: 2020, title: "Singapore Harbour Lounge",  description: "Harbour-side lounge. Photographed in 2020",  image: "./img/home/1/06.webp", coordinates: [103.8198, 1.3521],  location: "Singapore", categories: ['hospitality', 'interior'] },
-  ];
+  // 引入项目数据
+  // 注意：需要在 script.js 之前引入 projects-data.js
+  
+  // 排序辅助函数：处理年份排序，支持 "2024-2025" 这种范围格式
+  function getSortYear(year) {
+    if (typeof year === 'number') return year;
+    if (typeof year === 'string' && year.includes('-')) {
+      // "2024-2025" 格式：返回结束年份（排在 2024 之后，2025 之前）
+      const parts = year.split('-');
+      return parseInt(parts[1], 10) - 0.5; // 2024-2025 -> 2024.5
+    }
+    return parseInt(year, 10) || 0;
+  }
+
+  // 为 projectsData 中的每个项目添加地图坐标和位置信息
+  // 这些信息不需要在 projects-data.js 中重复定义
+  const projectMapInfo = {
+    0: {
+      // 石室茶室+树洞酒馆 - 惠州
+      coordinates: [114.3500, 23.0500],
+      location: "惠州",
+      locationEn: "Huizhou"
+    },
+    1: {
+      // 启东彭宅 - 启东市
+      coordinates: [121.6570, 31.8100],
+      location: "启东",
+      locationEn: "Qidong"
+    },
+    2: {
+      // 公牛总部园区 - 慈溪市观海卫镇工业园东区三海路32号
+      coordinates: [121.4500, 30.2800],
+      location: "慈溪",
+      locationEn: "Cixi"
+    },
+    3: {
+      // 西安万象城 - 西安市曲江新区雁展路与长安南路交汇处
+      coordinates: [108.9530, 34.1950],
+      location: "西安",
+      locationEn: "Xi'an"
+    },
+    4: {
+      // 天安会 - 常州武进西太湖天安别墅
+      coordinates: [119.8200, 31.6800],
+      location: "常州",
+      locationEn: "Changzhou"
+    },
+    5: {
+      // 杭州望朝中心 - 杭州市萧山区市心北路2086号
+      coordinates: [120.2630, 30.2280],
+      location: "杭州",
+      locationEn: "Hangzhou"
+    },
+    6: {
+      // 重景环 - 惠州（与石室茶室分开显示）
+      coordinates: [114.5500, 23.1800],
+      location: "惠州",
+      locationEn: "Huizhou"
+    }
+  };
+
+  // 构建完整的项目数据
+  const projects = projectsData.map(p => ({
+    ...p,
+    // 添加地图信息（如果存在）
+    ...(projectMapInfo[p.id] || {})
+  }));
+
+  // 获取项目封面图路径
+  function getProjectCover(project) {
+    return `./img/program/${project.folder}/${project.cover}`;
+  }
 
   const previewImage = document.getElementById("preview-image");
   const previewTitle = document.getElementById("preview-title");
   const previewDescription = document.getElementById("preview-description");
 
-  // 手机端：记录上一次“点亮”的项目 ID，用于实现“第一次点击只显示信息，第二次点击进入作品页”
+  // 手机端：记录上一次"点亮"的项目 ID，用于实现"第一次点击只显示信息，第二次点击进入作品页"
   let lastTappedProjectIdMobile = null;
+
+  // 全局函数：更新预览区内容（根据当前语言状态）
+  // 这个函数会在语言切换时被调用
+  window.updateProjectPreviewByLang = function() {
+    const project = window.currentProjectData;
+    if (!project || !previewTitle) return;
+
+    const isZh = document.body.classList.contains('lang-zh');
+    previewTitle.textContent = isZh ? project.title : project.titleEn;
+    previewDescription.textContent = isZh 
+      ? `拍摄于 ${project.year}` 
+      : `Photographed in ${project.year}`;
+  };
 
   // 初始化 Mapbox 地图
   mapboxgl.accessToken = 'pk.eyJ1IjoiZnVtb3RvIiwiYSI6ImNtYXhqbGZ4bDBiOWwybHB3a3R5dmk3Z2kifQ.vXgn2UF6HVT0cnnQRmLO1A';
@@ -742,8 +807,8 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11', // 使用白色浅色样式
-    center: [113.5, 30.5], // 初始中心点（中国中部）
-    zoom: 4.5, // 缩小一点以显示更多城市
+    center: [116.5, 30.5], // 初始中心点（中国中东部）
+    zoom: 4.5, // 显示整个中国东部区域
     projection: 'mercator' // 使用墨卡托投影（平面地图），不是 globe（地球）
   });
 
@@ -751,7 +816,31 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   map.dragRotate.disable();
   map.touchZoomRotate.disableRotation();
 
+  // 设置地图语言的函数
+  window.setMapLanguage = function(lang) {
+    if (!map || !map.isStyleLoaded()) return;
+    
+    // 获取地图样式
+    const style = map.getStyle();
+    if (!style || !style.layers) return;
+    
+    // 遍历所有文字图层，更新语言
+    style.layers.forEach(layer => {
+      if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+        // 设置文字字段为对应语言
+        // Mapbox 使用 {name_zh} 表示中文，{name_en} 表示英文，{name} 表示本地语言
+        const textField = lang === 'zh' 
+          ? ['coalesce', ['get', 'name_zh-Hans'], ['get', 'name_zh'], ['get', 'name']]
+          : ['coalesce', ['get', 'name_en'], ['get', 'name']];
+        
+        map.setLayoutProperty(layer.id, 'text-field', textField);
+      }
+    });
+  };
+
   const markers = [];
+  let clusterSourceId = 'projects-cluster';
+  let isClusterInitialized = false;
 
   // 地图加载完成后添加标记
   map.on('load', () => {
@@ -770,86 +859,244 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       }
     }
     
+    // 检查当前语言状态，设置地图语言
+    const isZh = document.body.classList.contains('lang-zh');
+    if (isZh && typeof window.setMapLanguage === 'function') {
+      window.setMapLanguage('zh');
+    }
+    
     initializeMarkers();
   });
   
-  // 初始化地图标记
+  // 初始化地图标记（使用聚合功能）
   function initializeMarkers() {
-    // 清除现有标记
-    markers.forEach(({ marker }) => marker.remove());
-    markers.length = 0;
-    
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
     console.log('🗺️ 地图初始化，当前分类:', category);
     const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
     console.log('  筛选后项目数:', filteredProjects.length);
     
-    filteredProjects.forEach((project, index) => {
-      // 创建自定义标记元素
-      const el = document.createElement('div');
-      el.className = 'map-marker';
-      el.style.width = index === 0 ? '20px' : '16px';
-      el.style.height = index === 0 ? '20px' : '16px';
-      el.style.backgroundColor = index === 0 ? '#2a4cd7' : '#4a6cf7';
-      el.style.borderRadius = '50%';
-      el.style.cursor = 'pointer';
-      el.style.boxShadow = '0 2px 8px rgba(74, 108, 247, 0.4)';
-      el.style.opacity = index === 0 ? '1' : '0.4'; // 初始只有第一个点完全不透明
-      el.style.transition = 'width 0.3s ease, height 0.3s ease, background-color 0.3s ease, opacity 0.3s ease';
-      el.style.pointerEvents = 'auto'; // 确保鼠标事件响应灵敏
-
-      // 悬浮标记时立即切换项目预览（无延迟）
-      el.addEventListener('mouseenter', () => {
-        switchProject(project.id);
-        updateMarkerStyles(project.id);
-      }, { passive: true });
-
-      // 创建 Mapbox 标记
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat(project.coordinates)
-        .addTo(map);
-
-      // 点击标记：手机端（窄屏）第一次点击只切换预览，第二次点击才进入作品页；电脑端（宽屏）一次点击直接进入作品页
-      el.addEventListener('click', () => {
-        const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-        const url = `project.html?from=map&category=${encodeURIComponent(category)}`;
-
-        // 使用视口宽度判断手机 / 电脑，而不是是否支持触摸，
-        // 避免带触摸屏的电脑也走“二次点击”逻辑
-        if (isMobileViewport) {
-          // 第二次点击同一个点：进入作品页
-          if (lastTappedProjectIdMobile === project.id) {
-            const mapState = {
-              center: map.getCenter(),
-              zoom: map.getZoom()
-            };
-            sessionStorage.setItem('mapState', JSON.stringify(mapState));
-            console.log('💾 保存地图状态:', mapState);
-            window.location.href = url;
-          } else {
-            // 第一次点击：仅切换预览与高亮，不跳转
-            lastTappedProjectIdMobile = project.id;
-            switchProject(project.id);
-          }
-        } else {
-          // 桌面端：保持原逻辑，直接保存状态并跳转
+    // 构建 GeoJSON 数据（每个 feature 需要唯一 id 用于悬浮高亮）
+    const geojsonData = {
+      type: 'FeatureCollection',
+      features: filteredProjects.map((project, index) => ({
+        type: 'Feature',
+        id: project.id,  // 用于 setFeatureState 的唯一 id
+        properties: {
+          id: project.id,
+          title: project.title,
+          titleEn: project.titleEn,
+          year: project.year,
+          index: index
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: project.coordinates
+        }
+      }))
+    };
+    
+    // 如果已经初始化过，更新数据源
+    if (isClusterInitialized) {
+      const source = map.getSource(clusterSourceId);
+      if (source) {
+        source.setData(geojsonData);
+      }
+      // 初始激活第一个项目
+      if (filteredProjects.length > 0) {
+        switchProject(filteredProjects[0].id);
+      }
+      return;
+    }
+    
+    // 首次初始化：添加聚合数据源
+    map.addSource(clusterSourceId, {
+      type: 'geojson',
+      data: geojsonData,
+      cluster: true,
+      clusterMaxZoom: 12, // 超过这个缩放级别不再聚合
+      clusterRadius: 10, // 聚合半径（像素）- 较小值，只有很近的点才合并
+      promoteId: 'id' // 使用 properties.id 作为 feature id（用于悬浮高亮）
+    });
+    
+    // 添加聚合圆圈图层
+    map.addLayer({
+      id: 'clusters',
+      type: 'circle',
+      source: clusterSourceId,
+      filter: ['has', 'point_count'],
+      paint: {
+        'circle-color': '#2a4cd7',
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
+          12,  // 默认大小（较小）
+          3, 14,  // 3个以上项目
+          5, 16   // 5个以上项目
+        ],
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#fff',
+        // 添加过渡动画
+        'circle-radius-transition': { duration: 300, delay: 0 },
+        'circle-opacity-transition': { duration: 300, delay: 0 }
+      }
+    });
+    
+    // 添加聚合数字图层
+    map.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: clusterSourceId,
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 11
+      },
+      paint: {
+        'text-color': '#ffffff',
+        'text-opacity-transition': { duration: 300, delay: 0 }
+      }
+    });
+    
+    // 添加单独项目点图层（支持悬浮高亮）
+    map.addLayer({
+      id: 'unclustered-point',
+      type: 'circle',
+      source: clusterSourceId,
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        // 根据 hover 状态改变颜色
+        'circle-color': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          '#2a4cd7',  // 悬浮时深蓝色
+          '#4a6cf7'   // 默认浅蓝色
+        ],
+        // 根据 hover 状态改变大小
+        'circle-radius': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          10,  // 悬浮时变大
+          8    // 默认大小
+        ],
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#fff',
+        // 根据 hover 状态改变透明度
+        'circle-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,    // 悬浮时完全不透明
+          0.6   // 默认半透明
+        ],
+        // 添加过渡动画（分散出现时的缩放效果）
+        'circle-radius-transition': { duration: 400, delay: 0 },
+        'circle-opacity-transition': { duration: 400, delay: 0 },
+        'circle-color-transition': { duration: 200, delay: 0 }
+      }
+    });
+    
+    // 记录当前悬浮的要素 ID
+    let hoveredPointId = null;
+    
+    // 点击聚合点：放大地图显示该区域的项目
+    map.on('click', 'clusters', (e) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+      const clusterId = features[0].properties.cluster_id;
+      
+      map.getSource(clusterSourceId).getClusterExpansionZoom(clusterId, (err, zoom) => {
+        if (err) return;
+        
+        map.easeTo({
+          center: features[0].geometry.coordinates,
+          zoom: zoom + 1
+        });
+      });
+    });
+    
+    // 点击单独项目点
+    map.on('click', 'unclustered-point', (e) => {
+      const feature = e.features[0];
+      const projectId = feature.properties.id;
+      const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+      const url = `project.html?id=${projectId}&from=map&category=${encodeURIComponent(category)}`;
+      
+      if (isMobileViewport) {
+        // 手机端：第一次点击切换预览，第二次进入作品页
+        if (lastTappedProjectIdMobile === projectId) {
           const mapState = {
             center: map.getCenter(),
             zoom: map.getZoom()
           };
           sessionStorage.setItem('mapState', JSON.stringify(mapState));
-          console.log('💾 保存地图状态:', mapState);
           window.location.href = url;
+        } else {
+          lastTappedProjectIdMobile = projectId;
+          switchProject(projectId);
         }
-      });
-
-      markers.push({ marker, el, projectId: project.id });
+      } else {
+        // 桌面端：保存状态并跳转
+        const mapState = {
+          center: map.getCenter(),
+          zoom: map.getZoom()
+        };
+        sessionStorage.setItem('mapState', JSON.stringify(mapState));
+        window.location.href = url;
+      }
     });
-
+    
+    // 鼠标悬浮在单独项目点上：切换预览并高亮
+    map.on('mouseenter', 'unclustered-point', (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      const feature = e.features[0];
+      const projectId = feature.properties.id;
+      
+      // 取消之前的高亮
+      if (hoveredPointId !== null) {
+        map.setFeatureState(
+          { source: clusterSourceId, id: hoveredPointId },
+          { hover: false }
+        );
+      }
+      
+      // 设置新的高亮（使用 feature 的 index 作为 id）
+      hoveredPointId = feature.id;
+      if (hoveredPointId !== undefined) {
+        map.setFeatureState(
+          { source: clusterSourceId, id: hoveredPointId },
+          { hover: true }
+        );
+      }
+      
+      switchProject(projectId);
+    });
+    
+    map.on('mouseleave', 'unclustered-point', () => {
+      map.getCanvas().style.cursor = '';
+      
+      // 取消高亮
+      if (hoveredPointId !== null) {
+        map.setFeatureState(
+          { source: clusterSourceId, id: hoveredPointId },
+          { hover: false }
+        );
+      }
+      hoveredPointId = null;
+    });
+    
+    // 鼠标悬浮在聚合点上：显示手型光标
+    map.on('mouseenter', 'clusters', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    
+    map.on('mouseleave', 'clusters', () => {
+      map.getCanvas().style.cursor = '';
+    });
+    
+    isClusterInitialized = true;
+    
     // 初始激活第一个项目
-    if (markers.length > 0) {
-      markers[0].el.classList.add('active');
+    if (filteredProjects.length > 0) {
       switchProject(filteredProjects[0].id);
     }
   }
@@ -859,19 +1106,35 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     initializeMarkers();
   });
 
+  // 全局变量：记录当前选中的项目 ID 和项目数据
+  window.currentProjectId = null;
+  window.currentProjectData = null;
+
   // 切换项目
   function switchProject(projectId) {
     const project = projects.find(p => p.id === projectId);
     if (!project) return;
 
+    // 记录当前选中的项目 ID 和数据
+    window.currentProjectId = projectId;
+    window.currentProjectData = project;
+
+    // 判断当前语言
+    const isZh = document.body.classList.contains('lang-zh');
+    const displayTitle = isZh ? project.title : project.titleEn;
+    // 预览图小字格式：Photographed in 2025 / 拍摄于 2025
+    const displayDescription = isZh 
+      ? `拍摄于 ${project.year}` 
+      : `Photographed in ${project.year}`;
+
     // 先预加载图片，加载完成后再切换，避免闪白
     const img = new Image();
     img.onload = () => {
-      previewImage.src = project.image;
-      previewTitle.textContent = project.title;
-      previewDescription.textContent = project.description;
+      if (previewImage) previewImage.src = getProjectCover(project);
+      if (previewTitle) previewTitle.textContent = displayTitle;
+      if (previewDescription) previewDescription.textContent = displayDescription;
     };
-    img.src = project.image;
+    img.src = getProjectCover(project);
 
     // 更新标记的激活状态
     markers.forEach(({ el, projectId: pid }) => {
@@ -900,22 +1163,27 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   function renderListView() {
     if (!mapListBody) return;
     
+    // 判断当前语言
+    const isZh = document.body.classList.contains('lang-zh');
+    
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
     console.log('📋 列表渲染，当前分类:', category);
     const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
     console.log('  筛选后项目数:', filteredProjects.length);
-    const sorted = [...filteredProjects].sort((a, b) => b.year - a.year); // 年份从大到小
+    const sorted = [...filteredProjects].sort((a, b) => getSortYear(b.year) - getSortYear(a.year)); // 年份从大到小
     
     mapListBody.innerHTML = '';
 
     sorted.forEach((project) => {
+      const displayTitle = isZh ? project.title : project.titleEn;
+      const displayLocation = isZh ? project.location : project.locationEn;
       const tr = document.createElement('tr');
       tr.dataset.projectId = String(project.id);
       tr.innerHTML = `
         <td class="col-year">${project.year}</td>
-        <td class="col-title">${project.title}</td>
-        <td class="col-location">${project.location}</td>
+        <td class="col-title">${displayTitle}</td>
+        <td class="col-location">${displayLocation}</td>
       `;
 
       // 悬浮时切换左侧缩略图和项目信息（和地图点效果一致）
@@ -926,7 +1194,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       // 点击行：手机端（窄屏）第一次点击只切换预览，第二次点击进入作品页；电脑端（宽屏）直接进入作品页
       tr.addEventListener('click', () => {
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-        const url = `project.html?from=indexList&category=${encodeURIComponent(category)}`;
+        const url = `project.html?id=${project.id}&from=indexList&category=${encodeURIComponent(category)}`;
 
         if (isMobileViewport) {
           const pid = project.id;
@@ -992,6 +1260,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   document.addEventListener('categoryChanged', () => {
     renderListView();
   });
+  
+  // 监听语言变化事件
+  document.addEventListener('languageChanged', () => {
+    renderListView();
+  });
 
   // Images 视图缩略图网格
   const imagesGrid = document.getElementById('images-grid');
@@ -999,22 +1272,31 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   function renderImagesView() {
     if (!imagesGrid) return;
     
+    // 判断当前语言
+    const isZh = document.body.classList.contains('lang-zh');
+    
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
     const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
-    const sortedForImages = [...filteredProjects].sort((a, b) => b.year - a.year);
+    const sortedForImages = [...filteredProjects].sort((a, b) => getSortYear(b.year) - getSortYear(a.year));
     
     imagesGrid.innerHTML = '';
     
     sortedForImages.forEach((project) => {
+      const displayTitle = isZh ? project.title : project.titleEn;
+      // Images 视图卡片上显示格式：大字项目名 + 小字拍摄年份
+      const displayDescription = isZh 
+        ? `拍摄于 ${project.year}` 
+        : `Photographed in ${project.year}`;
       const card = document.createElement('div');
       card.className = 'image-card';
+      const viewAllText = isZh ? '查看全部' : 'View All';
       card.innerHTML = `
-        <img src="${project.image}" alt="${project.title}" />
-        <button class="image-card-view-all" type="button">View All</button>
+        <img src="${getProjectCover(project)}" alt="${displayTitle}" />
+        <button class="image-card-view-all" type="button" data-en="View All" data-zh="查看全部">${viewAllText}</button>
         <div class="image-card-overlay">
-          <h3>${project.title}</h3>
-          <p>${project.description}</p>
+          <h3>${displayTitle}</h3>
+          <p>${displayDescription}</p>
         </div>
       `;
 
@@ -1031,7 +1313,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         }
 
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-        const url = `project.html?from=indexImages&category=${encodeURIComponent(category)}`;
+        const url = `project.html?id=${project.id}&from=indexImages&category=${encodeURIComponent(category)}`;
 
         if (isMobileViewport) {
           const pid = project.id;
@@ -1050,12 +1332,12 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         }
       });
 
-      // 右上角 “View All” 按钮：无论手机还是桌面，直接进入对应作品页
+      // 右上角 "View All" 按钮：无论手机还是桌面，直接进入对应作品页
       if (viewAllBtn) {
         viewAllBtn.addEventListener('click', (event) => {
           event.stopPropagation(); // 不触发卡片自身的点击逻辑
           const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-          const url = `project.html?from=indexImagesViewAll&category=${encodeURIComponent(category)}`;
+          const url = `project.html?id=${project.id}&from=indexImagesViewAll&category=${encodeURIComponent(category)}`;
           window.location.href = url;
         });
       }
@@ -1071,6 +1353,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   
   // 监听分类变化事件
   document.addEventListener('categoryChanged', () => {
+    renderImagesView();
+  });
+  
+  // 监听语言变化事件
+  document.addEventListener('languageChanged', () => {
     renderImagesView();
   });
 })();
@@ -1278,8 +1565,34 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       document.body.classList.remove('lang-zh');
     }
     
+    // 切换 About 页面的语言内容容器
+    const langEnContents = document.querySelectorAll('.lang-content.lang-en');
+    const langZhContents = document.querySelectorAll('.lang-content.lang-zh');
+    
+    if (currentLang === 'zh') {
+      langEnContents.forEach(el => el.style.display = 'none');
+      langZhContents.forEach(el => el.style.display = 'block');
+    } else {
+      langEnContents.forEach(el => el.style.display = 'block');
+      langZhContents.forEach(el => el.style.display = 'none');
+    }
+    
     // 更新首页图片文字（如果当前在首页）
     updateHomeImageText();
+    
+    // 切换地图语言（如果地图已加载）
+    if (typeof window.setMapLanguage === 'function') {
+      window.setMapLanguage(currentLang);
+    }
+    
+    // 更新当前选中项目的预览信息（如果在项目展示区域）
+    if (typeof window.updateProjectPreviewByLang === 'function') {
+      window.updateProjectPreviewByLang();
+    }
+    
+    // 触发语言变化事件，通知 Images 视图和列表视图重新渲染
+    const langEvent = new CustomEvent('languageChanged', { detail: { lang: currentLang } });
+    document.dispatchEvent(langEvent);
     
     // 保存语言偏好到 localStorage
     localStorage.setItem('preferredLanguage', currentLang);

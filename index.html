@@ -122,6 +122,8 @@
 
       <!-- About 板块：点击 About 时显示 -->
       <section class="about-section" id="about-section">
+        <!-- 桌面端 About 右上角语言切换按钮 -->
+        <button class="lang-btn lang-btn-about-desktop lang-switch-btn" data-en="中文" data-zh="English">中文</button>
         <div class="about-wrapper">
           <div class="about-container">
             <!-- 单一文本面板：人物照片 + 文字 + 联系方式 -->
@@ -130,14 +132,16 @@
           <div class="about-portraits">
             <figure class="about-portrait">
               <img src="./img/QingyanZhu.webp" alt="Portrait of Qingyan Zhu" />
-              <figcaption class="about-portrait-caption">Qingyan Zhu</figcaption>
+              <figcaption class="about-portrait-caption" data-en="Qingyan Zhu" data-zh="朱清言">Qingyan Zhu</figcaption>
             </figure>
             <figure class="about-portrait">
               <img src="./img/ZixiChen.webp" alt="Portrait of Zixi Chen" />
-              <figcaption class="about-portrait-caption">Zixi Chen</figcaption>
+              <figcaption class="about-portrait-caption" data-en="Zixi Chen" data-zh="陈子茜">Zixi Chen</figcaption>
             </figure>
           </div>
 
+          <!-- 英文内容 -->
+          <div class="lang-content lang-en">
           <p>
             We are a Shanghai-based architectural photography studio specializing in professional
             architectural and spatial imagery. The studio focuses on delivering clear, vibrant, and highly
@@ -155,82 +159,148 @@
           </p>
           <p>
             The studio partner, Zixi Chen, graduated from Politecnico di Milano with a strong
-            architectural and interior design background, contributes to the studio’s work through
+              architectural and interior design background, contributes to the studio's work through
             architectural understanding and spatial analysis.
           </p>
           <p>
-            The studio’s work has been published in leading architectural media such as ArchDaily,
+              The studio's work has been published in leading architectural media such as ArchDaily,
             Dezeen, A+U, Gooood, Archiposition, Architectural Practice, etc., and was featured in Issue
             32 of Chinese Architectural Photographers by Archiposition.
           </p>
+          </div>
 
-          <h3 class="about-subheading">Publication and Awards</h3>
+          <!-- 中文内容 -->
+          <div class="lang-content lang-zh" style="display: none;">
+            <p>
+              我们是一家常驻上海的建筑摄影工作室，专注于建筑与空间影像的专业拍摄。实践中，工作室以清晰、自然且具有高度可读性的影像语言，准确传达建筑空间逻辑与设计意图，服务于建筑事务所的传播、竞赛与项目展示需求。
+            </p>
+            <p>
+              工作室由建筑摄影师朱清言于2019年创立。朱清言毕业于芝加哥艺术学院（School of the Art Institute of Chicago），并于 2017–2019 年间师从芝加哥知名建筑摄影工作室 Hedrich Blessing Photographers（现 Hall+Merrick Photographers）。该工作室以长期记录现代主义建筑而闻名，曾为赖特、密斯·凡·德·罗、沙里宁、SOM 等建筑师及事务所拍摄作品。其间，朱清言参与多项重点建筑与空间项目的拍摄与后期制作。
+            </p>
+            <p>
+              合伙人陈子茜毕业于米兰理工大学（Politecnico di Milano），具备扎实的建筑与室内设计教育背景，从建筑理解与空间逻辑层面参与工作室影像创作。
+            </p>
+            <p>
+              工作室作品曾发表于 ArchDaily、Dezeen、A+U、谷德设计网、有方、《建筑实践》等国内外主流建筑媒体，并受访有方《中国建筑摄影师专辑》第32期。
+            </p>
+          </div>
 
+          <h3 class="about-subheading" data-en="Publication and Awards" data-zh="发布与奖项">Publication and Awards</h3>
+
+          <!-- 英文奖项 -->
+          <div class="lang-content lang-en">
           <h4 class="about-year-heading">2025</h4>
           <p>
-            Architizer A+Awards Popular Choice Winner CCBD<br />
-            APR IID Awards: Bosch Global Flagship Showroom SH by HATCH<br />
-            Dezeen Awards: Rebirth Project: Renovation of SH Relay Factory by HCCH<br />
-            Dezeen Awards: Mixed-use project shortlisted: Xi’an CCBD by Heatherwick Studio
+              Architizer A+Awards: Popular Choice Winner,Xi'an CCBD by Heatherwick Studio<br />
+              APR IID Awards: Gold Award, Bosch Global Flagship Showroom SH by HATCH Architects<br />
+              London Design Awards: Gold Winner, Microscopic Shanshui by Uncommon Architects<br />
+              Dezeen Awards: Rebirth Project Shortlisted, Renovation of SH Relay Factory by HCCH Studio<br />
+              Dezeen Awards: Mixed-use Project Shortlisterd, Xi'an CCBD by Heatherwick Studio
           </p>
 
           <h4 class="about-year-heading">2024</h4>
           <p>
-            AMP (Architecture MasterPrize) Winner 上海成交成功办公室 (Transaction Succeed Office) 壹舍设计<br />
-            AMP (Architecture MasterPrize) Winner 杭州望朝中心 (Wangchao Center) SOM<br />
-            Dezeen Awards China Shortlist HCCH 合尘建筑<br />
-            <em>Frame</em> Magazine (2024) - Retail Design: Zeekr Center Chengdu<br />
-            Architizer A+ Awards Special Mention: International Digital Sea by HATCH<br />
-            BLT Design Awards: Winner Award in the Architectural Design: MAX Technology Park SH by
-            HATCH<br />
-            Dezeen Awards: Top 10 Chinese architecture projects of 2024: Twisted Brick Shell Concept
-            Library by HCCH<br />
-            Chinese Real Estate Design Awards Gold Award: Hangzhou Wangchao Center by SOM<br />
-            International Design Award - Bronze in Architecture Project Development / Industrial /
-            Infrastructure: Yongchun Red Vinegar Factory by LEL Design Studio
+              AMP  Photography Awards: Winner, Transaction Succeed Office by One House Design<br />
+              AMP  Photography Awards: Winner, Hangzhou Wangchao Center by SOM<br />
+              AMP  Photography Awards: Winner, Peng's House by L&M Design Lab<br />
+              BLT Design Awards: Winner Award in the Architectural Design, MAX Technology Park SH by HATCH Architects<br />
+              Dezeen Awards: Top 10 Chinese architecture projects of 2024, Twisted Brick Shell Concept Library by HCCH Studio<br />
+              Chinese Real Estate Design Awards: Gold Award, Hangzhou Wangchao Center by SOM<br />
+              CTBUH Awards: Award of Excellence, Hangzhou Wangchao Center by SOM<br />
+              IDA Design Awards: Bronze Award in the Industrial and Infrastructure Category, Yongchun Red Vinegar Factory by LEL Design Lab
           </p>
 
           <h4 class="about-year-heading">2023</h4>
           <p>
-            AMP (Architecture MasterPrize) Winner 彭宅 (Peng's House) L&amp;M Design Lab<br />
-            <em>AD</em> China (2023 Special Issue) - AD100 (Moët Hennessy Diageo Shanghai Office) by
-            BNJN<br />
-            <em>Yuan Zu Dream World</em> – Tadao ANDO Complete Works<br />
-            ARCHINA: Top 10: ZEEKR Center Yangcheng Lake by HATCH
+              Architizer A+ Vision Awards Urban Photograph: Special Mention<br />
+              Architizer A+Awards: Jury Winner and Popular Choice Winner,1000 Trees Phase 1 by Heatherwick Studio<br />
+              Dezeen Awards: Mixed-use Project Shortlisted, 1000 Trees Phase 1 by Heatherwick Studio<br />
+              Moët Hennessy Diageo Shanghai HQ by BNJN Design included in  Architectural Digest (CN) 2023: AD100<br />
+              Ganzo Dream World included in Tadao Ando Complete Works<br />
+              ARCHINA Top 10 Architecture Awards: ZEEKR Center Yangcheng Lake by HATCH Architects<br />
+              Asian Design Awards: Gold Award in the Commercial Exhibition Architecture Category, International Digital Sea Investment and Exhibition Center by Hatch Architects
           </p>
 
           <h4 class="about-year-heading">2022</h4>
           <p>
-            ArchDaily Best Architectural Models Yongchun Qiaoxin Red Vinegar Factory by LEL Design
-            Studio<br />
-            APAlmanac Project of the Year Shortlisted<br />
-            AIA Chicago Design Excellence Awards ARCH XL: Citations of Merit, Shanghai International
-            Financial Center by FGP Atelier + Jahn<br />
-            CTBUH finalist Best Tall Building 200–299M, Shanghai International Financial Center by FGP
-            Atelier + Jahn
+              ArchDaily Best Architectural Models: Yongchun Red Vinegar Factory by LEL Design Lab<br />
+              AIA Chicago Design Excellence Awards: ARCH XL Citations of Merit, Shanghai International Financial Center by FGP Atelier + Jahn/<br />
+              CTBUH Best Tall Building: Finalist, Shanghai International Financial Center by FGP Atelier + Jahn/<br />
+              APAlmanac Project of the Year Shortisted
           </p>
 
           <h4 class="about-year-heading">2021</h4>
           <p>
-            有方《摄影师专辑》(2021) – “原地过年”全球建筑摄影师分享：上海篇
+              RICS China Awards: Urban Regeneration of the Year Excellence Award, Zhangjiang Landsea Center by HATCH Architects<br />
+              Qingyan Zhu included in ArchPosition's article "40 Active Chinese Architectural Photographers"
           </p>
 
           <h4 class="about-year-heading">2020</h4>
           <p>
-            有方《中国建筑摄影师》第32期 – 朱清言个人专访
-          </p>
+              Qingyan Zhu Reviewed by ArchPosition in "Chinese Architectural Photographers" Session 32
+            </p>
+          </div>
 
-          <h4 class="about-year-heading">2019</h4>
+          <!-- 中文奖项 -->
+          <div class="lang-content lang-zh" style="display: none;">
+            <h4 class="about-year-heading">2025</h4>
+            <p>
+              Heatherwick Studio的西安万象城荣获Architizer A+ Awards 大众评选奖<br />
+              汉齐建筑的博世家店上海全球旗舰店荣获APR IID 国际室内设计奖<br />
+              非筑设计的微观山水荣获伦敦设计奖金奖<br />
+              合尘建筑的上海继电器厂改造项目入围Dezeen设志大奖更新项目短名单<br />
+              Heatherwick Studio 的西安万象城入围Dezeen 设志大奖混合用途项目短名单
+            </p>
+
+            <h4 class="about-year-heading">2024</h4>
+            <p>
+              我们拍摄的上海易成办公室荣获AMP摄影大师奖室内类别优胜奖<br />
+              我们拍摄的杭州望朝中心荣获AMP摄影大师奖商业外景类别优胜奖<br />
+              我们拍摄的启东彭宅荣获AMP摄影大师奖住宅室内类别优胜奖<br />
+              汉齐建筑的MAX科技园上海美兰湖荣获BLT建筑设计奖更新类目奖<br />
+              合尘建筑的红砖概念图书馆入选Dezeen设志大奖十大最佳中国建筑项目<br />
+              SOM的杭州望朝中心荣获CREDAward地建师设计大奖金奖<br />
+              SOM的杭州望朝中心荣获CTBUH最佳高层建筑奖（亚洲地区）<br />
+              LEL Design Studio的永春红曲醋观光工厂荣获IDA Design Awards工业及基础设施类别铜奖
+            </p>
+
+            <h4 class="about-year-heading">2023</h4>
+            <p>
+              我们拍摄的作品荣获Architizer A+ Vision Awards 特别提名奖<br />
+              Heatherwick Studio的天安千树一期荣获Architizer A+ Awards 专业评审奖+大众评选奖<br />
+              Heatherwick Studio的天安千树一期入围Dezeen设志大奖混合用途项目短名单<br />
+              本真设计的轩尼诗MHD中国总部荣登《安邸 AD》2023增刊 - AD100<br />
+              安藤忠雄建筑研究所的元祖梦世界在《安藤忠雄全集》中收录<br />
+              汉齐建筑的极氪中心·苏州阳澄湖服务区荣登ARCHINA建筑中国年度建筑大奖Top 10<br />
+              汉齐建筑的上海数字江海招商展示中心荣获亚洲设计大奖国际商业建筑类别金奖
+            </p>
+
+            <h4 class="about-year-heading">2022</h4>
+            <p>
+              FGP Atelier + Jahn/ 的上海金融交易广场荣获AIA Chicago Awards 优秀设计奖项大型建筑类别优秀提名奖<br />
+              FGP Atelier + Jahn/ 的上海金融交易广场荣登CTBUH最佳高层建筑奖决赛入围<br />
+              Apalmanac建筑摄影奖 年度项目奖短名单<br />
+              渤岳建筑设计的永春红曲醋观光工厂模型荣登建日筑闻年度最佳建筑模型榜单
+            </p>
+
+            <h4 class="about-year-heading">2021</h4>
           <p>
-            有方《乌兹别克斯坦摄影日记》 – 朱清言个人旅行纪实专题
+              汉齐建筑设计的张江朗诗中心荣获 RICS CHINA Awards 年度城市更新优秀奖<br />
+              朱清言荣登有方《40位当下活跃的中国建筑摄影师》榜单
+            </p>
+
+            <h4 class="about-year-heading">2020</h4>
+            <p>
+              朱清言荣登有方《中国建筑摄影师》专题第32期采访
           </p>
+          </div>
 
           <!-- 联系方式（手机端移到最下面） -->
           <div class="about-contact">
-            <p>Cell: +86 1340204087</p>
-            <p>E-mail: qingyan@qzhuphoto.com</p>
-            <p>Red: 清言筑造</p>
-            <p>Instagram: qzhuphoto</p>
+            <p><span data-en="Cell" data-zh="电话">Cell</span>: +86 13402042087</p>
+            <p><span data-en="E-mail" data-zh="邮箱">E-mail</span>: qingyan@qzhuphoto.com</p>
+            <p>小红书@清言筑语</p>
+            <p>Instagram@qzhuphoto</p>
           </div>
         </div>
 
@@ -239,19 +309,19 @@
           <div class="about-sidebar-portraits">
             <figure class="about-portrait">
               <img src="./img/QingyanZhu.webp" alt="Portrait of Qingyan Zhu" />
-              <figcaption class="about-portrait-caption">Qingyan Zhu</figcaption>
+              <figcaption class="about-portrait-caption" data-en="Qingyan Zhu" data-zh="朱清言">Qingyan Zhu</figcaption>
             </figure>
             <figure class="about-portrait">
               <img src="./img/ZixiChen.webp" alt="Portrait of Zixi Chen" />
-              <figcaption class="about-portrait-caption">Zixi Chen</figcaption>
+              <figcaption class="about-portrait-caption" data-en="Zixi Chen" data-zh="陈子茜">Zixi Chen</figcaption>
             </figure>
           </div>
           <div class="about-sidebar-contact">
-            <p>Cell: +86 1340204087</p>
-            <p>E-mail: qingyan@qzhuphoto.com</p>
-            <p>Red: 清言筑造</p>
-            <p>Instagram: qzhuphoto</p>
-          </div>
+            <p><span data-en="Cell" data-zh="电话">Cell</span>: +86 13402042087</p>
+            <p><span data-en="E-mail" data-zh="邮箱">E-mail</span>: qingyan@qzhuphoto.com</p>
+            <p>小红书@清言筑语</p>
+            <p>Instagram@qzhuphoto</p>
+        </div>
         </aside>
 
           </div> <!-- /.about-container -->
@@ -273,7 +343,7 @@
                 class="preview-image"
               />
               <!-- 手机端：预览图右上角 View All 按钮 -->
-              <button class="preview-view-all-btn" id="preview-view-all-btn">View All</button>
+              <button class="preview-view-all-btn" id="preview-view-all-btn" data-en="View All" data-zh="查看全部">View All</button>
             </div>
             <div class="preview-info">
               <h2 id="preview-title" class="preview-title">Xi'an CCBD</h2>
@@ -295,9 +365,9 @@
               <table class="project-list-table">
                 <thead>
                   <tr>
-                    <th class="col-year">Year</th>
-                    <th class="col-title">Project</th>
-                    <th class="col-location">Location</th>
+                    <th class="col-year" data-en="Year" data-zh="年份">Year</th>
+                    <th class="col-title" data-en="Project" data-zh="项目名">Project</th>
+                    <th class="col-location" data-en="Location" data-zh="位置">Location</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -395,6 +465,7 @@
       <div id="projects-section-images"></div>
     </div>
 
+    <script src="./projects-data.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

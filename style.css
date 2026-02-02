@@ -1050,6 +1050,19 @@ body.is-desktop .scroll-arrow {
   margin: 0 0 6px;
 }
 
+/* 联系方式中的社交媒体链接样式 */
+.about-sidebar-contact a,
+.about-contact a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.about-sidebar-contact a:hover,
+.about-contact a:hover {
+  opacity: 0.6;
+}
+
 /* 人物照片在文本内（桌面端隐藏，手机端显示在最上方） */
 .about-portraits {
   display: none;                /* 桌面端隐藏 */

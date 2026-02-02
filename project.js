@@ -128,6 +128,27 @@
     });
   }
 
+  // 图片预加载缓存
+  const preloadedImages = new Set();
+  
+  // 预加载图片函数
+  function preloadImage(src) {
+    if (!src || preloadedImages.has(src)) return;
+    const img = new Image();
+    img.src = src;
+    preloadedImages.add(src);
+  }
+  
+  // 预加载相邻图片（提前加载前后各 3 张）
+  function preloadNearbyImages(index) {
+    for (let i = -3; i <= 3; i++) {
+      const targetIndex = index + i;
+      if (targetIndex >= 0 && targetIndex < images.length) {
+        preloadImage(images[targetIndex]);
+      }
+    }
+  }
+
   // 根据当前索引刷新三面板图片
   function updateCarouselImages() {
     if (!panelCurrImage) return;
@@ -156,10 +177,18 @@
         panelNextImage.style.visibility = 'hidden';
       }
     }
+    
+    // 预加载相邻图片
+    preloadNearbyImages(currentIndex);
   }
 
   // 初始化一次主图三面板
   updateCarouselImages();
+  
+  // 初始时预加载前几张图片
+  for (let i = 0; i < Math.min(5, images.length); i++) {
+    preloadImage(images[i]);
+  }
 
   // 切换图片函数
   function switchImage(index) {

@@ -228,10 +228,7 @@ body.is-mobile .language-switch {
 
 /* 手机端：首页右上角 Logo，向上移动5px */
 body.is-mobile .top-logo {
-  position: absolute;
-  top: 20px;                    /* 从 25px 减少到 20px，向上移动 5px (2px+3px) */
-  right: 20px;
-  z-index: 10;
+  display: none;                /* 手机端隐藏首页右上角 logo */
 }
 
 /* 桌面端（body 标记为 is-desktop）始终隐藏手机 Logo，
@@ -760,12 +757,40 @@ body.is-desktop .scroll-arrow {
 .map-container {
   flex: 1;
   position: relative;
-  background-color: #e5e5e5;
+  background-color: transparent;
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid #d0d0d0;
   height: 100%;
   width: 100%;
+}
+
+/* 地图归位按钮 - 默认隐藏，手机端显示 */
+.map-reset-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .map-reset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 10;
+    color: #666;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .map-reset-btn:active {
+    background: #f0f0f0;
+  }
 }
 
 .map-list-container {
@@ -894,11 +919,19 @@ body.is-desktop .scroll-arrow {
 }
 
 #map {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* 隐藏 Mapbox 底部控件 */
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  display: none !important;
 }
 
 .map-bg {
@@ -1290,10 +1323,29 @@ body.is-desktop .scroll-arrow {
     padding: 0 16px 6px 16px;             /* 底部略收紧一些，减少与下方空白 */
   }
 
-  .map-container,
+  .map-container {
+    height: calc(42vh + 5px);             /* 固定高度 */
+    max-height: calc(42vh + 5px);
+    padding: 0;
+    background-color: transparent;
+  }
+
   .map-list-container {
     max-height: calc(42vh + 5px);         /* 整体减少 5px (从 10px 改为 5px) */
-    padding: 0 16px 6px 16px;             /* 统一底部 padding，与 .project-map 一致 */
+    padding: 0;                           /* 移除 padding，让滚动条紧贴右侧 */
+  }
+
+  /* 手机端列表滚动条始终可见 */
+  .map-list-container::-webkit-scrollbar {
+    width: 4px;
+  }
+  .map-list-container::-webkit-scrollbar-track {
+    background: #e5e5e5;
+    border-radius: 2px;
+  }
+  .map-list-container::-webkit-scrollbar-thumb {
+    background-color: #999999;
+    border-radius: 2px;
   }
 
   /* Images 视图高度：匹配整个 Map/List 区域（包括预览图+内容） */

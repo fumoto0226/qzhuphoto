@@ -17,8 +17,8 @@
     throw new Error('Project not found');
   }
 
-  // 构建图片路径数组
-  const images = project.images.map(img => `./img/program/${project.folder}/${img}`);
+  // 构建图片路径数组（对路径进行 URL 编码以支持中文和空格）
+  const images = project.images.map(img => encodeURI(`./img/program/${project.folder}/${img}`));
 
   // ========== 语言切换功能 ==========
   // 从 localStorage 读取保存的语言偏好

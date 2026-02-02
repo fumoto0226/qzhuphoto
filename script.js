@@ -410,15 +410,13 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       const y = window.scrollY;
       const delta = y - lastScrollY;
 
-      // 中间区域：自动对齐到顶部或 tabs 区
+      // 中间区域：仅向下滚动时自动对齐到 tabs 区，向上滚动不自动跳回顶部
       if (y > 10 && y < targetTop - 10) {
         if (delta > 0) {
           // 向下滚动，自动对齐到 tabs 区
           scrollToNextSection();
-        } else if (delta < 0) {
-          // 向上滚动，自动对齐回首页顶部
-          scrollToTopSection();
         }
+        // 向上滚动不再自动跳回顶部，让用户自由滚动
       }
 
       lastScrollY = y;
@@ -453,18 +451,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
           imagesAnchor.scrollIntoView({ behavior: 'smooth' });
         }
       }
-      // 在 Images 区域外向上滚动到顶部时，平滑滚回首页顶部
-      else if (window.scrollY > 0 && event.deltaY < 0) {
-        const tabsSection = document.querySelector('.tabs-only-section');
-        if (tabsSection) {
-          const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
-          // 如果滚动到接近 tabs 区域顶部且向上滚动
-          if (window.scrollY <= tabsTop + 100) {
-            event.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        }
-      }
+      // 向上滚动不再自动跳回顶部，让用户自由滚动
       return;
     }
     
@@ -476,27 +463,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         event.preventDefault();
         aboutSection.scrollIntoView({ behavior: 'smooth' });
       }
-      // 在 About 区域向上滚动到顶部时，平滑滚回首页顶部
-      else if (window.scrollY > 0 && event.deltaY < 0) {
-        // 检查是否在 About 文字区域滚动
-        const target = event.target;
-        const isInAboutText = target.closest('.about-text-panel');
-        
-        // 如果在文字区域内，不触发回到首页
-        if (isInAboutText) {
-          return;
-        }
-        
-        const tabsSection = document.querySelector('.tabs-only-section');
-        if (tabsSection) {
-          const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
-          // 如果滚动到接近 tabs 区域顶部且向上滚动
-          if (window.scrollY <= tabsTop + 100) {
-            event.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        }
-      }
+      // 向上滚动不再自动跳回顶部，让用户自由滚动
       return;
     }
 
@@ -536,30 +503,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         }
       }
     }
-    // 在项目区域向上滚动时，检测是否需要滚回首页
-    else if (window.scrollY > 0 && event.deltaY < 0) {
-      // 检查鼠标是否在地图、列表或图片网格区域
-      const target = event.target;
-      const isInMapArea = target.closest('.map-container') || target.closest('#map');
-      const isInListArea = target.closest('.map-list-container');
-      const isInImagesArea = target.closest('.images-grid');
-      
-      // 如果鼠标在地图/列表/图片区域，不触发回到首页
-      if (isInMapArea || isInListArea || isInImagesArea) {
-        return;
-      }
-      
-      const tabsSection = document.querySelector('.tabs-only-section');
-      if (tabsSection) {
-        const tabsTop = tabsSection.getBoundingClientRect().top + window.scrollY;
-        // 如果滚动到接近 tabs 区域顶部（项目区域的上方）且向上滚动
-        if (window.scrollY <= tabsTop + 100) {
-          event.preventDefault();
-          // 直接平滑滚到页面顶部，不停在中间
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }
-    }
+    // 向上滚动不再自动跳回顶部，让用户自由滚动
   }, { passive: false }); // 改为 passive: false 以便可以 preventDefault
 
   // 触摸设备：手指滑动也触发
@@ -776,9 +720,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     ...(projectMapInfo[p.id] || {})
   }));
 
-  // 获取项目封面图路径
+  // 获取项目封面图路径（对路径进行 URL 编码以支持中文和空格）
   function getProjectCover(project) {
-    return `./img/program/${project.folder}/${project.cover}`;
+    return encodeURI(`./img/program/${project.folder}/${project.cover}`);
   }
 
   const previewImage = document.getElementById("preview-image");
@@ -807,9 +751,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11', // 使用白色浅色样式
-    center: [116.5, 30.5], // 初始中心点（中国中东部）
-    zoom: 4.5, // 显示整个中国东部区域
-    projection: 'mercator' // 使用墨卡托投影（平面地图），不是 globe（地球）
+    center: [115.5, 28.5], // 初始中心点（能显示所有项目）
+    zoom: 3.8, // 显示所有项目点
+    projection: 'mercator', // 使用墨卡托投影（平面地图），不是 globe（地球）
+    attributionControl: false // 隐藏底部 attribution 控件
   });
 
   // 禁用地图旋转和倾斜
@@ -842,6 +787,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   let clusterSourceId = 'projects-cluster';
   let isClusterInitialized = false;
 
+  // 初始地图位置（用于归位）- 调整为能显示所有项目点
+  const initialCenter = [115.5, 28.5];
+  const initialZoom = 3.8;
+
   // 地图加载完成后添加标记
   map.on('load', () => {
     // 尝试恢复保存的地图状态
@@ -857,6 +806,18 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       } catch (e) {
         console.error('恢复地图状态失败:', e);
       }
+    }
+
+    // 归位按钮点击事件
+    const mapResetBtn = document.getElementById('map-reset-btn');
+    if (mapResetBtn) {
+      mapResetBtn.addEventListener('click', () => {
+        map.flyTo({
+          center: initialCenter,
+          zoom: initialZoom,
+          duration: 800
+        });
+      });
     }
     
     // 检查当前语言状态，设置地图语言
@@ -1022,7 +983,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       const url = `project.html?id=${projectId}&from=map&category=${encodeURIComponent(category)}`;
       
       if (isMobileViewport) {
-        // 手机端：第一次点击切换预览，第二次进入作品页
+        // 手机端：第一次点击切换预览并高亮，第二次进入作品页
         if (lastTappedProjectIdMobile === projectId) {
           const mapState = {
             center: map.getCenter(),
@@ -1031,6 +992,23 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
           sessionStorage.setItem('mapState', JSON.stringify(mapState));
           window.location.href = url;
         } else {
+          // 取消之前的高亮
+          if (hoveredPointId !== null) {
+            map.setFeatureState(
+              { source: clusterSourceId, id: hoveredPointId },
+              { hover: false }
+            );
+          }
+          
+          // 设置新的高亮
+          hoveredPointId = feature.id;
+          if (hoveredPointId !== undefined) {
+            map.setFeatureState(
+              { source: clusterSourceId, id: hoveredPointId },
+              { hover: true }
+            );
+          }
+          
           lastTappedProjectIdMobile = projectId;
           switchProject(projectId);
         }

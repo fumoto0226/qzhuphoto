@@ -771,6 +771,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     // 遍历所有文字图层，更新语言
     style.layers.forEach(layer => {
+      // 跳过聚合数字图层，保持其 text-field 不变
+      if (layer.id === 'cluster-count') return;
+      
       if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
         // 设置文字字段为对应语言
         // Mapbox 使用 {name_zh} 表示中文，{name_en} 表示英文，{name} 表示本地语言

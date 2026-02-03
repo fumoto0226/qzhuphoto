@@ -47,7 +47,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       location: 'Peng\'s House',
       locationZh: '启东彭宅',
       description: 'Designed by L&M Design Lab',
-      descriptionZh: '委托方：立木设计'
+      descriptionZh: '委托方：立木建筑'
     },
     {
       src: './img/home/1/05.webp',
@@ -66,16 +66,16 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     {
       src: './img/home/1/07.webp',
       location: 'Resting Loop with Views',
-      locationZh: '重庆环（绿屏石瀑布站）',
+      locationZh: '重景环（绿屏石滩驿站）',
       description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合筑建筑'
+      descriptionZh: '委托方：合尘建筑'
     },
     {
       src: './img/home/1/08.webp',
       location: 'Wave Breaker by the Sea',
       locationZh: '临港浪花消波块驿站',
       description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合筑建筑'
+      descriptionZh: '委托方：合尘建筑'
     },
     {
       src: './img/home/1/09.webp',
@@ -89,14 +89,14 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       location: 'Asset Management Company Office',
       locationZh: '资产管理公司室内',
       description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合筑建筑'
+      descriptionZh: '委托方：合尘建筑'
     },
     {
       src: './img/home/1/11.webp',
-      location: 'Cave Teahouse & Tree tavern',
+      location: 'Cave Teahouse & Tree Tavern',
       locationZh: '石室茶室 树洞酒馆',
-      description: 'Designed by ARC Z + Practice on Earch',
-      descriptionZh: '委托方：ARC Z + 采一建筑'
+      description: 'Designed by Arc Z + Practice on Earth',
+      descriptionZh: '委托方：Arc Z + 猜一建筑'
     }
   ];
 
@@ -1621,14 +1621,14 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       { src: './img/home/1/01.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
       { src: './img/home/1/02.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
       { src: './img/home/1/03.webp', location: 'Shenzhen Gate', locationZh: '深圳汇隆商务中心', description: 'Designed by FGP Atelier', descriptionZh: '委托方：FGP Atelier' },
-      { src: './img/home/1/04.webp', location: 'Peng\'s House', locationZh: '启东彭宅', description: 'Designed by L&M Design Lab', descriptionZh: '委托方：立木设计' },
+      { src: './img/home/1/04.webp', location: 'Peng\'s House', locationZh: '启东彭宅', description: 'Designed by L&M Design Lab', descriptionZh: '委托方：立木建筑' },
       { src: './img/home/1/05.webp', location: 'Xuhui District New Archives Center', locationZh: '徐汇区档案馆新馆', description: 'Designed by Atelier Archmixing', descriptionZh: '委托方：阿科米星建筑设计事务所' },
       { src: './img/home/1/06.webp', location: 'Tian An Clubhouse', locationZh: '常州天安会所', description: 'Designed by HATCH Architects', descriptionZh: '委托方：汉齐建筑' },
-      { src: './img/home/1/07.webp', location: 'Resting Loop with Views', locationZh: '重庆环（绿屏石瀑布站）', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
-      { src: './img/home/1/08.webp', location: 'Wave Breaker by the Sea', locationZh: '临港浪花消波块驿站', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
+      { src: './img/home/1/07.webp', location: 'Resting Loop with Views', locationZh: '重景环（绿屏石滩驿站）', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
+      { src: './img/home/1/08.webp', location: 'Wave Breaker by the Sea', locationZh: '临港浪花消波块驿站', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
       { src: './img/home/1/09.webp', location: 'Xi\'an CCBD', locationZh: '西安万象城', description: 'Designed by Heatherwick Studio', descriptionZh: '委托方：Heatherwick Studio' },
-      { src: './img/home/1/10.webp', location: 'Asset Management Company Office', locationZh: '资产管理公司室内', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合筑建筑' },
-      { src: './img/home/1/11.webp', location: 'Cave Teahouse & Tree tavern', locationZh: '石室茶室 树洞酒馆', description: 'Designed by ARC Z + Practice on Earch', descriptionZh: '委托方：ARC Z + 采一建筑' }
+      { src: './img/home/1/10.webp', location: 'Asset Management Company Office', locationZh: '资产管理公司室内', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
+      { src: './img/home/1/11.webp', location: 'Cave Teahouse & Tree Tavern', locationZh: '石室茶室 树洞酒馆', description: 'Designed by Arc Z + Practice on Earth', descriptionZh: '委托方：Arc Z + 猜一建筑' }
     ];
     
     // 查找匹配的图片数据（使用完整URL或相对路径匹配）

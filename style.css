@@ -192,6 +192,11 @@ body.unlock-scroll .viewport {
   display: none;
 }
 
+/* 默认隐藏桌面端 Works 页面右下角版权信息（移动端不显示） */
+.copyright-work-desktop {
+  display: none;
+}
+
 /* ========= 手机端专用：首页取消缩放遮罩，改为居中大图 ========= */
 body.is-mobile .viewport {
   height: auto;
@@ -561,17 +566,22 @@ body.is-desktop .scroll-arrow {
 
 .project-list-table th.col-year,
 .project-list-table td.col-year {
-  width: 80px;
+  width: 20%;           /* 年份 */
 }
 
 .project-list-table th.col-title,
 .project-list-table td.col-title {
-  width: 50%;
+  width: 30%;           /* 项目名 */
+}
+
+.project-list-table th.col-designer,
+.project-list-table td.col-designer {
+  width: 30%;           /* 设计方 */
 }
 
 .project-list-table th.col-location,
 .project-list-table td.col-location {
-  width: 30%;
+  width: 20%;           /* 位置 */
 }
 
 .project-list-table tbody tr {
@@ -962,9 +972,9 @@ body.is-desktop .scroll-arrow {
   height: 85vh;                 /* 固定高度，和 projects-container 一致 */
   max-height: 85vh;
   overflow: hidden;             /* 防止整体滚动 */
-  padding: 0 40px 0 40px;
+  padding: 0 40px 60px 40px;    /* 底部增加内边距，为左下角语言按钮留出空间 */
   padding-right: 50px;          /* 右侧边距增加 10px (从 40px 到 50px) */
-  position: relative;           /* 作为 About 右上角中文按钮的定位容器（桌面端） */
+  position: relative;           /* 作为 About 左下角中文按钮的定位容器（桌面端） */
 }
 
 .about-container {
@@ -992,7 +1002,9 @@ body.is-desktop .scroll-arrow {
 }
 
 .about-subheading {
-  margin: 32px 0 12px;
+  margin: 48px 0 12px;          /* 增加上边距，从 32px 改为 48px */
+  padding-top: 32px;            /* 添加内边距，让文字与分割线有间距 */
+  border-top: 1px solid #E0E0E0;  /* 添加浅灰色细线作为分割 */
   font-size: 16px;
   font-weight: 600;
 }
@@ -1408,6 +1420,11 @@ body.is-desktop .scroll-arrow {
     display: none;
   }
 
+  /* 桌面端调整 project-map 底部内边距，为版权信息留出空间 */
+  .project-map {
+    padding-bottom: 50px;        /* 从 60px 减少到 50px，让 map/list 区域更高一些 */
+  }
+
   /* 桌面端 Works 区域左下角中文按钮 */
   .lang-btn-work-desktop {
     display: block;              /* 桌面端显示 */
@@ -1430,12 +1447,12 @@ body.is-desktop .scroll-arrow {
     opacity: 0.6;
   }
 
-  /* 桌面端 About 页面右上角语言切换按钮 */
+  /* 桌面端 About 页面左下角语言切换按钮（与 Work 页面位置一致） */
   .lang-btn-about-desktop {
     display: block;              /* 桌面端显示 */
     position: absolute;
-    right: 50px;                 /* 右边距对齐图片右侧 (与 about-wrapper 的 padding-right 一致) */
-    top: -48px;                  /* 负值让按钮上移，与"关于我们"垂直居中对齐 */
+    left: 40px;                  /* 左下角，与 Work 页面一致 */
+    bottom: 32px;                /* 底部距离，与 Work 页面一致 */
     font-size: 14px;
     background: none;
     border: none;
@@ -1450,6 +1467,33 @@ body.is-desktop .scroll-arrow {
   
   .lang-btn-about-desktop:hover {
     opacity: 0.6;
+  }
+
+  /* 桌面端 Works 页面右下角版权信息 */
+  .copyright-work-desktop {
+    display: block;              /* 桌面端显示 */
+    position: absolute;
+    right: 40px;                 /* 右下角，与右侧内边距对齐 */
+    bottom: 32px;                /* 底部距离，与左下角按钮对齐 */
+    font-size: 12px;
+    color: #BBBBBB;              /* 颜色更浅，从 #999999 改为 #BBBBBB */
+    line-height: 1.5;
+    z-index: 10;
+    text-align: right;
+  }
+
+  .copyright-work-desktop p {
+    margin: 0;
+  }
+
+  .copyright-work-desktop a {
+    color: #BBBBBB;              /* 链接颜色也更浅，从 #999999 改为 #BBBBBB */
+    text-decoration: none;
+    transition: color 0.2s ease; /* 从 opacity 改为 color 过渡 */
+  }
+
+  .copyright-work-desktop a:hover {
+    color: #6f6f6f;              /* hover 时变深，从变浅改为变深 */
   }
 }
 

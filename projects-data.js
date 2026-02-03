@@ -4,6 +4,8 @@
 // - year: 拍摄年份（数字或 "2024-2025" 这种范围格式用于排序）
 // - title: 中文名（作品页右上角显示）
 // - titleEn: 英文名（作品页右上角显示）
+// - designer: 设计方中文名
+// - designerEn: 设计方英文名
 // - folder: 项目图片文件夹名称（放在 img/program/ 下）
 // - cover: 封面图文件名（相对于项目文件夹）
 // - images: 图片文件名数组（按顺序显示）
@@ -14,6 +16,8 @@ const projectsData = [
     year: 2025,
     title: "石室茶室+树洞酒馆",
     titleEn: "Cave Teahouse & Tree Tavern",
+    designer: "Arc Z+猜一建筑",
+    designerEn: "Arc Z and Practice on Earth",
     folder: "cave-teahouse-tree-tavern",
     cover: "pano6.webp",
     categories: ["architecture", "small-scale", "interior", "commercial"],
@@ -51,6 +55,8 @@ const projectsData = [
     year: 2023,
     title: "启东彭宅",
     titleEn: "Peng's House",
+    designer: "立木设计",
+    designerEn: "L&M Design Lab",
     folder: "启东彭宅 Peng's House",
     cover: "0152_077.webp",
     categories: ["architecture", "small-scale", "interior", "residential"],
@@ -110,6 +116,8 @@ const projectsData = [
     year: 2025,
     title: "公牛总部园区",
     titleEn: "Goneo HQ Campus",
+    designer: "本真设计",
+    designerEn: "BNJN Design",
     folder: "公牛总部园区 Goneo HQ Campus",
     cover: "0205_179.webp",
     categories: ["architecture", "interior", "workspace"],
@@ -210,6 +218,8 @@ const projectsData = [
     year: "2024-2025",
     title: "西安万象城",
     titleEn: "Xi'an CCBD",
+    designer: "Heatherwick Studio",
+    designerEn: "Heatherwick Studio",
     folder: "西安万象城 Xi An CCBD",
     cover: "DJI_20250820175001_0282_D.webp",
     categories: ["architecture", "interior", "commercial"],
@@ -254,6 +264,8 @@ const projectsData = [
     year: 2025,
     title: "天安会",
     titleEn: "Tian An Clubhouse",
+    designer: "汉齐建筑",
+    designerEn: "HATCH Architects",
     folder: "天安会 Tian An Clubhouse",
     cover: "DJI_20250508102545_0551_D.webp",
     categories: ["architecture", "interior", "hospitality"],
@@ -312,6 +324,8 @@ const projectsData = [
     year: "2023-2024",
     title: "杭州望朝中心",
     titleEn: "Hangzhou Wangchao Center",
+    designer: "SOM",
+    designerEn: "SOM",
     folder: "杭州望朝中心 Hangzhou Wangchao Center",
     cover: "0131d_010.webp",
     categories: ["architecture", "interior", "workspace"],
@@ -366,6 +380,8 @@ const projectsData = [
     year: 2025,
     title: "重景环",
     titleEn: "Resting Loop with Views",
+    designer: "合尘建筑",
+    designerEn: "HCCH Studio",
     folder: "重景环 Resting Loop with Views",
     cover: "DJI_20250801163053_0327_D.webp",
     categories: ["small-scale"],

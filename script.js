@@ -586,8 +586,13 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     const cat = item.dataset.category;
     if (cat === currentCategory) {
       item.classList.add('active');
-      categoryBtn.textContent = item.textContent;
-      console.log('    设置按钮文字为:', item.textContent);
+      // 如果是"全部"分类，显示"筛选"；其他分类显示分类名
+      if (cat === 'all') {
+        categoryBtn.textContent = document.body.classList.contains('lang-zh') ? '筛选' : 'Filter';
+      } else {
+        categoryBtn.textContent = item.textContent;
+      }
+      console.log('    设置按钮文字为:', categoryBtn.textContent);
     } else {
       item.classList.remove('active');
     }
@@ -629,8 +634,12 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       categoryItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       
-      // 更新按钮文字
-      categoryBtn.textContent = item.textContent;
+      // 更新按钮文字：如果是"全部"分类，显示"筛选"；其他分类显示分类名
+      if (category === 'all') {
+        categoryBtn.textContent = document.body.classList.contains('lang-zh') ? '筛选' : 'Filter';
+      } else {
+        categoryBtn.textContent = item.textContent;
+      }
       
       // 关闭菜单
       categoryDropdown.classList.remove('open');
@@ -740,9 +749,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     const isZh = document.body.classList.contains('lang-zh');
     previewTitle.textContent = isZh ? project.title : project.titleEn;
+    // 格式：设计方：XXX。拍摄于XXXX年。
     previewDescription.textContent = isZh 
-      ? `拍摄于 ${project.year}` 
-      : `Photographed in ${project.year}`;
+      ? `设计方：${project.designer}。拍摄于${project.year}年。` 
+      : `Designed by ${project.designerEn}. Photographed in ${project.year}.`;
   };
 
   // 初始化 Mapbox 地图
@@ -1103,10 +1113,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     // 判断当前语言
     const isZh = document.body.classList.contains('lang-zh');
     const displayTitle = isZh ? project.title : project.titleEn;
-    // 预览图小字格式：Photographed in 2025 / 拍摄于 2025
+    const displayDesigner = isZh ? project.designer : project.designerEn;
+    // 预览图小字格式：设计方 + 拍摄年份
     const displayDescription = isZh 
-      ? `拍摄于 ${project.year}` 
-      : `Photographed in ${project.year}`;
+      ? `设计方：${displayDesigner}。拍摄于${project.year}年。`
+      : `Designed by ${displayDesigner}. Photographed in ${project.year}.`;
 
     // 先预加载图片，加载完成后再切换，避免闪白
     const img = new Image();
@@ -1158,12 +1169,14 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     sorted.forEach((project) => {
       const displayTitle = isZh ? project.title : project.titleEn;
+      const displayDesigner = isZh ? project.designer : project.designerEn;
       const displayLocation = isZh ? project.location : project.locationEn;
       const tr = document.createElement('tr');
       tr.dataset.projectId = String(project.id);
       tr.innerHTML = `
         <td class="col-year">${project.year}</td>
         <td class="col-title">${displayTitle}</td>
+        <td class="col-designer">${displayDesigner}</td>
         <td class="col-location">${displayLocation}</td>
       `;
 
@@ -1265,10 +1278,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     sortedForImages.forEach((project) => {
       const displayTitle = isZh ? project.title : project.titleEn;
-      // Images 视图卡片上显示格式：大字项目名 + 小字拍摄年份
+      // Images 视图卡片上显示格式：大字项目名 + 小字设计方+拍摄年份
       const displayDescription = isZh 
-        ? `拍摄于 ${project.year}` 
-        : `Photographed in ${project.year}`;
+        ? `设计方：${project.designer}。拍摄于${project.year}年。` 
+        : `Designed by ${project.designerEn}. Photographed in ${project.year}.`;
       const card = document.createElement('div');
       card.className = 'image-card';
       const viewAllText = isZh ? '查看全部' : 'View All';
@@ -1536,6 +1549,15 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       const zhText = element.getAttribute('data-zh');
       element.textContent = currentLang === 'en' ? enText : zhText;
     });
+    
+    // 特殊处理：如果分类按钮当前显示的是"全部"分类，需要显示"筛选"
+    const categoryBtn = document.getElementById('category-btn');
+    if (categoryBtn) {
+      const activeCategory = document.querySelector('.category-item.active');
+      if (activeCategory && activeCategory.dataset.category === 'all') {
+        categoryBtn.textContent = currentLang === 'en' ? 'Filter' : '筛选';
+      }
+    }
     
     // 在 body 上添加/移除语言类，用于 CSS 调整
     if (currentLang === 'zh') {

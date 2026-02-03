@@ -16,7 +16,7 @@
         document.documentElement.classList.add('start-at-projects');
       }
     </script>
-    <title>Qingyan Zhu Photographer</title>
+    <title>QingYan Studio</title>
     <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
     <link rel="stylesheet" href="./style.css" />
     <!-- Mapbox GL JS -->
@@ -35,7 +35,7 @@
         <div class="frame">
           <!-- 黑色标题：在白色区域，被遮罩盖住/露出 -->
           <header class="title-black">
-            <h1 class="title-text">Qingyan Zhu Photographer</h1>
+            <h1 class="title-text">QingYan Studio</h1>
           </header>
 
           <!-- 图片蒙版：包含图片和白色标题，一起被裁切 -->
@@ -54,7 +54,7 @@
             
             <!-- 白色标题：和图片一起被遮罩裁切 -->
             <div class="title-white">
-              <h1 class="title-text">Qingyan Zhu Photographer</h1>
+              <h1 class="title-text">QingYan Studio</h1>
             </div>
           </div>
 
@@ -104,7 +104,7 @@
             <button class="view-tab" data-view="images" id="view-images-tab" data-en="Images" data-zh="图片">Images</button>
             <!-- 项目分类下拉菜单 -->
             <div class="category-dropdown" id="category-dropdown">
-              <button class="category-btn" id="category-btn" data-en="All" data-zh="全部">All</button>
+              <button class="category-btn" id="category-btn" data-en="Filter" data-zh="筛选">Filter</button>
               <div class="category-menu" id="category-menu">
                 <div class="category-item active" data-category="all" data-en="All" data-zh="全部">All</div>
                 <div class="category-item" data-category="architecture" data-en="Architecture" data-zh="建筑">Architecture</div>
@@ -335,6 +335,11 @@
       <section class="projects-section" id="projects-section">
         <!-- 桌面端 Works 左下角中文按钮 -->
         <button class="lang-btn lang-btn-work-desktop lang-switch-btn" data-en="中文" data-zh="English">中文</button>
+        <!-- 桌面端 Works 右下角版权信息 -->
+        <div class="copyright-work-desktop">
+          <p class="lang-content lang-zh" style="display: none;">版权所有 © 2026 QingYan Studio。网站设计 <a href="https://fumoto0226.github.io/zenglujin/" target="_blank" rel="noopener">Zenglujin</a>。</p>
+          <p class="lang-content lang-en">© 2026 QingYan Studio. All Rights Reserved. Site by <a href="https://fumoto0226.github.io/zenglujin/" target="_blank" rel="noopener">Zenglujin</a>.</p>
+        </div>
         <div class="projects-container">
           <!-- 左侧：预览图和信息 -->
           <div class="project-preview">
@@ -377,6 +382,7 @@
                   <tr>
                     <th class="col-year" data-en="Year" data-zh="年份">Year</th>
                     <th class="col-title" data-en="Project" data-zh="项目名">Project</th>
+                    <th class="col-designer" data-en="Designer" data-zh="设计方">Designer</th>
                     <th class="col-location" data-en="Location" data-zh="位置">Location</th>
                   </tr>
                 </thead>

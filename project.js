@@ -41,8 +41,13 @@
   // 设置项目标题
   function updateProjectTitle() {
     const title = currentLang === 'zh' ? project.title : project.titleEn;
+    const designer = currentLang === 'zh' ? project.designer : project.designerEn;
+    const designerInfo = currentLang === 'zh' 
+      ? `（设计方：${designer}）` 
+      : `（Designed by ${designer}）`;
+    
     document.getElementById('page-title').textContent = title;
-    document.getElementById('project-title').textContent = title;
+    document.getElementById('project-title').textContent = title + designerInfo;
   }
   
   updateProjectTitle();

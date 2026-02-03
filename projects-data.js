@@ -55,7 +55,7 @@ const projectsData = [
     year: 2023,
     title: "启东彭宅",
     titleEn: "Peng's House",
-    designer: "立木设计",
+    designer: "立木建筑",
     designerEn: "L&M Design Lab",
     folder: "启东彭宅 Peng's House",
     cover: "0152_077.webp",
@@ -378,7 +378,7 @@ const projectsData = [
   {
     id: 6,
     year: 2025,
-    title: "重景环",
+    title: "重景环（绿屏石滩驿站）",
     titleEn: "Resting Loop with Views",
     designer: "合尘建筑",
     designerEn: "HCCH Studio",

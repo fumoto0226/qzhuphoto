@@ -685,16 +685,16 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       locationEn: "Huizhou"
     },
     1: {
-      // 启东彭宅 - 启东市
-      coordinates: [121.6570, 31.8100],
-      location: "启东",
-      locationEn: "Qidong"
+      // 启东彭宅 - 南通市
+      coordinates: [120.8945, 32.0146],
+      location: "南通",
+      locationEn: "Nantong"
     },
     2: {
-      // 公牛总部园区 - 慈溪市观海卫镇工业园东区三海路32号
-      coordinates: [121.4500, 30.2800],
-      location: "慈溪",
-      locationEn: "Cixi"
+      // 公牛总部园区 - 宁波市
+      coordinates: [121.5440, 29.8683],
+      location: "宁波",
+      locationEn: "Ningbo"
     },
     3: {
       // 西安万象城 - 西安市曲江新区雁展路与长安南路交汇处

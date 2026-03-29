@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import urllib.parse
@@ -18,7 +19,7 @@ FIELD_TRIP_DIR = ROOT / "img" / "FieldTrip"
 XLSX_PATH = PROGRAMS_DIR / "Proj. Library.xlsx"
 OUTPUT_PATH = ROOT / "projects-data.js"
 AMAP_GEOCODE_CACHE_PATH = ROOT / "scripts" / "amap_geocode_cache.json"
-MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiZnVtb3RvIiwiYSI6ImNtYXhqbGZ4bDBiOWwybHB3a3R5dmk3Z2kifQ.vXgn2UF6HVT0cnnQRmLO1A"
+MAPBOX_ACCESS_TOKEN = os.environ.get("MAPBOX_ACCESS_TOKEN", "").strip()
 
 NS = {
     "a": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
@@ -668,6 +669,9 @@ def geocode_address(raw_address: str, fallback_coordinates: list[float]) -> tupl
         ]
     seen_queries: set[str] = set()
     best_coordinates: list[float] | None = None
+
+    if not MAPBOX_ACCESS_TOKEN:
+        return None, "estimated"
 
     for query in queries:
         if not query or query in seen_queries:

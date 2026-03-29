@@ -254,17 +254,19 @@ body {
   }
 
   .project-info {
-    top: 20px;
+    top: 68px;
+    left: 20px;
     right: 20px;
-    text-align: right;
+    text-align: left;
   }
 
   .project-title {
     font-size: 22px;
+    line-height: 1.25;
   }
 
   .main-image-container {
-    padding: 70px 0 130px;      /* 移动端：上方增加间距避免和返回箭头/标题重合，左右去掉 padding 让图片铺满 */
+    padding: 120px 0 130px;     /* 移动端：为第二行标题留出空间，左右去掉 padding 让图片铺满 */
   }
   
   .carousel-item {

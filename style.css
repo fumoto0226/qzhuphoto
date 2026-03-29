@@ -1076,6 +1076,29 @@ body.is-desktop .scroll-arrow {
   background: transparent;
 }
 
+.film-loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.38);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  white-space: nowrap;
+}
+
+.film-player-frame[data-loading="true"] .film-loading-indicator {
+  opacity: 1;
+}
+
 .film-controls {
   position: absolute;
   left: 22px;

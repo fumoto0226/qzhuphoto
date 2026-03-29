@@ -1672,13 +1672,14 @@ const filmLibrary = [
   const filmPlayBtn = document.getElementById('film-play-btn');
   const filmCenterPlay = document.getElementById('film-center-play');
   const filmProgress = document.getElementById('film-progress');
+  const filmLoadingIndicator = document.getElementById('film-loading-indicator');
   const filmVolume = document.getElementById('film-volume');
   const filmVolumePanel = document.getElementById('film-volume-panel');
   const filmVolumeSlider = document.getElementById('film-volume-slider');
   const filmMuteBtn = document.getElementById('film-mute-btn');
   const filmFullscreenBtn = document.getElementById('film-fullscreen-btn');
 
-  if (!filmList || !filmPlayer || !filmPlayerFrame || !filmPlayBtn || !filmCenterPlay || !filmProgress || !filmVolume || !filmVolumePanel || !filmVolumeSlider || !filmMuteBtn || !filmFullscreenBtn) return;
+  if (!filmList || !filmPlayer || !filmPlayerFrame || !filmPlayBtn || !filmCenterPlay || !filmProgress || !filmLoadingIndicator || !filmVolume || !filmVolumePanel || !filmVolumeSlider || !filmMuteBtn || !filmFullscreenBtn) return;
 
   let currentFilmIndex = 0;
   let isSeekingFilm = false;
@@ -1696,6 +1697,15 @@ const filmLibrary = [
   function updateFilmVolumeProgress() {
     const percent = Math.max(0, Math.min(100, Number(filmVolumeSlider.value)));
     filmVolumeSlider.style.setProperty('--film-volume-progress', `${percent}%`);
+  }
+
+  function updateFilmLoadingText() {
+    const isZh = document.body.classList.contains('lang-zh');
+    filmLoadingIndicator.textContent = isZh ? '视频加载中' : 'Loading video...';
+  }
+
+  function setFilmLoadingState(isLoading) {
+    filmPlayerFrame.dataset.loading = isLoading ? 'true' : 'false';
   }
 
   function updatePlaybackState() {
@@ -1815,6 +1825,7 @@ const filmLibrary = [
     if (!nextFilm) return;
 
     currentFilmIndex = index;
+    setFilmLoadingState(true);
     filmPlayer.src = nextFilm.src;
     filmPlayer.muted = true;
     filmPlayer.volume = 0;
@@ -1837,6 +1848,7 @@ const filmLibrary = [
   }
 
   renderFilmList();
+  updateFilmLoadingText();
   switchFilm(0);
 
   filmPlayer.addEventListener('loadedmetadata', () => {
@@ -1846,6 +1858,12 @@ const filmLibrary = [
       pauseFilm();
     }
   });
+  filmPlayer.addEventListener('loadstart', () => setFilmLoadingState(true));
+  filmPlayer.addEventListener('waiting', () => setFilmLoadingState(true));
+  filmPlayer.addEventListener('loadeddata', () => setFilmLoadingState(false));
+  filmPlayer.addEventListener('canplay', () => setFilmLoadingState(false));
+  filmPlayer.addEventListener('playing', () => setFilmLoadingState(false));
+  filmPlayer.addEventListener('error', () => setFilmLoadingState(false));
 
   filmPlayer.addEventListener('timeupdate', syncFilmProgress);
   filmPlayer.addEventListener('play', updatePlaybackState);
@@ -1928,6 +1946,12 @@ const filmLibrary = [
   filmFullscreenBtn.addEventListener('click', (event) => {
     event.stopPropagation();
     requestFilmFullscreen();
+  });
+
+  document.addEventListener('languageChanged', () => {
+    updateFilmLoadingText();
+    updatePlaybackState();
+    updateMuteState();
   });
 
   document.addEventListener('pointerdown', (event) => {

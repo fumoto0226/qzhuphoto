@@ -1,6 +1,97 @@
 // 全局：根据视口宽度判断当前是否为手机端视图（窄屏）
 const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
+function getProjectSortYear(year) {
+  if (typeof year === "number") return year;
+  if (typeof year === "string" && year.includes("-")) {
+    const parts = year.split("-");
+    return parseInt(parts[1], 10) - 0.5;
+  }
+  return parseInt(year, 10) || 0;
+}
+
+function getProjectAssetBase(project) {
+  return project.assetBase || "programs";
+}
+
+function buildProgramImagePath(project, imageName = project.cover) {
+  return encodeURI(`./img/${getProjectAssetBase(project)}/${project.folder}/${imageName}`);
+}
+
+function buildProjectCardImagePath(project, imageName = project.cover) {
+  return encodeURI(`./img/${getProjectAssetBase(project)}-cards/${project.folder}/${imageName.replace(/\.[^.]+$/, '.webp')}`);
+}
+
+const PROJECTS_VIEW_STATE_KEY = "indexProjectsViewState";
+
+function readProjectsViewState() {
+  try {
+    return JSON.parse(sessionStorage.getItem(PROJECTS_VIEW_STATE_KEY) || "{}");
+  } catch (error) {
+    return {};
+  }
+}
+
+function writeProjectsViewState(partialState) {
+  const nextState = { ...readProjectsViewState(), ...partialState };
+  sessionStorage.setItem(PROJECTS_VIEW_STATE_KEY, JSON.stringify(nextState));
+}
+
+function getProjectMetaText(project, isZh) {
+  const client = isZh ? project.designer : project.designerEn;
+  if (client) {
+    return isZh
+      ? `委托方：${client}。拍摄于${project.year}年。`
+      : `Client: ${client}. Photographed in ${project.year}.`;
+  }
+  return isZh ? `拍摄于${project.year}年。` : `Photographed in ${project.year}.`;
+}
+
+const HORIZONTAL_HOME_HERO_IMAGES = [
+  { src: "./img/home/横版/H01.webp", location: "Shanghai International Exchange Plaza", locationZh: "上海金融交易广场", description: "Designed by FGP Atelier + Jahn/", descriptionZh: "委托方：FGP Atelier + Jahn/" },
+  { src: "./img/home/横版/H02.webp", location: "Shanghai International Exchange Plaza", locationZh: "上海金融交易广场", description: "Designed by FGP Atelier + Jahn/", descriptionZh: "委托方：FGP Atelier + Jahn/" },
+  { src: "./img/home/横版/H03.webp", location: "Shenzhen Gate", locationZh: "深圳汇隆商务中心", description: "Designed by FGP Atelier", descriptionZh: "委托方：FGP Atelier" },
+  { src: "./img/home/横版/H04.webp", location: "Peng’s House", locationZh: "启东彭宅", description: "Designed by L&M Design Lab", descriptionZh: "委托方：立木设计" },
+  { src: "./img/home/横版/H05.webp", location: "Xuhui District New Archives Center", locationZh: "徐汇区档案馆新馆", description: "Designed by Atelier Archmixing", descriptionZh: "委托方：阿科米星建筑设计事务所" },
+  { src: "./img/home/横版/H06.webp", location: "Tian An Clubhouse", locationZh: "常州天安会所", description: "Designed by HATCH Architects", descriptionZh: "委托方：汉齐建筑" },
+  { src: "./img/home/横版/H07.webp", location: "Resting Loop with Views", locationZh: "重景环（绿屏石滩驿站）", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/横版/H08.webp", location: "Wave Breaker by the Sea", locationZh: "临港浪花消波块驿站", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/横版/H09.webp", location: "Xi‘an CCBD", locationZh: "西安万象城", description: "Designed by Heatherwick Studio", descriptionZh: "委托方：Heatherwick Studio" },
+  { src: "./img/home/横版/H10.webp", location: "Asset Management Company Office", locationZh: "资产管理公司室内", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/横版/H11.webp", location: "Cave Teahouse & Tree tavern", locationZh: "石室茶室 树洞酒馆", description: "Designed by Arc Z + Practice on Earth", descriptionZh: "委托方：Arc Z + 猜一建筑" },
+  { src: "./img/home/横版/H12.webp", location: "Twisting Tower", locationZh: "扭转塔", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/横版/H13.webp", location: "Poly C+ International Expo Center", locationZh: "保利C+国际博览中心", description: "Designed by Murphy/Jahn", descriptionZh: "委托方：墨菲扬" },
+  { src: "./img/home/横版/H14.webp", location: "Wangchao Center", locationZh: "望朝中心", description: "Designed by SOM", descriptionZh: "委托方：SOM" },
+];
+
+const VERTICAL_HOME_HERO_IMAGES = [
+  { src: "./img/home/竖版/V01.webp", location: "Cave Teahouse & Tree tavern", locationZh: "石室茶室 树洞酒馆", description: "Designed by Arc Z + Practice on Earth", descriptionZh: "委托方：Arc Z + 猜一建筑" },
+  { src: "./img/home/竖版/V02.webp", location: "Science City Center", locationZh: "科学城中心", description: "Designed by HENN", descriptionZh: "委托方：海茵建筑" },
+  { src: "./img/home/竖版/V03.webp", location: "Twisted Brick Shell Concept Library", locationZh: "红砖概念图书馆", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/竖版/V04.webp", location: "Tian An Clubhouse", locationZh: "常州天安会所", description: "Designed by HATCH Architects", descriptionZh: "委托方：汉齐建筑" },
+  { src: "./img/home/竖版/V05.webp", location: "The Launch", locationZh: "“下水那天”船台装置", description: "Designed by Practice on Earth + Arc Z", descriptionZh: "委托方：猜一建筑 + Arc Z" },
+  { src: "./img/home/竖版/V06.webp", location: "Renovation of Shanghai Relay Factory", locationZh: "上海继电器厂改造", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/竖版/V07.webp", location: "Renovation of Shanghai Relay Factory", locationZh: "上海继电器厂改造", description: "Designed by HCCH Studio", descriptionZh: "委托方：合尘建筑" },
+  { src: "./img/home/竖版/V08.webp", location: "Marriott Courtyard Shunshan", locationZh: "舜山万怡酒店", description: "Designed by GAD", descriptionZh: "委托方：杰地设计" },
+  { src: "./img/home/竖版/V09.webp", location: "Transaction Succeed Office", locationZh: "上海易成办公室", description: "Designed by One House Design", descriptionZh: "委托方：壹舍设计" },
+  { src: "./img/home/竖版/V10.webp", location: "Pony Elementary School", locationZh: "宝莉斑马小学", description: "Designed by L&M Design Lab", descriptionZh: "委托方：立木设计" },
+];
+
+const homeHeroImages = isMobileViewport ? VERTICAL_HOME_HERO_IMAGES : HORIZONTAL_HOME_HERO_IMAGES;
+
+const filmLibrary = [
+  { file: "天安会.mp4", title: "天安会", titleEn: "Tian An Clubhouse" },
+  { file: "望朝中心.mp4", title: "望朝中心", titleEn: "Wangchao Center" },
+  { file: "极氪研发中心.mp4", title: "极氪研发中心", titleEn: "ZEEKR R&D Center" },
+  { file: "梅溪湖国际文化艺术中心.mp4", title: "梅溪湖国际文化艺术中心", titleEn: "Meixihu International Culture & Arts Center" },
+  { file: "浦东红窑.mp4", title: "浦东红窑", titleEn: "Pudong Red Kiln" },
+  { file: "科学城中心.mp4", title: "科学城中心", titleEn: "Science City Center" },
+  { file: "龙湖银泰.mp4", title: "龙湖银泰", titleEn: "Longfor Yintai" },
+].map((film) => ({
+  ...film,
+  src: encodeURI(`./film/${film.file}`),
+}));
+
 (() => {
   const body = document.body;
   const isTouchDevice =
@@ -19,117 +110,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   let rafId = null;
   let isUnlocked = false; // 是否已解锁页面滚动
 
-  // 首页图片数据（桌面端）
-  const heroImagesDesktop = [
-    {
-      src: './img/home/1/01.webp',
-      location: 'Shanghai International Exchange Plaza',
-      locationZh: '上海金融交易广场',
-      description: 'Designed by FGP Atelier + Jahn/',
-      descriptionZh: '委托方：FGP Atelier + Jahn/'
-    },
-    {
-      src: './img/home/1/02.webp',
-      location: 'Shanghai International Exchange Plaza',
-      locationZh: '上海金融交易广场',
-      description: 'Designed by FGP Atelier + Jahn/',
-      descriptionZh: '委托方：FGP Atelier + Jahn/'
-    },
-    {
-      src: './img/home/1/03.webp',
-      location: 'Shenzhen Gate',
-      locationZh: '深圳汇隆商务中心',
-      description: 'Designed by FGP Atelier',
-      descriptionZh: '委托方：FGP Atelier'
-    },
-    {
-      src: './img/home/1/04.webp',
-      location: 'Peng\'s House',
-      locationZh: '启东彭宅',
-      description: 'Designed by L&M Design Lab',
-      descriptionZh: '委托方：立木建筑'
-    },
-    {
-      src: './img/home/1/05.webp',
-      location: 'Xuhui District New Archives Center',
-      locationZh: '徐汇区档案馆新馆',
-      description: 'Designed by Atelier Archmixing',
-      descriptionZh: '委托方：阿科米星建筑设计事务所'
-    },
-    {
-      src: './img/home/1/06.webp',
-      location: 'Tian An Clubhouse',
-      locationZh: '常州天安会所',
-      description: 'Designed by HATCH Architects',
-      descriptionZh: '委托方：汉齐建筑'
-    },
-    {
-      src: './img/home/1/07.webp',
-      location: 'Resting Loop with Views',
-      locationZh: '重景环（绿屏石滩驿站）',
-      description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合尘建筑'
-    },
-    {
-      src: './img/home/1/08.webp',
-      location: 'Wave Breaker by the Sea',
-      locationZh: '临港浪花消波块驿站',
-      description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合尘建筑'
-    },
-    {
-      src: './img/home/1/09.webp',
-      location: 'Xi\'an CCBD',
-      locationZh: '西安万象城',
-      description: 'Designed by Heatherwick Studio',
-      descriptionZh: '委托方：Heatherwick Studio'
-    },
-    {
-      src: './img/home/1/10.webp',
-      location: 'Asset Management Company Office',
-      locationZh: '资产管理公司室内',
-      description: 'Designed by HCCH Studio',
-      descriptionZh: '委托方：合尘建筑'
-    },
-    {
-      src: './img/home/1/11.webp',
-      location: 'Cave Teahouse & Tree Tavern',
-      locationZh: '石室茶室 树洞酒馆',
-      description: 'Designed by Arc Z + Practice on Earth',
-      descriptionZh: '委托方：Arc Z + 猜一建筑'
-    }
-  ];
-
-  // 首页图片数据（手机端，使用 home/2 目录下 5 张图）
-  const heroImagesMobile = [
-    {
-      src: './img/home/2/01.webp',
-      location: "Xi'an CCBD",
-      description: 'by Heatherwick Studio. Photographed in 2024'
-    },
-    {
-      src: './img/home/2/02.webp',
-      location: 'Project 02',
-      description: 'Photographed in 2024'
-    },
-    {
-      src: './img/home/2/03.webp',
-      location: 'Project 03',
-      description: 'Photographed in 2024'
-    },
-    {
-      src: './img/home/2/04.webp',
-      location: 'Project 04',
-      description: 'Photographed in 2024'
-    },
-    {
-      src: './img/home/2/05.webp',
-      location: 'Project 05',
-      description: 'Photographed in 2024'
-    }
-  ];
-
-  const heroImages = isMobileViewport ? heroImagesMobile : heroImagesDesktop;
+  const heroImages = homeHeroImages;
 
   let currentImageIndex = 0;
   let imageChangeInterval = null;
@@ -143,6 +124,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     const metaBottomCenter = document.querySelector('.meta-bottom-center p');
 
     const imageData = heroImages[index];
+    body.dataset.heroImageIndex = String(index);
     
     if (isMobileViewport) {
       // 手机端：双图交叉淡化（和桌面端一样的效果）
@@ -552,7 +534,8 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     'commercial',
     'workspace',
     'residential',
-    'hospitality'
+    'hospitality',
+    'field-trip'
   ];
   
   if (validCategories.includes(urlCategory)) {
@@ -664,74 +647,165 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   // 引入项目数据
   // 注意：需要在 script.js 之前引入 projects-data.js
   
-  // 排序辅助函数：处理年份排序，支持 "2024-2025" 这种范围格式
-  function getSortYear(year) {
-    if (typeof year === 'number') return year;
-    if (typeof year === 'string' && year.includes('-')) {
-      // "2024-2025" 格式：返回结束年份（排在 2024 之后，2025 之前）
-      const parts = year.split('-');
-      return parseInt(parts[1], 10) - 0.5; // 2024-2025 -> 2024.5
-    }
-    return parseInt(year, 10) || 0;
+  const allProjects = projectsData.map((project) => ({ ...project }));
+  const listableProjects = allProjects.filter((project) => !project.mapOnly);
+
+  function getMapProjects(category) {
+    const baseProjects = category && window.getFilteredProjects
+      ? window.getFilteredProjects(allProjects, category)
+      : allProjects;
+    return baseProjects;
   }
 
-  // 为 projectsData 中的每个项目添加地图坐标和位置信息
-  // 这些信息不需要在 projects-data.js 中重复定义
-  const projectMapInfo = {
-    0: {
-      // 石室茶室+树洞酒馆 - 惠州
-      coordinates: [114.3500, 23.0500],
-      location: "惠州",
-      locationEn: "Huizhou"
-    },
-    1: {
-      // 启东彭宅 - 南通市
-      coordinates: [120.8945, 32.0146],
-      location: "南通",
-      locationEn: "Nantong"
-    },
-    2: {
-      // 公牛总部园区 - 宁波市
-      coordinates: [121.5440, 29.8683],
-      location: "宁波",
-      locationEn: "Ningbo"
-    },
-    3: {
-      // 西安万象城 - 西安市曲江新区雁展路与长安南路交汇处
-      coordinates: [108.9530, 34.1950],
-      location: "西安",
-      locationEn: "Xi'an"
-    },
-    4: {
-      // 天安会 - 常州武进西太湖天安别墅
-      coordinates: [119.8200, 31.6800],
-      location: "常州",
-      locationEn: "Changzhou"
-    },
-    5: {
-      // 杭州望朝中心 - 杭州市萧山区市心北路2086号
-      coordinates: [120.2630, 30.2280],
-      location: "杭州",
-      locationEn: "Hangzhou"
-    },
-    6: {
-      // 重景环 - 惠州（与石室茶室分开显示）
-      coordinates: [114.5500, 23.1800],
-      location: "惠州",
-      locationEn: "Huizhou"
-    }
-  };
+  function getListableProjects(category) {
+    const baseProjects = category && window.getFilteredProjects
+      ? window.getFilteredProjects(listableProjects, category)
+      : listableProjects;
+    return baseProjects;
+  }
 
-  // 构建完整的项目数据
-  const projects = projectsData.map(p => ({
-    ...p,
-    // 添加地图信息（如果存在）
-    ...(projectMapInfo[p.id] || {})
-  }));
+  function spreadOverlappingCoordinates(projectList) {
+    function hashString(value) {
+      let hash = 2166136261;
+      for (let i = 0; i < value.length; i += 1) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    }
+
+    function createSeededRandom(seedText) {
+      let seed = hashString(seedText) || 1;
+      return () => {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        return seed / 4294967296;
+      };
+    }
+
+    const grouped = new Map();
+    const adjusted = new Map();
+
+    projectList.forEach((project) => {
+      if (!Array.isArray(project.coordinates) || project.coordinates.length !== 2) return;
+      const key = project.coordinates.map((value) => Number(value).toFixed(6)).join(",");
+      const group = grouped.get(key) || [];
+      group.push(project);
+      grouped.set(key, group);
+    });
+
+    grouped.forEach((group) => {
+      if (group.length === 1) {
+        adjusted.set(group[0].id, group[0].coordinates);
+        return;
+      }
+
+      const [baseLng, baseLat] = group[0].coordinates;
+      const sortedGroup = [...group].sort((a, b) =>
+        `${a.address || ""}-${a.id}`.localeCompare(`${b.address || ""}-${b.id}`, "zh-Hans-CN")
+      );
+      const usedPoints = [];
+
+      sortedGroup.forEach((project, index) => {
+        const random = createSeededRandom(`${project.id}-${project.titleEn}-${project.address || ""}`);
+        let chosenPoint = [baseLng, baseLat];
+
+        for (let attempt = 0; attempt < 24; attempt += 1) {
+          const spread = 0.002 + Math.floor(index / 6) * 0.0014;
+          const angle = random() * Math.PI * 2;
+          const distance = (0.00055 + random() * spread) * (1 + attempt * 0.08);
+          const lngDistance = distance / Math.max(Math.cos((baseLat * Math.PI) / 180), 0.35);
+          const candidate = [
+            baseLng + Math.cos(angle) * lngDistance,
+            baseLat + Math.sin(angle) * distance,
+          ];
+
+          const hasConflict = usedPoints.some(([usedLng, usedLat]) => {
+            const dx = (candidate[0] - usedLng) * Math.max(Math.cos((baseLat * Math.PI) / 180), 0.35);
+            const dy = candidate[1] - usedLat;
+            return Math.hypot(dx, dy) < 0.00075;
+          });
+
+          if (!hasConflict || attempt === 23) {
+            chosenPoint = candidate;
+            usedPoints.push(candidate);
+            break;
+          }
+        }
+
+        adjusted.set(project.id, chosenPoint);
+      });
+    });
+
+    const scaledDistance = (pointA, pointB, latitudeBase) => {
+      const lngScale = Math.max(Math.cos((latitudeBase * Math.PI) / 180), 0.35);
+      const dx = (pointA[0] - pointB[0]) * lngScale;
+      const dy = pointA[1] - pointB[1];
+      return Math.hypot(dx, dy);
+    };
+
+    const projectsNeedingJitter = projectList
+      .filter((project) => {
+        const precision = project.coordinatePrecision || "estimated";
+        return precision !== "detailed" && adjusted.has(project.id);
+      })
+      .sort((a, b) => `${a.location || ""}-${a.address || ""}-${a.id}`.localeCompare(
+        `${b.location || ""}-${b.address || ""}-${b.id}`,
+        "zh-Hans-CN"
+      ));
+
+    projectsNeedingJitter.forEach((project) => {
+      const originalPoint = adjusted.get(project.id);
+      if (!originalPoint) return;
+
+      const precision = project.coordinatePrecision || "estimated";
+      const minDistance = precision === "approximate" ? 0.0016 : 0.00115;
+      const random = createSeededRandom(`dense-${project.id}-${project.titleEn}-${project.address || ""}`);
+
+      const otherPoints = projectList
+        .filter((candidate) => candidate.id !== project.id)
+        .map((candidate) => adjusted.get(candidate.id))
+        .filter(Boolean);
+
+      const isTooClose = otherPoints.some((point) => scaledDistance(originalPoint, point, originalPoint[1]) < minDistance);
+      if (!isTooClose) return;
+
+      let bestCandidate = originalPoint;
+      let bestDistance = -1;
+
+      for (let attempt = 0; attempt < 36; attempt += 1) {
+        const radius = 0.0009 + Math.floor(attempt / 6) * 0.00045 + random() * 0.00035;
+        const angle = random() * Math.PI * 2 + attempt * 0.35;
+        const lngRadius = radius / Math.max(Math.cos((originalPoint[1] * Math.PI) / 180), 0.35);
+        const candidate = [
+          originalPoint[0] + Math.cos(angle) * lngRadius,
+          originalPoint[1] + Math.sin(angle) * radius,
+        ];
+
+        let nearestDistance = Infinity;
+        for (const point of otherPoints) {
+          nearestDistance = Math.min(nearestDistance, scaledDistance(candidate, point, originalPoint[1]));
+        }
+
+        if (nearestDistance > bestDistance) {
+          bestDistance = nearestDistance;
+          bestCandidate = candidate;
+        }
+
+        if (nearestDistance >= minDistance) {
+          bestCandidate = candidate;
+          break;
+        }
+      }
+
+      adjusted.set(project.id, bestCandidate);
+    });
+
+    return adjusted;
+  }
 
   // 获取项目封面图路径（对路径进行 URL 编码以支持中文和空格）
   function getProjectCover(project) {
-    return encodeURI(`./img/program/${project.folder}/${project.cover}`);
+    return buildProgramImagePath(project);
   }
 
   const previewImage = document.getElementById("preview-image");
@@ -749,22 +823,23 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     const isZh = document.body.classList.contains('lang-zh');
     previewTitle.textContent = isZh ? project.title : project.titleEn;
-    // 格式：设计方：XXX。拍摄于XXXX年。
-    previewDescription.textContent = isZh 
-      ? `设计方：${project.designer}。拍摄于${project.year}年。` 
-      : `Designed by ${project.designerEn}. Photographed in ${project.year}.`;
+    previewDescription.textContent = getProjectMetaText(project, isZh);
   };
 
   // 初始化 Mapbox 地图
   mapboxgl.accessToken = 'pk.eyJ1IjoiZnVtb3RvIiwiYSI6ImNtYXhqbGZ4bDBiOWwybHB3a3R5dmk3Z2kifQ.vXgn2UF6HVT0cnnQRmLO1A';
   
+  const initialCenter = isMobileViewport ? [108.5, 32.0] : [115.5, 28.5];
+  const initialZoom = isMobileViewport ? 2.75 : 3.8;
+
   const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v11', // 使用白色浅色样式
-    center: [115.5, 28.5], // 初始中心点（能显示所有项目）
-    zoom: 3.8, // 显示所有项目点
+    center: initialCenter, // 初始中心点（能显示所有项目）
+    zoom: initialZoom, // 显示所有项目点
     projection: 'mercator', // 使用墨卡托投影（平面地图），不是 globe（地球）
-    attributionControl: false // 隐藏底部 attribution 控件
+    attributionControl: false, // 隐藏底部 attribution 控件
+    fadeDuration: 0 // 避免缩放时 symbol 碰撞淡入淡出导致数字和圈不同步
   });
 
   // 禁用地图旋转和倾斜
@@ -799,10 +874,6 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   const markers = [];
   let clusterSourceId = 'projects-cluster';
   let isClusterInitialized = false;
-
-  // 初始地图位置（用于归位）- 调整为能显示所有项目点
-  const initialCenter = [115.5, 28.5];
-  const initialZoom = 3.8;
 
   // 地图加载完成后添加标记
   map.on('load', () => {
@@ -847,7 +918,8 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
     console.log('🗺️ 地图初始化，当前分类:', category);
-    const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
+    const filteredProjects = getMapProjects(category);
+    const displayCoordinates = spreadOverlappingCoordinates(filteredProjects);
     console.log('  筛选后项目数:', filteredProjects.length);
     
     // 构建 GeoJSON 数据（每个 feature 需要唯一 id 用于悬浮高亮）
@@ -865,7 +937,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         },
         geometry: {
           type: 'Point',
-          coordinates: project.coordinates
+          coordinates: displayCoordinates.get(project.id) || project.coordinates
         }
       }))
     };
@@ -878,7 +950,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       }
       // 初始激活第一个项目
       if (filteredProjects.length > 0) {
-        switchProject(filteredProjects[0].id);
+        const savedState = readProjectsViewState();
+        const preferredProject = savedState.previewProjectId
+          ? filteredProjects.find((project) => project.id === savedState.previewProjectId)
+          : null;
+        switchProject((preferredProject || filteredProjects[0]).id);
       }
       return;
     }
@@ -889,7 +965,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       data: geojsonData,
       cluster: true,
       clusterMaxZoom: 12, // 超过这个缩放级别不再聚合
-      clusterRadius: 10, // 聚合半径（像素）- 较小值，只有很近的点才合并
+      clusterRadius: 16, // 稍微放大聚合半径，减少密集区域互相压住
       promoteId: 'id' // 使用 properties.id 作为 feature id（用于悬浮高亮）
     });
     
@@ -898,6 +974,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       id: 'clusters',
       type: 'circle',
       source: clusterSourceId,
+      layout: {
+        'circle-sort-key': ['get', 'point_count']
+      },
       filter: ['has', 'point_count'],
       paint: {
         'circle-color': '#2a4cd7',
@@ -925,7 +1004,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       layout: {
         'text-field': '{point_count_abbreviated}',
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 11
+        'text-size': 11,
+        'symbol-sort-key': ['get', 'point_count'],
+        'text-allow-overlap': true,
+        'text-ignore-placement': true
       },
       paint: {
         'text-color': '#ffffff',
@@ -969,6 +1051,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
         'circle-color-transition': { duration: 200, delay: 0 }
       }
     });
+
+    // Keep single points below numbered cluster layers.
+    map.moveLayer('unclustered-point', 'clusters');
     
     // 记录当前悬浮的要素 ID
     let hoveredPointId = null;
@@ -1088,7 +1173,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     // 初始激活第一个项目
     if (filteredProjects.length > 0) {
-      switchProject(filteredProjects[0].id);
+      const savedState = readProjectsViewState();
+      const preferredProject = savedState.previewProjectId
+        ? filteredProjects.find((project) => project.id === savedState.previewProjectId)
+        : null;
+      switchProject((preferredProject || filteredProjects[0]).id);
     }
   }
   
@@ -1103,7 +1192,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
   // 切换项目
   function switchProject(projectId) {
-    const project = projects.find(p => p.id === projectId);
+    const project = allProjects.find(p => p.id === projectId);
     if (!project) return;
 
     // 记录当前选中的项目 ID 和数据
@@ -1113,11 +1202,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     // 判断当前语言
     const isZh = document.body.classList.contains('lang-zh');
     const displayTitle = isZh ? project.title : project.titleEn;
-    const displayDesigner = isZh ? project.designer : project.designerEn;
-    // 预览图小字格式：设计方 + 拍摄年份
-    const displayDescription = isZh 
-      ? `设计方：${displayDesigner}。拍摄于${project.year}年。`
-      : `Designed by ${displayDesigner}. Photographed in ${project.year}.`;
+    const displayDescription = getProjectMetaText(project, isZh);
 
     // 先预加载图片，加载完成后再切换，避免闪白
     const img = new Image();
@@ -1125,6 +1210,7 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       if (previewImage) previewImage.src = getProjectCover(project);
       if (previewTitle) previewTitle.textContent = displayTitle;
       if (previewDescription) previewDescription.textContent = displayDescription;
+      if (previewViewAllBtn) previewViewAllBtn.dataset.projectId = String(project.id);
     };
     img.src = getProjectCover(project);
 
@@ -1148,9 +1234,52 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     // 不移动地图，保持当前视角
   }
 
+  document.addEventListener('forceProjectPreview', (event) => {
+    const projectId = event.detail && typeof event.detail.projectId === 'number'
+      ? event.detail.projectId
+      : null;
+    if (projectId !== null) {
+      switchProject(projectId);
+    }
+  });
+
   // 右侧列表视图与项目预览联动（根据项目数据自动渲染，并按年份排序）
   const mapListBody = document.querySelector('#map-list-container tbody');
   const previewViewAllBtn = document.getElementById('preview-view-all-btn');
+  const previewImageWrapper = document.querySelector('.preview-image-wrapper');
+  const previewImageElement = document.getElementById('preview-image');
+
+  function navigateToPreviewProject() {
+    const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+    const activeView = document.querySelector('.view-tab.active')?.dataset.view || 'map';
+    const listContainerElement = document.getElementById('map-list-container');
+    const imagesGridElement = document.getElementById('images-grid');
+    writeProjectsViewState({
+      view: activeView,
+      listScrollTop: listContainerElement ? listContainerElement.scrollTop : 0,
+      imagesScrollTop: imagesGridElement ? imagesGridElement.scrollTop : 0,
+      previewProjectId: window.currentProjectId ?? null,
+    });
+
+    let projectId = previewViewAllBtn && previewViewAllBtn.dataset.projectId
+      ? Number(previewViewAllBtn.dataset.projectId)
+      : (lastTappedProjectIdMobile ?? null);
+
+    if (projectId == null) {
+      const currentTitle = previewTitle ? previewTitle.textContent : '';
+      const found = allProjects.find(p => p.title === currentTitle || p.titleEn === currentTitle);
+      if (found) projectId = found.id;
+    }
+
+    if (projectId != null) {
+      writeProjectsViewState({ previewProjectId: projectId });
+    }
+
+    const url = `project.html?from=indexPreview&category=${encodeURIComponent(category)}` +
+      (projectId != null ? `&id=${encodeURIComponent(projectId)}` : '');
+
+    window.location.href = url;
+  }
   
   function renderListView() {
     if (!mapListBody) return;
@@ -1161,9 +1290,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
     console.log('📋 列表渲染，当前分类:', category);
-    const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
+    const filteredProjects = getListableProjects(category);
     console.log('  筛选后项目数:', filteredProjects.length);
-    const sorted = [...filteredProjects].sort((a, b) => getSortYear(b.year) - getSortYear(a.year)); // 年份从大到小
+    const sorted = [...filteredProjects].sort((a, b) => getProjectSortYear(b.year) - getProjectSortYear(a.year)); // 年份从大到小
     
     mapListBody.innerHTML = '';
 
@@ -1187,6 +1316,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
       // 点击行：手机端（窄屏）第一次点击只切换预览，第二次点击进入作品页；电脑端（宽屏）直接进入作品页
       tr.addEventListener('click', () => {
+        writeProjectsViewState({
+          view: 'list',
+          listScrollTop: document.getElementById('map-list-container')?.scrollTop || 0,
+          previewProjectId: project.id,
+        });
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
         const url = `project.html?id=${project.id}&from=indexList&category=${encodeURIComponent(category)}`;
 
@@ -1211,12 +1345,16 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     // 如果有项目，显示第一个
     if (sorted.length > 0) {
-      switchProject(sorted[0].id);
+      const savedState = readProjectsViewState();
+      const preferredProject = savedState.previewProjectId
+        ? sorted.find((project) => project.id === savedState.previewProjectId)
+        : null;
+      const selectedProject = preferredProject || sorted[0];
+      switchProject(selectedProject.id);
 
       // 默认情况下，“View All” 按钮跳到当前列表中的第一个项目所属作品页
       if (previewViewAllBtn) {
-        const firstProject = sorted[0];
-        previewViewAllBtn.dataset.projectId = String(firstProject.id);
+        previewViewAllBtn.dataset.projectId = String(selectedProject.id);
       }
     }
   }
@@ -1228,26 +1366,20 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
   // 预览图右上角 “View All” 按钮：跳转到当前选中项目的作品页
   if (previewViewAllBtn) {
-    previewViewAllBtn.addEventListener('click', () => {
-      const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-
-      // 优先使用按钮上记录的 projectId（随着列表渲染/选择更新）
-      let projectId = previewViewAllBtn.dataset.projectId
-        ? Number(previewViewAllBtn.dataset.projectId)
-        : (lastTappedProjectIdMobile ?? null);
-
-      // 如果还没有记录，用当前预览标题去匹配一个项目（兜底）
-      if (projectId == null) {
-        const currentTitle = previewTitle ? previewTitle.textContent : '';
-        const found = projects.find(p => p.title === currentTitle);
-        if (found) projectId = found.id;
-      }
-
-      const url = `project.html?from=indexPreview&category=${encodeURIComponent(category)}` +
-        (projectId != null ? `&id=${encodeURIComponent(projectId)}` : '');
-
-      window.location.href = url;
+    previewViewAllBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      navigateToPreviewProject();
     });
+  }
+
+  if (!isMobileViewport && previewImageWrapper) {
+    previewImageWrapper.addEventListener('click', () => {
+      navigateToPreviewProject();
+    });
+  }
+
+  if (previewImageElement) {
+    previewImageElement.draggable = false;
   }
   
   // 监听分类变化事件
@@ -1271,28 +1403,36 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     
     // 获取当前筛选的项目
     const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-    const filteredProjects = window.getFilteredProjects ? window.getFilteredProjects(projects, category) : projects;
-    const sortedForImages = [...filteredProjects].sort((a, b) => getSortYear(b.year) - getSortYear(a.year));
+    const filteredProjects = getListableProjects(category);
+    const sortedForImages = [...filteredProjects].sort((a, b) => getProjectSortYear(b.year) - getProjectSortYear(a.year));
     
     imagesGrid.innerHTML = '';
     
     sortedForImages.forEach((project) => {
       const displayTitle = isZh ? project.title : project.titleEn;
-      // Images 视图卡片上显示格式：大字项目名 + 小字设计方+拍摄年份
-      const displayDescription = isZh 
-        ? `设计方：${project.designer}。拍摄于${project.year}年。` 
-        : `Designed by ${project.designerEn}. Photographed in ${project.year}.`;
+      // Images 视图卡片上显示格式：大字项目名 + 小字委托方+拍摄年份
+      const displayDescription = getProjectMetaText(project, isZh);
+      const coverSrc = buildProgramImagePath(project);
+      const cardSrc = buildProjectCardImagePath(project);
       const card = document.createElement('div');
       card.className = 'image-card';
       const viewAllText = isZh ? '查看全部' : 'View All';
       card.innerHTML = `
-        <img src="${getProjectCover(project)}" alt="${displayTitle}" />
+        <img src="${cardSrc}" alt="${displayTitle}" loading="lazy" decoding="async" fetchpriority="low" />
         <button class="image-card-view-all" type="button" data-en="View All" data-zh="查看全部">${viewAllText}</button>
         <div class="image-card-overlay">
           <h3>${displayTitle}</h3>
           <p>${displayDescription}</p>
         </div>
       `;
+      const imageElement = card.querySelector('img');
+      if (imageElement) {
+        imageElement.addEventListener('error', () => {
+          if (imageElement.src !== new URL(coverSrc, window.location.href).href) {
+            imageElement.src = coverSrc;
+          }
+        }, { once: true });
+      }
 
       // 手机端和桌面端不同的点击逻辑：
       // - 电脑端（宽屏）：悬浮显示信息，点击直接进入作品页
@@ -1306,6 +1446,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
           return;
         }
 
+        writeProjectsViewState({
+          view: 'images',
+          imagesScrollTop: imagesGrid ? imagesGrid.scrollTop : 0,
+          previewProjectId: project.id,
+        });
         const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
         const url = `project.html?id=${project.id}&from=indexImages&category=${encodeURIComponent(category)}`;
 
@@ -1330,6 +1475,11 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
       if (viewAllBtn) {
         viewAllBtn.addEventListener('click', (event) => {
           event.stopPropagation(); // 不触发卡片自身的点击逻辑
+          writeProjectsViewState({
+            view: 'images',
+            imagesScrollTop: imagesGrid ? imagesGrid.scrollTop : 0,
+            previewProjectId: project.id,
+          });
           const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
           const url = `project.html?id=${project.id}&from=indexImagesViewAll&category=${encodeURIComponent(category)}`;
           window.location.href = url;
@@ -1368,8 +1518,34 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
   if (!mapTab || !listTab || !imagesTab || !mapContainer || !listContainer || !projectsContainer || !imagesGrid) return;
 
+  function restoreSavedScroll(view) {
+    const state = readProjectsViewState();
+    if (view === 'list') {
+      requestAnimationFrame(() => {
+        listContainer.scrollTop = state.listScrollTop || 0;
+      });
+      return;
+    }
+    if (view === 'images') {
+      requestAnimationFrame(() => {
+        imagesGrid.scrollTop = state.imagesScrollTop || 0;
+      });
+    }
+  }
+
+  function ensureStandardPreviewProject() {
+    if (!window.currentProjectData || !window.currentProjectData.mapOnly) return;
+
+    const fallbackProject = projectsData.find((project) => !project.mapOnly);
+    if (fallbackProject && typeof window.currentProjectId !== 'undefined') {
+      const event = new CustomEvent('forceProjectPreview', { detail: { projectId: fallbackProject.id } });
+      document.dispatchEvent(event);
+    }
+  }
+
   // 显示地图视图
   function showMap() {
+    writeProjectsViewState({ view: 'map' });
     mapTab.classList.add('active');
     listTab.classList.remove('active');
     imagesTab.classList.remove('active');
@@ -1382,6 +1558,8 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
   // 显示列表视图（仅右侧区域切换，左侧预览保持不变）
   function showList() {
+    ensureStandardPreviewProject();
+    writeProjectsViewState({ view: 'list' });
     mapTab.classList.remove('active');
     listTab.classList.add('active');
     imagesTab.classList.remove('active');
@@ -1390,17 +1568,29 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     listContainer.style.display = 'block';
     imagesGrid.style.display = 'none';
     document.body.classList.remove('images-mode');
+    restoreSavedScroll('list');
   }
 
   // 显示 Images 视图：隐藏左右两个板块，只显示全宽网格
   function showImages() {
+    ensureStandardPreviewProject();
+    writeProjectsViewState({ view: 'images' });
     mapTab.classList.remove('active');
     listTab.classList.remove('active');
     imagesTab.classList.add('active');
     projectsContainer.style.display = 'none';
     imagesGrid.style.display = 'grid';
     document.body.classList.add('images-mode');
+    restoreSavedScroll('images');
   }
+
+  listContainer.addEventListener('scroll', () => {
+    writeProjectsViewState({ listScrollTop: listContainer.scrollTop });
+  }, { passive: true });
+
+  imagesGrid.addEventListener('scroll', () => {
+    writeProjectsViewState({ imagesScrollTop: imagesGrid.scrollTop });
+  }, { passive: true });
 
   mapTab.addEventListener('click', () => {
     showMap();
@@ -1476,21 +1666,315 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
 // ========== 顶部 Work / About 切换 ==========
 (() => {
+  const filmList = document.getElementById('film-list');
+  const filmPlayer = document.getElementById('film-player');
+  const filmPlayerFrame = filmPlayer ? filmPlayer.closest('.film-player-frame') : null;
+  const filmPlayBtn = document.getElementById('film-play-btn');
+  const filmCenterPlay = document.getElementById('film-center-play');
+  const filmProgress = document.getElementById('film-progress');
+  const filmVolume = document.getElementById('film-volume');
+  const filmVolumePanel = document.getElementById('film-volume-panel');
+  const filmVolumeSlider = document.getElementById('film-volume-slider');
+  const filmMuteBtn = document.getElementById('film-mute-btn');
+  const filmFullscreenBtn = document.getElementById('film-fullscreen-btn');
+
+  if (!filmList || !filmPlayer || !filmPlayerFrame || !filmPlayBtn || !filmCenterPlay || !filmProgress || !filmVolume || !filmVolumePanel || !filmVolumeSlider || !filmMuteBtn || !filmFullscreenBtn) return;
+
+  let currentFilmIndex = 0;
+  let isSeekingFilm = false;
+  let rememberedFilmVolume = 1;
+  let shouldResumeFilmOnReturn = false;
+
+  function isFilmSectionActive() {
+    return document.body.classList.contains('film-mode');
+  }
+
+  filmPlayer.muted = true;
+  filmPlayer.volume = 0;
+  filmVolumeSlider.value = '0';
+
+  function updateFilmVolumeProgress() {
+    const percent = Math.max(0, Math.min(100, Number(filmVolumeSlider.value)));
+    filmVolumeSlider.style.setProperty('--film-volume-progress', `${percent}%`);
+  }
+
+  function updatePlaybackState() {
+    const isZh = document.body.classList.contains('lang-zh');
+    const isPaused = filmPlayer.paused;
+    filmPlayerFrame.dataset.paused = isPaused ? 'true' : 'false';
+    filmPlayBtn.setAttribute('aria-label', isPaused ? (isZh ? '播放视频' : 'Play video') : (isZh ? '暂停视频' : 'Pause video'));
+    filmCenterPlay.setAttribute('aria-label', isZh ? '播放视频' : 'Play video');
+  }
+
+  function updateFilmProgress(percent) {
+    const clamped = Math.max(0, Math.min(100, percent));
+    filmProgress.style.setProperty('--film-progress', `${clamped}%`);
+  }
+
+  function syncFilmProgress() {
+    if (!Number.isFinite(filmPlayer.duration) || filmPlayer.duration <= 0 || isSeekingFilm) return;
+    const progressValue = (filmPlayer.currentTime / filmPlayer.duration) * 1000;
+    filmProgress.value = String(Math.max(0, Math.min(1000, progressValue)));
+    updateFilmProgress((progressValue / 1000) * 100);
+  }
+
+  function updateMuteState() {
+    const isZh = document.body.classList.contains('lang-zh');
+    const muted = filmPlayer.muted || filmPlayer.volume === 0;
+    filmVolume.dataset.muted = muted ? 'true' : 'false';
+    filmMuteBtn.setAttribute('aria-label', muted ? (isZh ? '开启声音' : 'Sound') : (isZh ? '调整音量' : 'Volume'));
+  }
+
+  function playFilm() {
+    const playAttempt = filmPlayer.play();
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {});
+    }
+    updatePlaybackState();
+  }
+
+  function pauseFilm() {
+    filmPlayer.pause();
+    updatePlaybackState();
+  }
+
+  function toggleFilmPlayback() {
+    if (filmPlayer.paused) {
+      playFilm();
+    } else {
+      pauseFilm();
+    }
+  }
+
+  function suspendFilmPlaybackForHiddenState() {
+    if (!filmPlayer.paused) {
+      shouldResumeFilmOnReturn = true;
+      pauseFilm();
+    } else {
+      shouldResumeFilmOnReturn = false;
+    }
+  }
+
+  function resumeFilmPlaybackAfterHiddenState() {
+    if (shouldResumeFilmOnReturn) {
+      shouldResumeFilmOnReturn = false;
+      playFilm();
+    }
+  }
+
+  async function requestFilmFullscreen() {
+    const target = filmPlayerFrame;
+    if (!target) return;
+
+    try {
+      if (isMobileViewport && filmPlayer.webkitEnterFullscreen) {
+        filmPlayer.webkitEnterFullscreen();
+        return;
+      }
+
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      if (target.requestFullscreen) {
+        await target.requestFullscreen();
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      }
+
+      if (isMobileViewport && screen.orientation && screen.orientation.lock) {
+        try {
+          await screen.orientation.lock('landscape');
+        } catch (error) {}
+      }
+    } catch (error) {}
+  }
+
+  function renderFilmList() {
+    const isZh = document.body.classList.contains('lang-zh');
+    filmList.innerHTML = '';
+
+    filmLibrary.forEach((film, index) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = `film-list-item${index === currentFilmIndex ? ' active' : ''}`;
+      item.innerHTML = `
+        <span class="film-list-item-title">${isZh ? film.title : film.titleEn}</span>
+        <span class="film-list-item-status">${isZh ? '• 正在播放' : '• Playing'}</span>
+      `;
+      item.addEventListener('click', () => {
+        switchFilm(index);
+      });
+      filmList.appendChild(item);
+    });
+  }
+
+  function switchFilm(index) {
+    const nextFilm = filmLibrary[index];
+    if (!nextFilm) return;
+
+    currentFilmIndex = index;
+    filmPlayer.src = nextFilm.src;
+    filmPlayer.muted = true;
+    filmPlayer.volume = 0;
+    rememberedFilmVolume = 1;
+    filmVolume.dataset.open = 'false';
+    filmVolume.classList.remove('open');
+    filmVolumeSlider.value = '0';
+    updateFilmVolumeProgress();
+    filmProgress.value = '0';
+    updateFilmProgress(0);
+    updateMuteState();
+    filmPlayer.load();
+    if (isFilmSectionActive()) {
+      playFilm();
+    } else {
+      shouldResumeFilmOnReturn = true;
+      pauseFilm();
+    }
+    renderFilmList();
+  }
+
+  renderFilmList();
+  switchFilm(0);
+
+  filmPlayer.addEventListener('loadedmetadata', () => {
+    filmProgress.value = '0';
+    updateFilmProgress(0);
+    if (!isFilmSectionActive()) {
+      pauseFilm();
+    }
+  });
+
+  filmPlayer.addEventListener('timeupdate', syncFilmProgress);
+  filmPlayer.addEventListener('play', updatePlaybackState);
+  filmPlayer.addEventListener('pause', updatePlaybackState);
+
+  filmPlayer.addEventListener('volumechange', () => {
+    const volumeValue = filmPlayer.muted ? 0 : Math.round(filmPlayer.volume * 100);
+    filmVolumeSlider.value = String(volumeValue);
+    if (!filmPlayer.muted && filmPlayer.volume > 0) {
+      rememberedFilmVolume = filmPlayer.volume;
+    }
+    updateFilmVolumeProgress();
+    updateMuteState();
+  });
+
+  filmProgress.addEventListener('input', () => {
+    isSeekingFilm = true;
+    const percent = (Number(filmProgress.value) / 1000) * 100;
+    updateFilmProgress(percent);
+  });
+
+  const applyFilmSeek = () => {
+    if (Number.isFinite(filmPlayer.duration) && filmPlayer.duration > 0) {
+      filmPlayer.currentTime = (Number(filmProgress.value) / 1000) * filmPlayer.duration;
+    }
+    isSeekingFilm = false;
+    syncFilmProgress();
+  };
+
+  filmProgress.addEventListener('change', applyFilmSeek);
+  filmProgress.addEventListener('pointerup', applyFilmSeek);
+  filmProgress.addEventListener('touchend', applyFilmSeek);
+
+  filmPlayBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleFilmPlayback();
+  });
+
+  filmCenterPlay.addEventListener('click', (event) => {
+    event.stopPropagation();
+    playFilm();
+  });
+
+  filmPlayer.addEventListener('click', toggleFilmPlayback);
+
+  filmMuteBtn.addEventListener('click', () => {
+    const muted = filmPlayer.muted || filmPlayer.volume === 0;
+    if (muted) {
+      const restoredVolume = rememberedFilmVolume > 0 ? rememberedFilmVolume : 1;
+      filmPlayer.muted = false;
+      filmPlayer.volume = restoredVolume;
+      filmVolumeSlider.value = String(Math.round(restoredVolume * 100));
+      filmVolume.classList.add('open');
+      filmVolume.dataset.open = 'true';
+    } else {
+      rememberedFilmVolume = filmPlayer.volume > 0 ? filmPlayer.volume : rememberedFilmVolume;
+      filmPlayer.volume = 0;
+      filmPlayer.muted = true;
+      filmVolume.classList.remove('open');
+      filmVolume.dataset.open = 'false';
+    }
+    updateFilmVolumeProgress();
+  });
+
+  filmVolumeSlider.addEventListener('input', () => {
+    const volume = Number(filmVolumeSlider.value) / 100;
+    filmPlayer.volume = volume;
+    filmPlayer.muted = volume === 0;
+    if (volume > 0) {
+      rememberedFilmVolume = volume;
+    }
+    updateFilmVolumeProgress();
+    updateMuteState();
+    const playAttempt = filmPlayer.play();
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {});
+    }
+  });
+
+  filmFullscreenBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    requestFilmFullscreen();
+  });
+
+  document.addEventListener('pointerdown', (event) => {
+    if (!filmVolume.contains(event.target)) {
+      filmVolume.classList.remove('open');
+      filmVolume.dataset.open = 'false';
+    }
+  });
+
+  document.addEventListener('languageChanged', () => {
+    renderFilmList();
+    updateMuteState();
+    updatePlaybackState();
+    filmFullscreenBtn.setAttribute('aria-label', document.body.classList.contains('lang-zh') ? '全屏观看' : 'Fullscreen video');
+  });
+
+  updateFilmVolumeProgress();
+  filmFullscreenBtn.setAttribute('aria-label', document.body.classList.contains('lang-zh') ? '全屏观看' : 'Fullscreen video');
+
+  window.pauseFilmForInactiveSection = suspendFilmPlaybackForHiddenState;
+  window.resumeFilmForActiveSection = resumeFilmPlaybackAfterHiddenState;
+})();
+
+(() => {
   const workTab = document.querySelector('.nav-tab[data-page="work"]');
+  const filmTab = document.querySelector('.nav-tab[data-page="film"]');
   const aboutTab = document.querySelector('.nav-tab[data-page="about"]');
   const projectsSection = document.getElementById('projects-section');
+  const filmSection = document.getElementById('film-section');
   const aboutSection = document.getElementById('about-section');
   const viewTabs = document.querySelector('.view-tabs');
 
-  if (!workTab || !aboutTab || !projectsSection || !aboutSection || !viewTabs) return;
+  if (!workTab || !filmTab || !aboutTab || !projectsSection || !filmSection || !aboutSection || !viewTabs) return;
 
   function showWork() {
+    if (document.body.classList.contains('film-mode') && typeof window.pauseFilmForInactiveSection === 'function') {
+      window.pauseFilmForInactiveSection();
+    }
     workTab.classList.add('active');
+    filmTab.classList.remove('active');
     aboutTab.classList.remove('active');
     projectsSection.style.display = 'block';
+    filmSection.style.display = 'none';
     aboutSection.style.display = 'none';
     viewTabs.style.display = 'flex';
     document.body.classList.remove('about-mode');
+    document.body.classList.remove('film-mode');
     
     // 暂时禁用手机端自动对齐，避免跳转到顶部
     if (window.disableMobileAutoScroll !== undefined) {
@@ -1501,13 +1985,42 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     }
   }
 
-  function showAbout() {
+  function showFilm() {
     workTab.classList.remove('active');
+    filmTab.classList.add('active');
+    aboutTab.classList.remove('active');
+    projectsSection.style.display = 'none';
+    filmSection.style.display = 'block';
+    aboutSection.style.display = 'none';
+    viewTabs.style.display = 'none';
+    document.body.classList.remove('about-mode');
+    document.body.classList.add('film-mode');
+
+    if (typeof window.resumeFilmForActiveSection === 'function') {
+      window.resumeFilmForActiveSection();
+    }
+
+    if (window.disableMobileAutoScroll !== undefined) {
+      window.disableMobileAutoScroll = true;
+      setTimeout(() => {
+        window.disableMobileAutoScroll = false;
+      }, 800);
+    }
+  }
+
+  function showAbout() {
+    if (document.body.classList.contains('film-mode') && typeof window.pauseFilmForInactiveSection === 'function') {
+      window.pauseFilmForInactiveSection();
+    }
+    workTab.classList.remove('active');
+    filmTab.classList.remove('active');
     aboutTab.classList.add('active');
     projectsSection.style.display = 'none';
+    filmSection.style.display = 'none';
     aboutSection.style.display = 'block';
     viewTabs.style.display = 'none';
     document.body.classList.add('about-mode');
+    document.body.classList.remove('film-mode');
     
     // 暂时禁用手机端自动对齐，避免跳转到顶部
     if (window.disableMobileAutoScroll !== undefined) {
@@ -1521,6 +2034,10 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
   workTab.addEventListener('click', (event) => {
     event.preventDefault();    // 阻止默认跳转行为
     showWork();
+  });
+
+  filmTab.addEventListener('click', () => {
+    showFilm();
   });
 
   aboutTab.addEventListener('click', () => {
@@ -1616,23 +2133,9 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     const currentPhoto = heroPhoto1.style.opacity !== '0' && heroPhoto1.style.opacity !== '' ? heroPhoto1 : heroPhoto2;
     const currentSrc = currentPhoto.src;
     
-    // 在 heroImagesDesktop 中查找对应的图片数据
-    const heroImagesDesktop = [
-      { src: './img/home/1/01.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
-      { src: './img/home/1/02.webp', location: 'Shanghai International Exchange Plaza', locationZh: '上海金融交易广场', description: 'Designed by FGP Atelier + Jahn/', descriptionZh: '委托方：FGP Atelier + Jahn/' },
-      { src: './img/home/1/03.webp', location: 'Shenzhen Gate', locationZh: '深圳汇隆商务中心', description: 'Designed by FGP Atelier', descriptionZh: '委托方：FGP Atelier' },
-      { src: './img/home/1/04.webp', location: 'Peng\'s House', locationZh: '启东彭宅', description: 'Designed by L&M Design Lab', descriptionZh: '委托方：立木建筑' },
-      { src: './img/home/1/05.webp', location: 'Xuhui District New Archives Center', locationZh: '徐汇区档案馆新馆', description: 'Designed by Atelier Archmixing', descriptionZh: '委托方：阿科米星建筑设计事务所' },
-      { src: './img/home/1/06.webp', location: 'Tian An Clubhouse', locationZh: '常州天安会所', description: 'Designed by HATCH Architects', descriptionZh: '委托方：汉齐建筑' },
-      { src: './img/home/1/07.webp', location: 'Resting Loop with Views', locationZh: '重景环（绿屏石滩驿站）', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
-      { src: './img/home/1/08.webp', location: 'Wave Breaker by the Sea', locationZh: '临港浪花消波块驿站', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
-      { src: './img/home/1/09.webp', location: 'Xi\'an CCBD', locationZh: '西安万象城', description: 'Designed by Heatherwick Studio', descriptionZh: '委托方：Heatherwick Studio' },
-      { src: './img/home/1/10.webp', location: 'Asset Management Company Office', locationZh: '资产管理公司室内', description: 'Designed by HCCH Studio', descriptionZh: '委托方：合尘建筑' },
-      { src: './img/home/1/11.webp', location: 'Cave Teahouse & Tree Tavern', locationZh: '石室茶室 树洞酒馆', description: 'Designed by Arc Z + Practice on Earth', descriptionZh: '委托方：Arc Z + 猜一建筑' }
-    ];
-    
     // 查找匹配的图片数据（使用完整URL或相对路径匹配）
-    const imageData = heroImagesDesktop.find(img => 
+    const currentIndex = Number(document.body.dataset.heroImageIndex || 0);
+    const imageData = homeHeroImages[currentIndex] || homeHeroImages.find(img => 
       currentSrc.includes(img.src) || currentSrc.endsWith(img.src.replace('./', ''))
     );
     
@@ -1692,5 +2195,3 @@ const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
     e.stopPropagation();
   }, { passive: false });
 })();
-
-

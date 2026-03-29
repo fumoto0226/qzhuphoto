@@ -5,8 +5,8 @@
 }
 
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #fafafa;
+  color: #111111;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
@@ -24,7 +24,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #111111;
   cursor: pointer;
   z-index: 100;
   transition: opacity 0.2s ease;
@@ -101,9 +101,7 @@ body {
   left: 0;
   right: 0;
   height: 80px;                 /* 减小高度 */
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background-color: #fafafa;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px 40px;           /* 减小内边距 */
@@ -144,7 +142,7 @@ body {
   height: 40px;                 /* 选中时放大 */
   width: 40px;
   transform: scale(1);          /* 不额外放大，用尺寸变化 */
-  box-shadow: 0 0 0 1px #ffffff; /* 边框从2px减到1px */
+  box-shadow: 0 0 0 1px #111111; /* 边框从2px减到1px */
 }
 
 /* 自定义滚动条 */
@@ -153,16 +151,16 @@ body {
 }
 
 .thumbnail-strip::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(17, 17, 17, 0.05);
 }
 
 .thumbnail-strip::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(17, 17, 17, 0.25);
   border-radius: 3px;
 }
 
 .thumbnail-strip::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(17, 17, 17, 0.4);
 }
 
 /* 左右悬浮翻页箭头（覆盖在主图上方） */
@@ -208,6 +206,7 @@ body {
   pointer-events: none;
   transition: opacity 0.2s ease;
   display: block;
+  filter: invert(1);
 }
 
 .nav-arrow:hover .nav-arrow-icon {
@@ -287,5 +286,3 @@ body {
     width: 36px;
   }
 }
-
-

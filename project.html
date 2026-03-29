@@ -72,6 +72,12 @@
       var category = params.get('category');
       var backLink = document.getElementById('back-link');
       if (!backLink) return;
+      var savedViewState = null;
+      try {
+        savedViewState = JSON.parse(sessionStorage.getItem('indexProjectsViewState') || '{}');
+      } catch (e) {
+        savedViewState = {};
+      }
 
       // 保存项目 ID 到全局变量，供 project.js 使用
       if (projectId !== null) {
@@ -96,8 +102,14 @@
         backLink.href = withCategory('index.html#projects-section-list');
       } else if (from === 'indexImages') {
         backLink.href = withCategory('index.html#projects-section-images');
+      } else if (from === 'indexImagesViewAll') {
+        backLink.href = withCategory('index.html#projects-section-images');
       } else if (from === 'map') {
         backLink.href = withCategory('index.html#projects-section');
+      } else if (from === 'indexPreview' && savedViewState && savedViewState.view === 'images') {
+        backLink.href = withCategory('index.html#projects-section-images');
+      } else if (from === 'indexPreview' && savedViewState && savedViewState.view === 'list') {
+        backLink.href = withCategory('index.html#projects-section-list');
       } else {
         backLink.href = withCategory('index.html#projects-section');
       }

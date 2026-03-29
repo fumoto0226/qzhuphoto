@@ -1,0 +1,2 @@
+[    3627ms] [WARNING] CardDataManager: No card data found @ https://www.amap.com/build/main.8dae52e95acee87fd3e6.js:69
+[    9567ms] [WARNING] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently @ https://webapi.amap.com/maps?v=2.0&key=d1f15ad3fdf0c704434eaf23c7c18698&plugin=AMap.Adaptor:0

@@ -17,8 +17,23 @@
     throw new Error('Project not found');
   }
 
+  function getProjectAssetBase(projectData) {
+    return projectData.assetBase || 'programs';
+  }
+
+  function getProjectMetaSuffix(projectData, lang) {
+    const client = lang === 'zh' ? projectData.designer : projectData.designerEn;
+    if (!client) return '';
+    return lang === 'zh' ? `（委托方：${client}）` : `（Client: ${client}）`;
+  }
+
   // 构建图片路径数组（对路径进行 URL 编码以支持中文和空格）
-  const images = project.images.map(img => encodeURI(`./img/program/${project.folder}/${img}`));
+  const images = project.images.map((img) =>
+    encodeURI(`./img/${getProjectAssetBase(project)}/${project.folder}/${img}`)
+  );
+  const thumbnailImages = project.images.map((img) =>
+    encodeURI(`./img/${getProjectAssetBase(project)}-thumbs/${project.folder}/${img.replace(/\.[^.]+$/, '.webp')}`)
+  );
 
   // ========== 语言切换功能 ==========
   // 从 localStorage 读取保存的语言偏好
@@ -41,11 +56,8 @@
   // 设置项目标题
   function updateProjectTitle() {
     const title = currentLang === 'zh' ? project.title : project.titleEn;
-    const designer = currentLang === 'zh' ? project.designer : project.designerEn;
-    const designerInfo = currentLang === 'zh' 
-      ? `（设计方：${designer}）` 
-      : `（Designed by ${designer}）`;
-    
+    const designerInfo = getProjectMetaSuffix(project, currentLang);
+
     document.getElementById('page-title').textContent = title;
     document.getElementById('project-title').textContent = title + designerInfo;
   }
@@ -58,6 +70,7 @@
   if (mainImage) {
     mainImage.loading = 'eager';
     mainImage.decoding = 'async';
+    mainImage.fetchPriority = 'high';
   }
   const mainImageContainer = document.querySelector('.main-image-container');
   const carouselTrack = document.getElementById('carousel-track');
@@ -67,7 +80,59 @@
   const panelPrevImage = panelPrev ? panelPrev.querySelector('img') : null;
   const panelCurrImage = panelCurr ? panelCurr.querySelector('img') : null;
   const panelNextImage = panelNext ? panelNext.querySelector('img') : null;
+  if (panelPrevImage) {
+    panelPrevImage.decoding = 'async';
+    panelPrevImage.loading = 'eager';
+    panelPrevImage.fetchPriority = 'low';
+  }
+  if (panelCurrImage) {
+    panelCurrImage.decoding = 'async';
+    panelCurrImage.loading = 'eager';
+    panelCurrImage.fetchPriority = 'high';
+  }
+  if (panelNextImage) {
+    panelNextImage.decoding = 'async';
+    panelNextImage.loading = 'eager';
+    panelNextImage.fetchPriority = 'low';
+  }
   const thumbnailContainer = document.getElementById('thumbnail-container');
+  const thumbnailElements = [];
+  let isAnimating = false;
+  let queuedNavigation = null;
+  let activeAnimationFinish = null;
+
+  function loadThumbnailImage(img, index) {
+    if (!img) return;
+    const thumbnailSrc = thumbnailImages[index];
+    const fallbackSrc = images[index];
+    img.onerror = () => {
+      if (img.src !== fallbackSrc) {
+        img.src = fallbackSrc;
+      }
+    };
+    img.src = thumbnailSrc;
+  }
+
+  function queueNavigation(action) {
+    queuedNavigation = action;
+    if (isAnimating && typeof activeAnimationFinish === 'function') {
+      activeAnimationFinish();
+    }
+  }
+
+  function flushQueuedNavigation() {
+    if (!queuedNavigation) return;
+    const action = queuedNavigation;
+    queuedNavigation = null;
+
+    window.requestAnimationFrame(() => {
+      if (action.type === 'step') {
+        animateStep(action.direction);
+      } else if (action.type === 'jump') {
+        switchImage(action.index);
+      }
+    });
+  }
 
   // 生成缩略图（懒加载优化）
   images.forEach((src, index) => {
@@ -78,18 +143,31 @@
     img.loading = 'lazy';
 
     // 首屏只加载前 10 张缩略图，其余使用懒加载，减少首屏压力
-    if (index < 10) {
-      img.src = src;
+    if (index < 4) {
+      loadThumbnailImage(img, index);
     } else {
-      img.dataset.src = src;
+      img.dataset.src = thumbnailImages[index];
+      img.dataset.fallbackSrc = images[index];
     }
     if (index === 0) {
       img.classList.add('active');
     }
+    thumbnailElements.push(img);
 
     // 点击缩略图切换主图
     img.addEventListener('click', () => {
       if (index === currentIndex) return;
+
+      if (isAnimating) {
+        if (index === currentIndex + 1) {
+          queueNavigation({ type: 'step', direction: 1 });
+        } else if (index === currentIndex - 1) {
+          queueNavigation({ type: 'step', direction: -1 });
+        } else {
+          queueNavigation({ type: 'jump', index });
+        }
+        return;
+      }
 
       if (index === currentIndex + 1) {
         animateStep(1);
@@ -110,8 +188,16 @@
         if (entry.isIntersecting) {
           const img = entry.target;
           if (img.dataset && img.dataset.src) {
-            img.src = img.dataset.src;
+            const thumbnailSrc = img.dataset.src;
+            const fallbackSrc = img.dataset.fallbackSrc;
+            img.onerror = () => {
+              if (fallbackSrc && img.src !== fallbackSrc) {
+                img.src = fallbackSrc;
+              }
+            };
+            img.src = thumbnailSrc;
             delete img.dataset.src;
+            delete img.dataset.fallbackSrc;
           }
           observer.unobserve(img);
         }
@@ -128,29 +214,97 @@
   } else {
     document.querySelectorAll('.thumbnail').forEach((img, index) => {
       if (!img.src) {
-        img.src = images[index];
+        loadThumbnailImage(img, index);
       }
     });
   }
 
   // 图片预加载缓存
-  const preloadedImages = new Set();
+  const preloadedImages = new Map();
+  let idlePreloadHandle = null;
   
   // 预加载图片函数
   function preloadImage(src) {
-    if (!src || preloadedImages.has(src)) return;
+    if (!src) return Promise.resolve(null);
+    const cached = preloadedImages.get(src);
+    if (cached) return cached;
+
     const img = new Image();
-    img.src = src;
-    preloadedImages.add(src);
+    img.decoding = 'async';
+    img.loading = 'eager';
+    img.fetchPriority = 'low';
+
+    const ready = new Promise((resolve) => {
+      let resolved = false;
+      const finish = () => {
+        if (resolved) return;
+        resolved = true;
+        resolve(img);
+      };
+
+      img.onload = finish;
+      img.onerror = () => resolve(img);
+      img.src = src;
+
+      if (img.complete) {
+        finish();
+      }
+    });
+
+    preloadedImages.set(src, ready);
+    return ready;
   }
   
-  // 预加载相邻图片（提前加载前后各 3 张）
+  function runIdle(task) {
+    if ('requestIdleCallback' in window) {
+      return window.requestIdleCallback(task, { timeout: 300 });
+    }
+    return window.setTimeout(task, 60);
+  }
+
+  function cancelIdle(handle) {
+    if (!handle) return;
+    if ('cancelIdleCallback' in window) {
+      window.cancelIdleCallback(handle);
+      return;
+    }
+    window.clearTimeout(handle);
+  }
+
+  // 只预热下一跳之外的两张，避免一次性解码太多 3000px 原图
   function preloadNearbyImages(index) {
-    for (let i = -3; i <= 3; i++) {
-      const targetIndex = index + i;
-      if (targetIndex >= 0 && targetIndex < images.length) {
-        preloadImage(images[targetIndex]);
-      }
+    cancelIdle(idlePreloadHandle);
+    idlePreloadHandle = runIdle(() => {
+      const targets = [index - 2, index + 2];
+      targets.forEach((targetIndex) => {
+        if (targetIndex >= 0 && targetIndex < images.length) {
+          preloadImage(images[targetIndex]);
+        }
+      });
+    });
+  }
+
+  function setPanelImage(panelImage, src) {
+    if (!panelImage) return;
+    if (!src) {
+      panelImage.removeAttribute('src');
+      panelImage.style.visibility = 'hidden';
+      return;
+    }
+    if (panelImage.getAttribute('src') !== src) {
+      panelImage.src = src;
+    }
+    panelImage.style.visibility = 'visible';
+  }
+
+  function syncActiveThumbnail(index) {
+    thumbnailElements.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === index);
+    });
+
+    const activeThumbnail = thumbnailElements[index];
+    if (activeThumbnail) {
+      activeThumbnail.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
     }
   }
 
@@ -161,27 +315,9 @@
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : null;
     const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : null;
 
-    panelCurrImage.src = images[currentIndex];
-
-    if (panelPrevImage) {
-      if (prevIndex !== null) {
-        panelPrevImage.src = images[prevIndex];
-        panelPrevImage.style.visibility = 'visible';
-      } else {
-        panelPrevImage.src = '';
-        panelPrevImage.style.visibility = 'hidden';
-      }
-    }
-
-    if (panelNextImage) {
-      if (nextIndex !== null) {
-        panelNextImage.src = images[nextIndex];
-        panelNextImage.style.visibility = 'visible';
-      } else {
-        panelNextImage.src = '';
-        panelNextImage.style.visibility = 'hidden';
-      }
-    }
+    setPanelImage(panelCurrImage, images[currentIndex]);
+    setPanelImage(panelPrevImage, prevIndex !== null ? images[prevIndex] : null);
+    setPanelImage(panelNextImage, nextIndex !== null ? images[nextIndex] : null);
     
     // 预加载相邻图片
     preloadNearbyImages(currentIndex);
@@ -190,27 +326,20 @@
   // 初始化一次主图三面板
   updateCarouselImages();
   
-  // 初始时预加载前几张图片
-  for (let i = 0; i < Math.min(5, images.length); i++) {
-    preloadImage(images[i]);
-  }
+  // 初始时只预热第一跳之外的图片，避免首屏一次吃太多原图
+  preloadNearbyImages(0);
 
   // 切换图片函数
   function switchImage(index) {
     if (index === currentIndex || index < 0 || index >= images.length) return;
+    if (isAnimating) {
+      queueNavigation({ type: 'jump', index });
+      return;
+    }
     currentIndex = index;
 
     updateCarouselImages();
-    
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    thumbnails.forEach((thumb, i) => {
-      if (i === index) {
-        thumb.classList.add('active');
-        thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      } else {
-        thumb.classList.remove('active');
-      }
-    });
+    syncActiveThumbnail(index);
   }
 
   // 键盘导航
@@ -284,9 +413,66 @@
   }
 
   const SWIPE_THRESHOLD_RATIO = 0.08;
+  const SLIDE_TRANSITION = 'transform 0.56s cubic-bezier(0.16, 0.84, 0.24, 1)';
+  const RESET_TRANSITION = 'transform 0.34s cubic-bezier(0.2, 0.82, 0.36, 1)';
+
+  function commitSlide(direction) {
+    currentIndex += direction;
+    if (direction > 0) {
+      setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+      setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
+      setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+    } else {
+      setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+      setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+      setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+    }
+    preloadNearbyImages(currentIndex);
+  }
+
+  function resetTrackPosition() {
+    if (!carouselTrack) return;
+    carouselTrack.style.transition = 'none';
+    carouselTrack.style.transform = 'translateX(0px)';
+  }
+
+  function animateTrackTo(targetOffset, transition, onComplete) {
+    if (!carouselTrack) return;
+
+    let finished = false;
+    let timeoutId = null;
+
+    const cleanup = () => {
+      carouselTrack.removeEventListener('transitionend', handleTransitionEnd);
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+      if (activeAnimationFinish === finish) {
+        activeAnimationFinish = null;
+      }
+    };
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      onComplete();
+    };
+
+    const handleTransitionEnd = (event) => {
+      if (event.target !== carouselTrack || event.propertyName !== 'transform') return;
+      finish();
+    };
+
+    carouselTrack.addEventListener('transitionend', handleTransitionEnd);
+    activeAnimationFinish = finish;
+    timeoutId = window.setTimeout(finish, 700);
+    carouselTrack.style.transition = transition;
+    carouselTrack.style.transform = `translateX(${targetOffset}px)`;
+  }
 
   function finishSwipe(delta) {
-    if (!carouselTrack || !mainImageContainer) return;
+    if (!carouselTrack || !mainImageContainer || isAnimating) return;
 
     const slideWidth = getSlideWidth();
     const threshold = slideWidth * SWIPE_THRESHOLD_RATIO;
@@ -302,28 +488,27 @@
       direction = -1;
     }
 
-    carouselTrack.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
-    carouselTrack.style.transform = `translateX(${targetOffset}px)`;
+    if (direction !== 0) {
+      syncActiveThumbnail(currentIndex + direction);
+      isAnimating = true;
+    }
 
-    const handleTransitionEnd = () => {
-      carouselTrack.removeEventListener('transitionend', handleTransitionEnd);
-
+    animateTrackTo(targetOffset, direction !== 0 ? SLIDE_TRANSITION : RESET_TRANSITION, () => {
       if (direction !== 0) {
-        const newIndex = currentIndex + direction;
-        if (newIndex >= 0 && newIndex < images.length) {
-          switchImage(newIndex);
-        }
+        commitSlide(direction);
       }
-
-      carouselTrack.style.transition = 'none';
-      carouselTrack.style.transform = 'translateX(0px)';
-    };
-
-    carouselTrack.addEventListener('transitionend', handleTransitionEnd);
+      resetTrackPosition();
+      isAnimating = false;
+      flushQueuedNavigation();
+    });
   }
 
   function animateStep(direction) {
     if (!carouselTrack || !mainImageContainer) return;
+    if (isAnimating) {
+      queueNavigation({ type: 'step', direction });
+      return;
+    }
     const slideWidth = getSlideWidth();
     if (!slideWidth) {
       const targetIndex = currentIndex + direction;
@@ -333,31 +518,27 @@
     
     const newIndex = currentIndex + direction;
     if (newIndex < 0 || newIndex >= images.length) return;
-    
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    thumbnails.forEach((thumb, i) => {
-      if (i === newIndex) {
-        thumb.classList.add('active');
-        thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      } else {
-        thumb.classList.remove('active');
-      }
-    });
+    isAnimating = true;
+    syncActiveThumbnail(newIndex);
     
     const targetOffset = direction > 0 ? -slideWidth : slideWidth;
-    
-    carouselTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-    carouselTrack.style.transform = `translateX(${targetOffset}px)`;
 
-    const handleTransitionEnd = () => {
-      carouselTrack.removeEventListener('transitionend', handleTransitionEnd);
+    animateTrackTo(targetOffset, SLIDE_TRANSITION, () => {
       currentIndex = newIndex;
-      updateCarouselImages();
-      carouselTrack.style.transition = 'none';
-      carouselTrack.style.transform = 'translateX(0px)';
-    };
-
-    carouselTrack.addEventListener('transitionend', handleTransitionEnd);
+      if (direction > 0) {
+        setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+        setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
+        setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+      } else {
+        setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+        setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+        setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+      }
+      preloadNearbyImages(currentIndex);
+      resetTrackPosition();
+      isAnimating = false;
+      flushQueuedNavigation();
+    });
   }
   
   // 手机端触摸滑动
@@ -369,6 +550,7 @@
     let isSwiping = false;
 
     mainImageContainer.addEventListener('touchstart', (e) => {
+      if (isAnimating) return;
       if (!e.touches || e.touches.length === 0) return;
       const touch = e.touches[0];
       touchStartX = touch.clientX;
@@ -380,6 +562,7 @@
     }, { passive: true });
 
     mainImageContainer.addEventListener('touchmove', (e) => {
+      if (isAnimating) return;
       if (!e.touches || e.touches.length === 0) return;
       const touch = e.touches[0];
       const deltaX = touch.clientX - touchStartX;
@@ -405,9 +588,13 @@
     }, { passive: false });
 
     function endTouch() {
+      if (isAnimating) {
+        isDragging = false;
+        isSwiping = false;
+        return;
+      }
       if (!isDragging) {
-        carouselTrack.style.transition = 'transform 0.2s ease-out';
-        carouselTrack.style.transform = 'translateX(0px)';
+        animateTrackTo(0, RESET_TRANSITION, resetTrackPosition);
         isSwiping = false;
         return;
       }
@@ -425,33 +612,28 @@
 
       if (direction !== 0) {
         const newIndex = currentIndex + direction;
-        
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        thumbnails.forEach((thumb, i) => {
-          if (i === newIndex) {
-            thumb.classList.add('active');
-            thumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-          } else {
-            thumb.classList.remove('active');
-          }
-        });
+        isAnimating = true;
+        syncActiveThumbnail(newIndex);
 
         const targetOffset = direction > 0 ? -slideWidth : slideWidth;
-        carouselTrack.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
-        carouselTrack.style.transform = `translateX(${targetOffset}px)`;
-
-        const handleTransitionEnd = () => {
-          carouselTrack.removeEventListener('transitionend', handleTransitionEnd);
+        animateTrackTo(targetOffset, SLIDE_TRANSITION, () => {
           currentIndex = newIndex;
-          updateCarouselImages();
-          carouselTrack.style.transition = 'none';
-          carouselTrack.style.transform = 'translateX(0px)';
-        };
-
-        carouselTrack.addEventListener('transitionend', handleTransitionEnd);
+          if (direction > 0) {
+            setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+            setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
+            setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+          } else {
+            setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+            setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+            setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+          }
+          preloadNearbyImages(currentIndex);
+          resetTrackPosition();
+          isAnimating = false;
+          flushQueuedNavigation();
+        });
       } else {
-        carouselTrack.style.transition = 'transform 0.2s ease-out';
-        carouselTrack.style.transform = 'translateX(0px)';
+        animateTrackTo(0, RESET_TRANSITION, resetTrackPosition);
       }
 
       isDragging = false;
@@ -470,6 +652,7 @@
     let isMouseDragging = false;
 
     mainImageContainer.addEventListener('mousedown', (e) => {
+      if (isAnimating) return;
       if (e.button !== 0) return;
       isMouseDown = true;
       isMouseDragging = false;
@@ -481,6 +664,7 @@
     });
 
     window.addEventListener('mousemove', (e) => {
+      if (isAnimating) return;
       if (!isMouseDown) return;
 
       const deltaX = e.clientX - mouseStartX;
@@ -503,13 +687,18 @@
     });
 
     function endMouseDrag() {
+      if (isAnimating) {
+        isMouseDown = false;
+        isMouseDragging = false;
+        document.body.style.cursor = '';
+        return;
+      }
       if (!isMouseDown) return;
 
       document.body.style.cursor = '';
 
       if (!isMouseDragging) {
-        carouselTrack.style.transition = 'transform 0.2s ease-out';
-        carouselTrack.style.transform = 'translateX(0px)';
+        animateTrackTo(0, RESET_TRANSITION, resetTrackPosition);
         isMouseDown = false;
         return;
       }

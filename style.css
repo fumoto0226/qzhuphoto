@@ -445,6 +445,7 @@ body.is-desktop .scroll-arrow {
   overflow: hidden;
   background-color: #fafafa;
   position: relative;
+  cursor: pointer;
 }
 
 .preview-image {
@@ -456,6 +457,14 @@ body.is-desktop .scroll-arrow {
   top: 0;
   left: 0;
   background-color: #fafafa;
+}
+
+@media (min-width: 769px) {
+  .preview-image-wrapper:hover .preview-view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* 预览图右上角“View All”按钮基础样式（默认桌面端隐藏） */
@@ -474,6 +483,8 @@ body.is-desktop .scroll-arrow {
   cursor: pointer;
   display: none; /* 默认不显示，后面在手机端单独打开 */
   z-index: 5;
+  align-items: center;
+  justify-content: center;
 }
 
 .preview-view-all-btn:hover {
@@ -968,6 +979,415 @@ body.is-desktop .scroll-arrow {
   position: relative;           /* 为绝对定位的子元素提供参照 */
 }
 
+.film-section {
+  width: 100%;
+  background-color: #fafafa;
+  display: none;
+  min-height: 85vh;
+  padding: 0 0 20px 0;
+  position: relative;
+}
+
+.film-wrapper {
+  display: flex;
+  gap: 36px;
+  padding: 0 40px 60px 40px;
+  min-height: 85vh;
+  height: 85vh;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.film-list-panel {
+  flex: 0 0 23%;
+  min-width: 280px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.film-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #d9d9d9;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.film-list-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  border: none;
+  border-bottom: 1px solid #d9d9d9;
+  background: transparent;
+  color: #8b8b8b;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.film-list-item:hover {
+  color: #111111;
+}
+
+.film-list-item.active {
+  background-color: #f2f2f2;
+  color: #111111;
+}
+
+.film-list-item-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.film-list-item-status {
+  display: none;
+}
+
+.film-player-panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+.film-player-frame {
+  width: 100%;
+  height: 100%;
+  background-color: #f2f2f2;
+  overflow: hidden;
+  position: relative;
+  border-radius: 2px;
+}
+
+.film-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: transparent;
+}
+
+.film-controls {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.42);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.film-player-frame:hover .film-controls,
+.film-player-frame:focus-within .film-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.film-play-btn {
+  border: none;
+  background: transparent;
+  color: #f5f5f5;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.film-play-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.film-play-icon-pause {
+  display: block;
+}
+
+.film-play-icon-play {
+  display: none;
+}
+
+.film-player-frame[data-paused="true"] .film-play-icon-pause {
+  display: none;
+}
+
+.film-player-frame[data-paused="true"] .film-play-icon-play {
+  display: block;
+}
+
+.film-volume {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.film-fullscreen-btn {
+  border: none;
+  background: transparent;
+  color: #f5f5f5;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.film-fullscreen-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.film-mute-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  color: #f5f5f5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.film-volume-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.film-volume-wave {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: translateY(-0.6px);
+}
+
+.film-volume-slash {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.film-volume[data-muted="false"] .film-volume-wave {
+  opacity: 1;
+}
+
+.film-volume[data-muted="false"] .film-volume-slash {
+  opacity: 0;
+}
+
+.film-volume-panel {
+  position: absolute;
+  right: -8px;
+  bottom: calc(100% + 10px);
+  width: 44px;
+  height: 112px;
+  background: rgba(0, 0, 0, 0.72);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.film-volume.open .film-volume-panel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.film-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 82px;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+  transform: rotate(-90deg);
+}
+
+.film-progress {
+  flex: 1 1 auto;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  margin: 0;
+  cursor: pointer;
+}
+
+.film-center-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.film-player-frame[data-paused="true"] .film-center-play {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.film-center-play-icon {
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 18px solid rgba(255, 255, 255, 0.88);
+  margin-left: 4px;
+}
+
+.film-progress::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.95) var(--film-progress, 0%), rgba(255, 255, 255, 0.28) var(--film-progress, 0%), rgba(255, 255, 255, 0.28) 100%);
+  border-radius: 999px;
+}
+
+.film-progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  margin-top: -4px;
+  border: 0;
+}
+
+.film-progress::-moz-range-track {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+
+.film-progress::-moz-range-progress {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+}
+
+.film-progress::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  border: 0;
+}
+
+.film-volume-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+
+.film-volume-slider {
+  --film-volume-progress: 0%;
+}
+
+.film-volume-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #1f7aff 0%, #1f7aff var(--film-volume-progress, 0%), rgba(255, 255, 255, 0.28) var(--film-volume-progress, 0%), rgba(255, 255, 255, 0.28) 100%);
+}
+
+.film-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  margin-top: -5px;
+  border: 0;
+}
+
+.film-volume-slider::-moz-range-track {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+
+.film-volume-slider::-moz-range-progress {
+  height: 2px;
+  background: #1f7aff;
+  border-radius: 999px;
+}
+
+.film-volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  border: 0;
+}
+
+.copyright-film-desktop {
+  position: absolute;
+  right: 40px;
+  bottom: 33px;
+  font-size: 12px;
+  color: #b6b6b6;
+  letter-spacing: 0.01em;
+}
+
+.copyright-film-desktop p {
+  margin: 0;
+}
+
+.copyright-film-desktop a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.copyright-film-desktop a:hover {
+  opacity: 0.6;
+}
+
 .about-section .about-wrapper {
   height: 85vh;                 /* 固定高度，和 projects-container 一致 */
   max-height: 85vh;
@@ -975,6 +1395,16 @@ body.is-desktop .scroll-arrow {
   padding: 0 40px 60px 40px;    /* 底部增加内边距，为左下角语言按钮留出空间 */
   padding-right: 50px;          /* 右侧边距增加 10px (从 40px 到 50px) */
   position: relative;           /* 作为 About 左下角中文按钮的定位容器（桌面端） */
+}
+
+.about-corner-logo {
+  position: absolute;
+  right: 60px;
+  bottom: 0;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  opacity: 0.9;
 }
 
 .about-container {
@@ -1169,6 +1599,94 @@ body.is-desktop .scroll-arrow {
     overflow: hidden;             /* 防止外部滚动 */
   }
 
+  .film-section {
+    min-height: calc(100vh - 70px);
+    height: calc(100vh - 70px);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .film-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 16px 24px 16px;
+    min-height: 0;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .film-list-panel {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
+  }
+
+  .film-player-panel {
+    order: 1;
+    flex: 0 0 auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .film-list-item {
+    padding: 14px 0;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .film-list-item-status {
+    font-size: 12px;
+  }
+
+  .film-list {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .film-player-frame {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin: 18px 0 56px;
+    overflow: visible;
+  }
+
+  .film-controls {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 8px 10px;
+  }
+
+  .film-center-play {
+    width: 62px;
+    height: 62px;
+  }
+
+  .film-volume-panel {
+    right: -4px;
+  }
+
+  .copyright-film-desktop {
+    display: none;
+  }
+
+  .lang-btn-film-desktop {
+    display: none;
+  }
+
   .about-section .about-wrapper {
     height: 100%;
     max-height: 100%;
@@ -1221,6 +1739,17 @@ body.is-desktop .scroll-arrow {
     display: none;
   }
 
+  .about-corner-logo {
+    display: block;
+    position: static;
+    width: 56px;
+    height: 56px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    margin-left: 0;
+    opacity: 0.9;
+  }
+
   .project-map {
     width: 100%;
     min-height: 60vh;
@@ -1240,6 +1769,14 @@ body.is-desktop .scroll-arrow {
     padding: 20px 0 5px 0;
     background-color: #fafafa;  /* 确保背景不透明，覆盖滚动内容 */
     z-index: 10;                /* 确保在内容上方 */
+  }
+
+  body.film-mode .tabs-only-section {
+    position: sticky;
+    top: 0;
+    padding: 20px 0 5px 0;
+    background-color: #fafafa;
+    z-index: 10;
   }
 
   /* 顶部 tabs 与下方图片左右边缘对齐 */
@@ -1275,14 +1812,16 @@ body.is-desktop .scroll-arrow {
   }
 
   /* About 模式下，语言切换按钮移到右上角与 Works / About 并排 */
-  body.about-mode .language-switch-tabs {
+  body.about-mode .language-switch-tabs,
+  body.film-mode .language-switch-tabs {
     position: static;
     margin-top: 0;
     margin-left: auto;
     padding-left: 12px;
   }
 
-  body.about-mode .language-switch-tabs .lang-btn {
+  body.about-mode .language-switch-tabs .lang-btn,
+  body.film-mode .language-switch-tabs .lang-btn {
     padding: 9px 0;            /* 与 nav-tab 高度对齐 */
     color: #999999;            /* 与未激活的 tab 颜色一致 */
   }
@@ -1469,6 +2008,27 @@ body.is-desktop .scroll-arrow {
     opacity: 0.6;
   }
 
+  .lang-btn-film-desktop {
+    display: block;
+    position: absolute;
+    left: 40px;
+    bottom: 32px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    padding: 0;
+    letter-spacing: 0.02em;
+    color: #111111;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  .lang-btn-film-desktop:hover {
+    opacity: 0.6;
+  }
+
   /* 桌面端 Works 页面右下角版权信息 */
   .copyright-work-desktop {
     display: block;              /* 桌面端显示 */
@@ -1496,5 +2056,3 @@ body.is-desktop .scroll-arrow {
     color: #6f6f6f;              /* hover 时变深，从变浅改为变深 */
   }
 }
-
-

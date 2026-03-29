@@ -35,26 +35,26 @@
         <div class="frame">
           <!-- 黑色标题：在白色区域，被遮罩盖住/露出 -->
           <header class="title-black">
-            <h1 class="title-text">QingYan Studio</h1>
+            <h1 class="title-text" data-en="QingYan Studio" data-zh="清言筑语">QingYan Studio</h1>
           </header>
 
           <!-- 图片蒙版：包含图片和白色标题，一起被裁切 -->
           <div class="photo-shell">
             <img
               class="hero-photo hero-photo-1"
-              src="./img/home/1/01.webp"
+              src="./img/home/横版/H01.webp"
               alt="Hero Image 1"
             />
             <img
               class="hero-photo hero-photo-2"
-              src="./img/home/1/02.webp"
+              src=""
               alt="Hero Image 2"
               style="opacity: 0;"
             />
             
             <!-- 白色标题：和图片一起被遮罩裁切 -->
             <div class="title-white">
-              <h1 class="title-text">QingYan Studio</h1>
+              <h1 class="title-text" data-en="QingYan Studio" data-zh="清言筑语">QingYan Studio</h1>
             </div>
           </div>
 
@@ -71,11 +71,11 @@
           <!-- 底部信息，同样在外部白色区域 -->
           <footer class="meta-row">
             <section class="meta meta-bottom-left">
-              <p>Xi'an CCBD</p>
+              <p>Shanghai International Exchange Plaza</p>
             </section>
 
             <section class="meta meta-bottom-center">
-              <p>by Heatherwick Studio. Photographed in 2024</p>
+              <p>Designed by FGP Atelier + Jahn/</p>
             </section>
           </footer>
 
@@ -92,6 +92,7 @@
         <div class="tabs-container">
           <div class="nav-tabs">
             <button class="nav-tab active" data-page="work" data-en="Works" data-zh="项目">Works</button>
+            <button class="nav-tab" data-page="film" data-en="Film" data-zh="影片">Film</button>
             <button class="nav-tab" data-page="about" data-en="About" data-zh="关于我们">About</button>
           </div>
           <!-- 手机端标签栏中的语言切换按钮：绝对定位在Works下方 -->
@@ -99,9 +100,9 @@
             <button class="lang-btn lang-switch-btn" data-en="中文" data-zh="English">中文</button>
           </div>
           <div class="view-tabs">
-            <button class="view-tab active" data-view="map" data-en="Map" data-zh="地图">Map</button>
             <button class="view-tab" data-view="list" id="view-list-tab" data-en="List" data-zh="列表">List</button>
             <button class="view-tab" data-view="images" id="view-images-tab" data-en="Images" data-zh="图片">Images</button>
+            <button class="view-tab active" data-view="map" data-en="Map" data-zh="地图">Map</button>
             <!-- 项目分类下拉菜单 -->
             <div class="category-dropdown" id="category-dropdown">
               <button class="category-btn" id="category-btn" data-en="Filter" data-zh="筛选">Filter</button>
@@ -114,6 +115,7 @@
                 <div class="category-item" data-category="workspace" data-en="Workspace" data-zh="办公">Workspace</div>
                 <div class="category-item" data-category="residential" data-en="Residential" data-zh="住宅">Residential</div>
                 <div class="category-item" data-category="hospitality" data-en="Hospitality" data-zh="酒店">Hospitality</div>
+                <div class="category-item" data-category="field-trip" data-en="Field Trip" data-zh="习作">Field Trip</div>
               </div>
             </div>
           </div>
@@ -328,7 +330,62 @@
         </aside>
 
           </div> <!-- /.about-container -->
+          <img src="./img/logo.svg" alt="QingYan Studio Logo" class="about-corner-logo" />
         </div>   <!-- /.about-wrapper -->
+      </section>
+
+      <section class="film-section" id="film-section">
+        <button class="lang-btn lang-btn-film-desktop lang-switch-btn" data-en="中文" data-zh="English">中文</button>
+        <div class="film-wrapper">
+          <div class="film-list-panel">
+            <div class="film-list" id="film-list"></div>
+          </div>
+          <div class="film-player-panel">
+            <div class="film-player-frame">
+              <video id="film-player" class="film-player" muted loop playsinline preload="metadata"></video>
+              <button type="button" class="film-center-play" id="film-center-play" aria-label="Play video">
+                <span class="film-center-play-icon"></span>
+              </button>
+              <div class="film-controls" id="film-controls">
+                <button type="button" class="film-play-btn" id="film-play-btn" aria-label="Pause video">
+                  <svg class="film-play-icon film-play-icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+                    <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+                  </svg>
+                  <svg class="film-play-icon film-play-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 6l10 6-10 6z"></path>
+                  </svg>
+                </button>
+                <input type="range" id="film-progress" class="film-progress" min="0" max="1000" value="0" aria-label="Video progress" />
+                <div class="film-volume" id="film-volume">
+                  <button type="button" class="film-mute-btn" id="film-mute-btn" aria-label="Toggle sound">
+                    <svg class="film-volume-icon" id="film-volume-icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 10h4.2l4.8-4v12l-4.8-4H4z"></path>
+                      <path class="film-volume-wave" d="M15.4 10c1.1 1 1.7 2.2 1.7 4s-.6 3-1.7 4"></path>
+                      <path class="film-volume-wave" d="M17.5 7.8c1.7 1.5 2.5 3.5 2.5 6.2s-.8 4.7-2.5 6.2"></path>
+                      <path class="film-volume-slash" d="M5.5 5.5l13 13"></path>
+                    </svg>
+                  </button>
+                  <div class="film-volume-panel" id="film-volume-panel">
+                    <input type="range" id="film-volume-slider" class="film-volume-slider" min="0" max="100" value="0" aria-label="Video volume" />
+                  </div>
+                </div>
+                <button type="button" class="film-fullscreen-btn" id="film-fullscreen-btn" aria-label="Fullscreen video">
+                  <svg class="film-fullscreen-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 4H4v4"></path>
+                    <path d="M16 4h4v4"></path>
+                    <path d="M20 16v4h-4"></path>
+                    <path d="M4 16v4h4"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright-film-desktop">
+          <p class="lang-content lang-zh" style="display: none;">版权所有 © 2026 QingYan Studio。网站设计 <a href="https://fumoto0226.github.io/zenglujin/" target="_blank" rel="noopener">Zenglujin</a>。</p>
+          <p class="lang-content lang-en">© 2026 QingYan Studio. All Rights Reserved. Site by <a href="https://fumoto0226.github.io/zenglujin/" target="_blank" rel="noopener">Zenglujin</a>.</p>
+        </div>
       </section>
 
       <!-- 第二个板块：左边缩略图+信息，右侧 Map/List/Images 视图 -->
@@ -346,7 +403,7 @@
             <div class="preview-image-wrapper">
               <img 
                 id="preview-image" 
-                src="./img/DJI_20241211112556_0707_D.webp" 
+                src="./img/programs/ACZ + 猜一建筑/下水那天 THE LAUNCH/cover.webp" 
                 alt="Project Preview"
                 class="preview-image"
               />
@@ -354,8 +411,8 @@
               <button class="preview-view-all-btn" id="preview-view-all-btn" data-en="View All" data-zh="查看全部">View All</button>
             </div>
             <div class="preview-info">
-              <h2 id="preview-title" class="preview-title">Xi'an CCBD</h2>
-              <p id="preview-description" class="preview-description">by Heatherwick Studio. Photographed in 2024</p>
+              <h2 id="preview-title" class="preview-title">The Launch</h2>
+              <p id="preview-description" class="preview-description">Client: Practice on Earth + Arc Z. Photographed in 2025.</p>
             </div>
           </div>
 
@@ -382,87 +439,11 @@
                   <tr>
                     <th class="col-year" data-en="Year" data-zh="年份">Year</th>
                     <th class="col-title" data-en="Project" data-zh="项目名">Project</th>
-                    <th class="col-designer" data-en="Designer" data-zh="设计方">Designer</th>
+                    <th class="col-designer" data-en="Client" data-zh="委托方">Client</th>
                     <th class="col-location" data-en="Location" data-zh="位置">Location</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr data-project-id="0">
-                    <td class="col-year">2025</td>
-                    <td class="col-title">Xi'an CCBD</td>
-                    <td class="col-location">Xi'an</td>
-                  </tr>
-                  <tr data-project-id="1">
-                    <td class="col-year">2024</td>
-                    <td class="col-title">Shanghai Tower</td>
-                    <td class="col-location">Shanghai</td>
-                  </tr>
-                  <tr data-project-id="2">
-                    <td class="col-year">2024</td>
-                    <td class="col-title">Beijing Daxing Airport</td>
-                    <td class="col-location">Beijing</td>
-                  </tr>
-                  <tr data-project-id="3">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Guangzhou Opera House</td>
-                    <td class="col-location">Guangzhou</td>
-                  </tr>
-                  <tr data-project-id="4">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Shenzhen Bay</td>
-                    <td class="col-location">Shenzhen</td>
-                  </tr>
-                  <tr data-project-id="5">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Chengdu IFS</td>
-                    <td class="col-location">Chengdu</td>
-                  </tr>
-                  <tr data-project-id="6">
-                    <td class="col-year">2022</td>
-                    <td class="col-title">Hangzhou Olympic Center</td>
-                    <td class="col-location">Hangzhou</td>
-                  </tr>
-                  <tr data-project-id="7">
-                    <td class="col-year">2022</td>
-                    <td class="col-title">Nanjing Zifeng Tower</td>
-                    <td class="col-location">Nanjing</td>
-                  </tr>
-                  <tr data-project-id="8">
-                    <td class="col-year">2022</td>
-                    <td class="col-title">Wuhan Greenland Center</td>
-                    <td class="col-location">Wuhan</td>
-                  </tr>
-                  <tr data-project-id="9">
-                    <td class="col-year">2022</td>
-                    <td class="col-title">Chongqing Raffles City</td>
-                    <td class="col-location">Chongqing</td>
-                  </tr>
-                  <tr data-project-id="10">
-                    <td class="col-year">2022</td>
-                    <td class="col-title">Suzhou Museum</td>
-                    <td class="col-location">Suzhou</td>
-                  </tr>
-                  <tr data-project-id="11">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Onoma Hotel</td>
-                    <td class="col-location">Hong Kong</td>
-                  </tr>
-                  <tr data-project-id="12">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Taipei Modern Residence</td>
-                    <td class="col-location">Taipei</td>
-                  </tr>
-                  <tr data-project-id="13">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Macau Waterfront</td>
-                    <td class="col-location">Macau</td>
-                  </tr>
-                  <tr data-project-id="14">
-                    <td class="col-year">2023</td>
-                    <td class="col-title">Sanya Coastal Resort</td>
-                    <td class="col-location">Sanya</td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           </div>
@@ -485,5 +466,3 @@
     <script src="./script.js"></script>
   </body>
 </html>
-
-

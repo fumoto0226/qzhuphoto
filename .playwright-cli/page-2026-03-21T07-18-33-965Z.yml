@@ -1,0 +1,144 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - img [ref=e4] [cursor=pointer]
+    - text:  
+    - generic [ref=e5]:
+      - textbox "搜索位置、公交站、地铁站" [active] [ref=e6]
+      - generic [ref=e8]: 
+    - generic [ref=e9]:
+      - img [ref=e10] [cursor=pointer]
+      - text: 
+  - text: 
+  - generic [ref=e15]:         
+  - generic [ref=e17]:
+    - iframe [ref=e18]:
+      
+    - img [ref=e23]
+    - generic:
+      - generic:
+        - generic: 30 公里
+    - generic:
+      - img
+    - generic [ref=e32]:
+      - text: ©2026 高德 - GS(2025)5996号 - 甲测资字11112528 -
+      - link "京ICP备2023020281号-12" [ref=e33] [cursor=pointer]:
+        - /url: https://beian.miit.gov.cn
+      - text: "-"
+      - link "京公网安备 11010502056787号" [ref=e35] [cursor=pointer]:
+        - /url: //beian.mps.gov.cn/#/query/webSearch?code=11010502056787
+        - img [ref=e36]
+        - text: 京公网安备 11010502056787号
+      - text: "|"
+      - link "资质证照" [ref=e37] [cursor=pointer]:
+        - /url: https://a.amap.com/pc/static/page/info.html
+      - text: "|"
+      - link "协议与声明" [ref=e38] [cursor=pointer]:
+        - /url: https://map.amap.com/doc/serviceitem.html
+      - text: "|"
+      - link "开放平台" [ref=e39] [cursor=pointer]:
+        - /url: https://lbs.amap.com/
+      - text: "|"
+      - link "新增地点" [ref=e40] [cursor=pointer]:
+        - /url: https://map.amap.com/help/index.html?type=addpoi
+      - text: "|"
+      - link "意见反馈" [ref=e41] [cursor=pointer]:
+        - /url: https://map.amap.com/help/index.html
+      - text: "|"
+      - link "商户免费标注" [ref=e42] [cursor=pointer]:
+        - /url: http://bgc.amap.com?src=pcbottom
+      - text: "|"
+      - link "车机版" [ref=e43] [cursor=pointer]:
+        - /url: https://www.amapauto.com?src=pc_openapi
+      - text: "|"
+      - link "网上有害信息举报" [ref=e44] [cursor=pointer]:
+        - /url: https://www.12377.cn/
+      - text: "|"
+      - link "涉未成年人举报" [ref=e45] [cursor=pointer]:
+        - /url: https://a.amap.com/pc/static/page/report.html
+      - text: "|"
+      - link "算法推荐举报" [ref=e46] [cursor=pointer]:
+        - /url: https://a.amap.com/pc/static/page/report.html
+      - text: "|"
+      - link "生活服务专项举报" [ref=e47] [cursor=pointer]:
+        - /url: https://a.amap.com/pc/static/page/report.html
+      - text: "|"
+      - link "廉正举报" [ref=e48] [cursor=pointer]:
+        - /url: https://a.amap.com/pc/static/page/report.html
+  - img [ref=e56] [cursor=pointer]
+  - generic [ref=e66]:
+    - generic:
+      - link " 卫星" [ref=e67] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e69]: 
+        - generic [ref=e70]: 卫星
+      - link " 路况" [ref=e71] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e73]: 
+        - generic [ref=e74]: 路况
+      - link " 测距" [ref=e75] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e77]: 
+        - generic [ref=e78]: 测距
+      - link " 地铁" [ref=e79] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e81]: 
+        - generic [ref=e82]: 地铁
+      - link " 全屏" [ref=e83] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e85]: 
+        - generic [ref=e86]: 全屏
+      - link " 更多" [ref=e87] [cursor=pointer]:
+        - /url: javascript:void(0)
+        - generic [ref=e89]: 
+        - generic [ref=e90]: 更多
+  - generic [ref=e95] [cursor=pointer]: 反馈
+  - generic [ref=e96]:
+    - generic [ref=e104] [cursor=pointer]: 下载APP
+    - generic [ref=e107]:
+      - generic [ref=e109] [cursor=pointer]: 移动端
+      - generic [ref=e110]:
+        - img [ref=e112]
+        - generic [ref=e113]:
+          - paragraph [ref=e114]: 扫码下载 高德地图
+          - paragraph [ref=e115]: 高德地图 哪儿都熟
+  - generic [ref=e116]:
+    - generic [ref=e121] [cursor=pointer]:
+      - text: 北京
+      - generic [ref=e122]: 
+    - generic [ref=e124]:
+      - text: 阴
+      - text: 7/16℃
+    - text:  
+  - generic [ref=e125]:
+    - generic [ref=e133] [cursor=pointer]: 体验新版
+    - generic [ref=e137]:
+      - generic [ref=e138]: 去体验新版吧～
+      - generic [ref=e139]: 全新界面，更快更流畅
+      - button "立即体验" [ref=e140] [cursor=pointer]
+  - generic [ref=e143]:
+    - generic:
+      - link:
+        - /url: https://amap.com
+    - generic [ref=e146]:
+      - generic [ref=e148]:
+        - generic [ref=e149]: ⓘ
+        - generic [ref=e150]: 手机号码
+      - generic [ref=e151]:
+        - generic [ref=e152] [cursor=pointer]: 短信登录
+        - generic [ref=e153] [cursor=pointer]: 二维码登录
+      - generic [ref=e156]:
+        - textbox "手机号" [ref=e158]
+        - generic [ref=e165] [cursor=pointer]: 加载中
+        - generic [ref=e179]:
+          - textbox "验证码" [ref=e180]
+          - button "发送验证码" [ref=e181] [cursor=pointer]
+      - button "立即登录" [ref=e183] [cursor=pointer]
+      - generic [ref=e187]:
+        - text: 我已阅读并同意
+        - link "《高德服务条款》" [ref=e188] [cursor=pointer]:
+          - /url: https://terms.alicdn.com/legal-agreement/terms/c_platform_service_agreement/20250314165704167/20250314165704167.html
+        - link "《高德地图基本功能隐私政策》" [ref=e189] [cursor=pointer]:
+          - /url: https://terms.alicdn.com/legal-agreement/terms/privacy_policy_full/20250314145608599/20250314145608599.html
+        - link "《高德账号服务个人信息处理规则》" [ref=e190] [cursor=pointer]:
+          - /url: https://terms.alicdn.com/legal-agreement/terms/privacy_other/20250313232240407/20250313232240407.html
+        - text: ；未注册的手机号将自动注册

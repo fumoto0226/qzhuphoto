@@ -21,7 +21,19 @@
     return projectData.assetBase || 'programs';
   }
 
+  function encodePathSegments(...parts) {
+    return parts
+      .flatMap((part) => String(part).split('/'))
+      .filter(Boolean)
+      .map((segment) => encodeURIComponent(segment))
+      .join('/');
+  }
+
   function getProjectMetaSuffix(projectData, lang) {
+    const isFieldTrip = Array.isArray(projectData.categories) && projectData.categories.includes('field-trip');
+    if (isFieldTrip) {
+      return lang === 'zh' ? '（习作）' : ' (Field Trip)';
+    }
     const client = lang === 'zh' ? projectData.designer : projectData.designerEn;
     if (!client) return '';
     return lang === 'zh' ? `（委托方：${client}）` : `（Client: ${client}）`;
@@ -29,10 +41,15 @@
 
   // 构建图片路径数组（对路径进行 URL 编码以支持中文和空格）
   const images = project.images.map((img) =>
-    encodeURI(`./img/${getProjectAssetBase(project)}/${project.folder}/${img}`)
+    `./${encodePathSegments('img', getProjectAssetBase(project), project.folder, img)}`
   );
   const thumbnailImages = project.images.map((img) =>
-    encodeURI(`./img/${getProjectAssetBase(project)}-thumbs/${project.folder}/${img.replace(/\.[^.]+$/, '.webp')}`)
+    `./${encodePathSegments(
+      'img',
+      `${getProjectAssetBase(project)}-thumbs`,
+      project.folder,
+      img.replace(/\.[^.]+$/, '.webp')
+    )}`
   );
 
   // ========== 语言切换功能 ==========
@@ -80,6 +97,9 @@
   const panelPrevImage = panelPrev ? panelPrev.querySelector('img') : null;
   const panelCurrImage = panelCurr ? panelCurr.querySelector('img') : null;
   const panelNextImage = panelNext ? panelNext.querySelector('img') : null;
+  const panelPrevStatus = panelPrev ? panelPrev.querySelector('.image-status') : null;
+  const panelCurrStatus = panelCurr ? panelCurr.querySelector('.image-status') : null;
+  const panelNextStatus = panelNext ? panelNext.querySelector('.image-status') : null;
   if (panelPrevImage) {
     panelPrevImage.decoding = 'async';
     panelPrevImage.loading = 'eager';
@@ -100,6 +120,24 @@
   let isAnimating = false;
   let queuedNavigation = null;
   let activeAnimationFinish = null;
+  function getImageLoadingText() {
+    return currentLang === 'zh' ? '图片加载中' : 'Loading image...';
+  }
+
+  function getImageErrorText() {
+    return currentLang === 'zh' ? '图片加载失败' : 'Image unavailable';
+  }
+
+  function setPanelState(panel, statusElement, state, message = '') {
+    if (!panel) return;
+    panel.classList.remove('is-loading', 'is-ready', 'is-error');
+    if (state) {
+      panel.classList.add(state);
+    }
+    if (statusElement) {
+      statusElement.textContent = message;
+    }
+  }
 
   function loadThumbnailImage(img, index) {
     if (!img) return;
@@ -222,6 +260,24 @@
   // 图片预加载缓存
   const preloadedImages = new Map();
   let idlePreloadHandle = null;
+
+  function getNearbyImageSources(index) {
+    const nearbyIndexes = [index - 2, index - 1, index + 1, index + 2];
+    return new Set(
+      nearbyIndexes
+        .filter((targetIndex) => targetIndex >= 0 && targetIndex < images.length)
+        .map((targetIndex) => images[targetIndex])
+    );
+  }
+
+  function prunePreloadedImages(index) {
+    const keepSources = getNearbyImageSources(index);
+    for (const src of preloadedImages.keys()) {
+      if (!keepSources.has(src)) {
+        preloadedImages.delete(src);
+      }
+    }
+  }
   
   // 预加载图片函数
   function preloadImage(src) {
@@ -274,8 +330,9 @@
   // 只预热下一跳之外的两张，避免一次性解码太多 3000px 原图
   function preloadNearbyImages(index) {
     cancelIdle(idlePreloadHandle);
+    prunePreloadedImages(index);
     idlePreloadHandle = runIdle(() => {
-      const targets = [index - 2, index + 2];
+      const targets = [index - 2, index - 1, index + 1, index + 2];
       targets.forEach((targetIndex) => {
         if (targetIndex >= 0 && targetIndex < images.length) {
           preloadImage(images[targetIndex]);
@@ -284,17 +341,46 @@
     });
   }
 
-  function setPanelImage(panelImage, src) {
+  function setPanelImage(panel, panelImage, statusElement, src) {
     if (!panelImage) return;
     if (!src) {
       panelImage.removeAttribute('src');
       panelImage.style.visibility = 'hidden';
+      setPanelState(panel, statusElement, null, '');
       return;
     }
+
+    const showLoaded = () => {
+      panelImage.style.visibility = 'visible';
+      setPanelState(panel, statusElement, 'is-ready', '');
+    };
+
+    panelImage.onload = showLoaded;
+    panelImage.onerror = () => {
+      panelImage.style.visibility = 'hidden';
+      setPanelState(panel, statusElement, 'is-error', getImageErrorText());
+    };
+
     if (panelImage.getAttribute('src') !== src) {
+      panelImage.style.visibility = 'hidden';
+      setPanelState(panel, statusElement, 'is-loading', getImageLoadingText());
       panelImage.src = src;
+      if (panelImage.complete) {
+        if (panelImage.naturalWidth > 0) {
+          showLoaded();
+        } else {
+          panelImage.onerror();
+        }
+      }
+      return;
     }
-    panelImage.style.visibility = 'visible';
+
+    if (panelImage.complete && panelImage.naturalWidth > 0) {
+      showLoaded();
+    } else {
+      panelImage.style.visibility = 'hidden';
+      setPanelState(panel, statusElement, 'is-loading', getImageLoadingText());
+    }
   }
 
   function syncActiveThumbnail(index) {
@@ -315,9 +401,9 @@
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : null;
     const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : null;
 
-    setPanelImage(panelCurrImage, images[currentIndex]);
-    setPanelImage(panelPrevImage, prevIndex !== null ? images[prevIndex] : null);
-    setPanelImage(panelNextImage, nextIndex !== null ? images[nextIndex] : null);
+    setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, images[currentIndex]);
+    setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, prevIndex !== null ? images[prevIndex] : null);
+    setPanelImage(panelNext, panelNextImage, panelNextStatus, nextIndex !== null ? images[nextIndex] : null);
     
     // 预加载相邻图片
     preloadNearbyImages(currentIndex);
@@ -419,13 +505,13 @@
   function commitSlide(direction) {
     currentIndex += direction;
     if (direction > 0) {
-      setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-      setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
-      setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+      setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+      setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelNextImage ? panelNextImage.getAttribute('src') : null);
+      setPanelImage(panelNext, panelNextImage, panelNextStatus, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
     } else {
-      setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-      setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
-      setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+      setPanelImage(panelNext, panelNextImage, panelNextStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+      setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+      setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, currentIndex > 0 ? images[currentIndex - 1] : null);
     }
     preloadNearbyImages(currentIndex);
   }
@@ -526,13 +612,13 @@
     animateTrackTo(targetOffset, SLIDE_TRANSITION, () => {
       currentIndex = newIndex;
       if (direction > 0) {
-        setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-        setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
-        setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+        setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+        setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelNextImage ? panelNextImage.getAttribute('src') : null);
+        setPanelImage(panelNext, panelNextImage, panelNextStatus, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
       } else {
-        setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-        setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
-        setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+        setPanelImage(panelNext, panelNextImage, panelNextStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+        setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+        setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, currentIndex > 0 ? images[currentIndex - 1] : null);
       }
       preloadNearbyImages(currentIndex);
       resetTrackPosition();
@@ -619,13 +705,13 @@
         animateTrackTo(targetOffset, SLIDE_TRANSITION, () => {
           currentIndex = newIndex;
           if (direction > 0) {
-            setPanelImage(panelPrevImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-            setPanelImage(panelCurrImage, panelNextImage ? panelNextImage.getAttribute('src') : null);
-            setPanelImage(panelNextImage, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
+            setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+            setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelNextImage ? panelNextImage.getAttribute('src') : null);
+            setPanelImage(panelNext, panelNextImage, panelNextStatus, currentIndex < images.length - 1 ? images[currentIndex + 1] : null);
           } else {
-            setPanelImage(panelNextImage, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
-            setPanelImage(panelCurrImage, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
-            setPanelImage(panelPrevImage, currentIndex > 0 ? images[currentIndex - 1] : null);
+            setPanelImage(panelNext, panelNextImage, panelNextStatus, panelCurrImage ? panelCurrImage.getAttribute('src') : null);
+            setPanelImage(panelCurr, panelCurrImage, panelCurrStatus, panelPrevImage ? panelPrevImage.getAttribute('src') : null);
+            setPanelImage(panelPrev, panelPrevImage, panelPrevStatus, currentIndex > 0 ? images[currentIndex - 1] : null);
           }
           preloadNearbyImages(currentIndex);
           resetTrackPosition();

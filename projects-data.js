@@ -26,9 +26,9 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "launch01.webp",
       "launch02.webp",
+      "launch03.webp",
       "launch04.webp",
       "launch05.webp",
       "launch06.webp",
@@ -63,17 +63,16 @@ const projectsData = [
     "location": "惠州",
     "locationEn": "Huizhou",
     "coordinates": [
-      114.40926,
-      23.113785
+      114.41679,
+      23.111847
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -117,10 +116,10 @@ const projectsData = [
     "location": "嘉兴",
     "locationEn": "Jiaxing",
     "coordinates": [
-      120.750145,
-      30.747084
+      120.755486,
+      30.746129
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -128,7 +127,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -154,17 +152,16 @@ const projectsData = [
     "location": "深圳",
     "locationEn": "Shenzhen",
     "coordinates": [
-      114.05471,
-      22.535383
+      114.057868,
+      22.543099
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -208,7 +205,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "1000trees01.webp",
       "1000trees02.webp",
       "1000trees03.webp",
@@ -249,10 +245,10 @@ const projectsData = [
     "location": "西安",
     "locationEn": "Xi'an",
     "coordinates": [
-      108.95584,
-      34.261143
+      108.93977,
+      34.341574
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -261,7 +257,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "ccbd01.webp",
       "ccbd02.webp",
       "ccbd03.webp",
@@ -326,7 +321,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -365,10 +359,10 @@ const projectsData = [
     "location": "昌黎",
     "locationEn": "Changli",
     "coordinates": [
-      119.16038,
-      39.706345
+      119.164541,
+      39.709729
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -377,7 +371,6 @@ const projectsData = [
       "hospitality"
     ],
     "images": [
-      "cover.webp",
       "greatwall01.webp",
       "greatwall02.webp",
       "greatwall03.webp",
@@ -411,7 +404,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "crystalplaza01.webp",
       "crystalplaza02.webp",
       "crystalplaza03.webp",
@@ -435,10 +427,10 @@ const projectsData = [
     "location": "永春",
     "locationEn": "Yongchun",
     "coordinates": [
-      118.289566,
-      25.323635
+      118.294246,
+      25.321566
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -446,7 +438,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "Vinegar01.webp",
       "Vinegar02.webp",
       "Vinegar03.webp",
@@ -477,17 +468,16 @@ const projectsData = [
     "location": "上海",
     "locationEn": "Shanghai",
     "coordinates": [
-      121.4326,
-      31.1909
+      121.469102,
+      31.232344
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "LINDBERG_01.webp",
       "LINDBERG_11.webp",
       "LINDBERG_13.webp",
@@ -523,7 +513,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "tank01.webp",
       "tank02.webp",
       "tank03.webp",
@@ -563,7 +552,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "shanghaiplaza01.webp",
       "shanghaiplaza02.webp",
       "shanghaiplaza03.webp",
@@ -605,7 +593,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "raffles01.webp",
       "raffles02.webp",
       "raffles03.webp",
@@ -638,7 +625,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "gba01.webp",
       "gba02.webp",
       "gba03.webp",
@@ -667,10 +653,10 @@ const projectsData = [
     "location": "深圳",
     "locationEn": "Shenzhen",
     "coordinates": [
-      114.05471,
-      22.535383
+      114.057868,
+      22.543099
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -678,7 +664,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "szenergy01.webp",
       "szenergy02.webp",
       "szenergy03.webp",
@@ -708,17 +693,16 @@ const projectsData = [
     "location": "雄安",
     "locationEn": "Xiong'an",
     "coordinates": [
-      116.691826,
-      39.503265
+      115.973611,
+      38.994444
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "sinochem01.webp",
       "sinochem02.webp",
       "sinochem03.webp",
@@ -758,17 +742,16 @@ const projectsData = [
     "location": "杭州",
     "locationEn": "Hangzhou",
     "coordinates": [
-      120.20473,
-      30.248787
+      120.15507,
+      30.274084
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "wangchao01.webp",
       "wangchao02.webp",
       "wangchao03.webp",
@@ -836,7 +819,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "TOP01.webp",
       "TOP02.webp",
       "TOP03.webp",
@@ -871,17 +853,16 @@ const projectsData = [
     "location": "北京",
     "locationEn": "Beijing",
     "coordinates": [
-      116.624794,
-      40.314663
+      116.407526,
+      39.90403
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "campus"
     ],
     "images": [
-      "cover.webp",
       "光源01.webp",
       "光源02.webp",
       "光源03.webp",
@@ -909,17 +890,16 @@ const projectsData = [
     "location": "苏州",
     "locationEn": "Suzhou",
     "coordinates": [
-      120.58027,
-      31.301138
+      120.585316,
+      31.298886
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "英诺赛科01.webp",
       "英诺赛科02.webp",
       "英诺赛科03.webp",
@@ -945,10 +925,10 @@ const projectsData = [
     "location": "南京",
     "locationEn": "Nanjing",
     "coordinates": [
-      118.78567,
-      32.037132
+      118.796877,
+      32.060255
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -956,7 +936,6 @@ const projectsData = [
       "landscape"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -988,10 +967,10 @@ const projectsData = [
     "location": "嘉兴",
     "locationEn": "Jiaxing",
     "coordinates": [
-      120.94293,
-      30.52782
+      120.755486,
+      30.746129
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -999,7 +978,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "Linen01.webp",
       "Linen02.webp",
       "Linen03.webp",
@@ -1039,7 +1017,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "RelayFactory01.webp",
       "RelayFactory02.webp",
       "RelayFactory03.webp",
@@ -1111,7 +1088,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -1171,7 +1147,6 @@ const projectsData = [
       "residential"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -1217,7 +1192,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -1276,7 +1250,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "redkiln01.webp",
       "redkiln02.webp",
       "redkiln03.webp",
@@ -1331,7 +1304,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "ecologicalpavilions01.webp",
       "ecologicalpavilions02.webp",
       "ecologicalpavilions03.webp",
@@ -1390,17 +1362,16 @@ const projectsData = [
     "location": "衢州",
     "locationEn": "Quzhou",
     "coordinates": [
-      119.16804,
-      29.031267
+      118.87263,
+      28.941708
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "civic"
     ],
     "images": [
-      "cover.webp",
       "conceptbookstore01.webp",
       "conceptbookstore02.webp",
       "conceptbookstore03.webp",
@@ -1452,7 +1423,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -1492,7 +1462,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "01.webp",
       "02.webp",
       "03.webp",
@@ -1528,17 +1497,16 @@ const projectsData = [
     "location": "惠州",
     "locationEn": "Huizhou",
     "coordinates": [
-      114.40926,
-      23.113785
+      114.41679,
+      23.111847
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "civic"
     ],
     "images": [
-      "cover.webp",
       "重景环01.webp",
       "重景环02.webp",
       "重景环03.webp",
@@ -1589,7 +1557,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -1619,17 +1586,16 @@ const projectsData = [
     "location": "三亚",
     "locationEn": "Sanya",
     "coordinates": [
-      109.74826,
-      18.40198
+      109.508268,
+      18.247872
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "civic"
     ],
     "images": [
-      "cover.webp",
       "polyC01.webp",
       "polyC02.webp",
       "polyC03.webp",
@@ -1676,7 +1642,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "TransactionSucceed01.webp",
       "TransactionSucceed02.webp",
       "TransactionSucceed03.webp",
@@ -1716,7 +1681,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "skypeoplechangning01.webp",
       "skypeoplechangning02.webp",
       "skypeoplechangning03.webp",
@@ -1751,7 +1715,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "skypeoplesanlitun01.webp",
       "skypeoplesanlitun02.webp",
       "skypeoplesanlitun03.webp",
@@ -1787,7 +1750,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "skypeopleguomao01.webp",
       "skypeopleguomao02.webp",
       "skypeopleguomao03.webp",
@@ -1813,17 +1775,16 @@ const projectsData = [
     "location": "上海",
     "locationEn": "Shanghai",
     "coordinates": [
-      121.11812,
-      31.151115
+      121.469102,
+      31.232344
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "ganzo01.webp",
       "ganzo02.webp",
       "ganzo03.webp",
@@ -1847,17 +1808,16 @@ const projectsData = [
     "location": "南京",
     "locationEn": "Nanjing",
     "coordinates": [
-      118.78567,
-      32.037132
+      118.796877,
+      32.060255
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "residential"
     ],
     "images": [
-      "cover.webp",
       "roomgarden01.webp",
       "roomgarden02.webp",
       "roomgarden03.webp",
@@ -1878,7 +1838,7 @@ const projectsData = [
     "designerEn": "Scale Forest Atelier",
     "folder": "尺度森林/肉仙来",
     "assetBase": "programs",
-    "cover": "rouxianlai01.webp",
+    "cover": "cover.webp",
     "address": "上海 灵石路851",
     "location": "上海",
     "locationEn": "Shanghai",
@@ -1886,7 +1846,7 @@ const projectsData = [
       121.469102,
       31.232344
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
@@ -1917,14 +1877,13 @@ const projectsData = [
       121.469102,
       31.232344
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "residential"
     ],
     "images": [
-      "cover.webp",
       "xinhualu01.webp",
       "xinhualu02.webp",
       "xinhualu03.webp",
@@ -1966,7 +1925,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "SHTrust01.webp",
       "SHTrust02.webp",
       "SHTrust03.webp",
@@ -1994,10 +1952,10 @@ const projectsData = [
     "location": "慈溪",
     "locationEn": "Cixi",
     "coordinates": [
-      121.26067,
-      30.174532
+      121.266579,
+      30.169665
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -2006,7 +1964,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "GONEO01.webp",
       "GONEO02.webp",
       "GONEO03.webp",
@@ -2089,7 +2046,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2126,7 +2082,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2168,7 +2123,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2206,7 +2160,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2256,17 +2209,16 @@ const projectsData = [
     "location": "常州",
     "locationEn": "Changzhou",
     "coordinates": [
-      119.96882,
-      31.811464
+      119.973987,
+      31.810689
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "hospitality"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2308,7 +2260,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2339,10 +2290,10 @@ const projectsData = [
     "location": "常州",
     "locationEn": "Changzhou",
     "coordinates": [
-      119.96882,
-      31.811464
+      119.973987,
+      31.810689
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -2351,7 +2302,6 @@ const projectsData = [
       "hospitality"
     ],
     "images": [
-      "cover.webp",
       "TianAn01.webp",
       "TianAn02.webp",
       "TianAn03.webp",
@@ -2403,17 +2353,16 @@ const projectsData = [
     "location": "成都",
     "locationEn": "Chengdu",
     "coordinates": [
-      104.07872,
-      30.659126
+      104.066541,
+      30.572269
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2455,7 +2404,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "IDS01.webp",
       "IDS02.webp",
       "IDS03.webp",
@@ -2488,17 +2436,16 @@ const projectsData = [
     "location": "深圳",
     "locationEn": "Shenzhen",
     "coordinates": [
-      114.05471,
-      22.535383
+      114.057868,
+      22.543099
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2542,7 +2489,6 @@ const projectsData = [
       "educational"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -2569,17 +2515,16 @@ const projectsData = [
     "location": "广州",
     "locationEn": "Guangzhou",
     "coordinates": [
-      113.27006,
-      23.125345
+      113.264385,
+      23.129112
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "sciencecity01.webp",
       "sciencecity02.webp",
       "sciencecity03.webp",
@@ -2616,7 +2561,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "Junuy01.webp",
       "Junuy02.webp",
       "Junuy03.webp",
@@ -2642,17 +2586,16 @@ const projectsData = [
     "location": "北京",
     "locationEn": "Beijing",
     "coordinates": [
-      116.391297,
-      39.905714
+      116.407526,
+      39.90403
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "Guanghezuoyong01.webp",
       "Guanghezuoyong02.webp",
       "Guanghezuoyong03.webp",
@@ -2678,10 +2621,10 @@ const projectsData = [
     "location": "启东",
     "locationEn": "Qidong",
     "coordinates": [
-      121.649155,
-      31.797243
+      121.659724,
+      31.810158
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -2689,7 +2632,6 @@ const projectsData = [
       "residential"
     ],
     "images": [
-      "cover.webp",
       "Peng01.webp",
       "Peng02.webp",
       "Peng03.webp",
@@ -2745,7 +2687,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "Neobay01.webp",
       "Neobay02.webp",
       "Neobay03.webp",
@@ -2772,17 +2713,16 @@ const projectsData = [
     "location": "安吉",
     "locationEn": "Anji",
     "coordinates": [
-      119.67546,
-      30.637402
+      119.680353,
+      30.638674
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "residential"
     ],
     "images": [
-      "cover.webp",
       "AnjiRes01.webp",
       "AnjiRes02.webp",
       "AnjiRes03.webp",
@@ -2810,17 +2750,16 @@ const projectsData = [
     "location": "潢川",
     "locationEn": "Huangchuan",
     "coordinates": [
-      115.04209,
-      32.131496
+      115.050123,
+      32.131557
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "educational"
     ],
     "images": [
-      "cover.webp",
       "Pony01.webp",
       "Pony02.webp",
       "Pony03.webp",
@@ -2854,17 +2793,16 @@ const projectsData = [
     "location": "厦门",
     "locationEn": "Xiamen",
     "coordinates": [
-      118.08627,
-      24.47891
+      118.089425,
+      24.479834
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "educational"
     ],
     "images": [
-      "cover.webp",
       "Xinmeng01.webp",
       "Xinmeng02.webp",
       "Xinmeng03.webp",
@@ -2899,17 +2837,16 @@ const projectsData = [
     "location": "汕头",
     "locationEn": "Shantou",
     "coordinates": [
-      116.67792,
-      23.357761
+      116.681956,
+      23.354152
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "civic"
     ],
     "images": [
-      "cover.webp",
       "TeacherDev01.webp",
       "TeacherDev02.webp",
       "TeacherDev03.webp",
@@ -2936,10 +2873,10 @@ const projectsData = [
     "location": "汕头",
     "locationEn": "Shantou",
     "coordinates": [
-      116.67792,
-      23.357761
+      116.681956,
+      23.354152
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -2947,7 +2884,6 @@ const projectsData = [
       "campus"
     ],
     "images": [
-      "cover.webp",
       "CampusbytheSea01.webp",
       "CampusbytheSea02.webp",
       "CampusbytheSea03.webp",
@@ -2990,7 +2926,7 @@ const projectsData = [
       121.469102,
       31.232344
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -2998,7 +2934,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "PastoralHub01.webp",
       "PastoralHub02.webp",
       "PastoralHub03.webp",
@@ -3028,16 +2963,15 @@ const projectsData = [
     "location": "晋城",
     "locationEn": "Jincheng",
     "coordinates": [
-      112.91581,
-      35.507095
+      112.851831,
+      35.490701
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "educational"
     ],
     "images": [
-      "cover.webp",
       "Putou01.webp",
       "Putou02.webp",
       "Putou03.webp",
@@ -3068,17 +3002,16 @@ const projectsData = [
     "location": "杭州",
     "locationEn": "Hangzhou",
     "coordinates": [
-      120.20473,
-      30.248787
+      120.15507,
+      30.274084
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "MoCoffee01.webp",
       "MoCoffee02.webp",
       "MoCoffee03.webp",
@@ -3109,17 +3042,16 @@ const projectsData = [
     "location": "南京",
     "locationEn": "Nanjing",
     "coordinates": [
-      118.78567,
-      32.037132
+      118.796877,
+      32.060255
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "hongyuecheng01.webp",
       "hongyuecheng02.webp",
       "hongyuecheng03.webp",
@@ -3146,10 +3078,10 @@ const projectsData = [
     "location": "南昌",
     "locationEn": "Nanchang",
     "coordinates": [
-      115.92869,
-      28.559921
+      115.858198,
+      28.682892
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
@@ -3157,7 +3089,6 @@ const projectsData = [
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "nanchangmixc01.webp",
       "nanchangmixc02.webp",
       "nanchangmixc03.webp",
@@ -3190,17 +3121,16 @@ const projectsData = [
     "location": "郑州",
     "locationEn": "Zhengzhou",
     "coordinates": [
-      113.66795,
-      34.753853
+      113.625368,
+      34.7466
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "architecture",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "longhu01.webp",
       "longhu02.webp",
       "longhu03.webp",
@@ -3239,14 +3169,13 @@ const projectsData = [
       121.469102,
       31.232344
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "interior",
       "commercial"
     ],
     "images": [
-      "cover.webp",
       "tianwu01.webp",
       "tianwu02.webp",
       "tianwu03.webp",
@@ -3272,8 +3201,8 @@ const projectsData = [
     "location": "上海",
     "locationEn": "Shanghai",
     "coordinates": [
-      118.19168,
-      39.62294
+      121.5128,
+      31.3031
     ],
     "coordinatePrecision": "detailed",
     "mapOnly": false,
@@ -3282,7 +3211,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "xiaogongyuan01.webp",
       "xiaogongyuan02.webp",
       "xiaogongyuan03.webp",
@@ -3329,7 +3257,6 @@ const projectsData = [
       "civic"
     ],
     "images": [
-      "cover.webp",
       "1.webp",
       "2.webp",
       "3.webp",
@@ -3372,7 +3299,6 @@ const projectsData = [
       "workspace"
     ],
     "images": [
-      "cover.webp",
       "wangyi01.webp",
       "wangyi02.webp",
       "wangyi03.webp",
@@ -3410,7 +3336,6 @@ const projectsData = [
       "small-scale"
     ],
     "images": [
-      "cover.webp",
       "eddypavilion01.webp",
       "eddypavilion02.webp",
       "eddypavilion03.webp",
@@ -3430,8 +3355,8 @@ const projectsData = [
     "year": 2015,
     "title": "墨西哥景观",
     "titleEn": "Mexican Views",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "Mexican Views",
     "assetBase": "FieldTrip",
     "cover": "1-8.webp",
@@ -3439,10 +3364,10 @@ const projectsData = [
     "location": "梅里达",
     "locationEn": "Merida",
     "coordinates": [
-      -89.62278,
-      20.968672
+      -89.6237,
+      20.9674
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3465,35 +3390,35 @@ const projectsData = [
     "year": 2016,
     "title": "The Grand Calumet River",
     "titleEn": "The Grand Calumet River",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "The Grand Calumet River",
     "assetBase": "FieldTrip",
-    "cover": "1-Morning-River.webp",
+    "cover": "cover.webp",
     "address": "Gary, Indiana, USA",
     "location": "加里",
     "locationEn": "Gary",
     "coordinates": [
-      -87.337176,
-      41.603895
+      -87.3464,
+      41.5934
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "1-Morning-River.webp",
-      "9-I90-over-Grand-Calumet.webp",
-      "10-Transmission-Towers,-Utility-Poles-and-a-Stop-Sign.webp",
-      "12-Algal-Boom.webp",
-      "13-Riverbed.webp",
-      "14-Wolf-Lake-and-Distant-Factories.webp",
-      "20-Gasoline-pipeline-dont-anchor.webp",
-      "23.webp",
-      "30.webp",
-      "31.webp",
-      "Calumet-016.webp"
+      "calumet01.webp",
+      "calumet02.webp",
+      "calumet03.webp",
+      "calumet04.webp",
+      "calumet05.webp",
+      "calumet06.webp",
+      "calumet07.webp",
+      "calumet08.webp",
+      "calumet09.webp",
+      "calumet10.webp",
+      "calumet11.webp"
     ]
   },
   {
@@ -3501,8 +3426,8 @@ const projectsData = [
     "year": 2023,
     "title": "CopenHill",
     "titleEn": "CopenHill",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "哥本哈根copenhill",
     "assetBase": "FieldTrip",
     "cover": "DSC01727.webp",
@@ -3510,10 +3435,10 @@ const projectsData = [
     "location": "哥本哈根",
     "locationEn": "Copenhagen",
     "coordinates": [
-      12.569734,
-      55.675313
+      12.5683,
+      55.6761
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3532,8 +3457,8 @@ const projectsData = [
     "year": 2022,
     "title": "Hungerburg缆车站",
     "titleEn": "Hungerburgbahn",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "因斯布鲁克缆车站",
     "assetBase": "FieldTrip",
     "cover": "DSC03873.webp",
@@ -3541,10 +3466,10 @@ const projectsData = [
     "location": "因斯布鲁克",
     "locationEn": "Innsbruck",
     "coordinates": [
-      11.395086,
-      47.268234
+      11.4041,
+      47.2692
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3564,49 +3489,33 @@ const projectsData = [
     "year": 2025,
     "title": "大吉酒店茶室",
     "titleEn": "Daji Resort Teahouse",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "大吉酒店茶室",
     "assetBase": "FieldTrip",
-    "cover": "DSC06932_1.webp",
+    "cover": "cover.webp",
     "address": "大理大吉酒店",
     "location": "大理",
     "locationEn": "Dali",
     "coordinates": [
-      100.246574,
-      25.59676
+      100.1905,
+      25.6937
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "DSC06932_1.webp",
-      "DSC06934_1.webp",
-      "DSC06940_1.webp",
-      "DSC06942_1.webp",
-      "DSC06950_1.webp",
-      "DSC06954_1.webp",
-      "DSC06955_1.webp",
-      "DSC06965.webp",
-      "DSC06971.webp",
-      "DSC06973.webp",
-      "DSC06976.webp",
-      "DSC06979.webp",
-      "DSC06985.webp",
-      "DSC06990.webp",
-      "DSC06999.webp",
-      "DSC07001.webp",
-      "DSC07003.webp",
-      "DSC07014.webp",
-      "DSC07022.webp",
-      "DSC07031.webp",
-      "DSC07038.webp",
-      "DSC07043.webp",
-      "DSC07046.webp",
-      "DSC07049.webp",
-      "DSC07055.webp"
+      "daji01.webp",
+      "daji02.webp",
+      "daji03.webp",
+      "daji04.webp",
+      "daji05.webp",
+      "daji06.webp",
+      "daji07.webp",
+      "daji08.webp",
+      "daji09.webp"
     ]
   },
   {
@@ -3614,41 +3523,41 @@ const projectsData = [
     "year": 2025,
     "title": "方塔园",
     "titleEn": "Fangta Garden",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "方塔园",
     "assetBase": "FieldTrip",
-    "cover": "_DSF0909.webp",
+    "cover": "cover.webp",
     "address": "上海方塔园",
     "location": "上海",
     "locationEn": "Shanghai",
     "coordinates": [
-      121.469102,
-      31.232344
+      121.2275,
+      31.0026
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "_DSF0909.webp",
-      "_DSF0947.webp",
-      "_DSF0949.webp",
-      "_DSF0987.webp",
-      "_DSF1009.webp",
-      "_DSF1022.webp",
-      "_DSF1067.webp",
-      "_DSF1091.webp",
-      "_DSF1094.webp",
-      "_DSF1098.webp",
-      "_DSF1115.webp",
-      "_DSF1127.webp",
-      "_DSF1131.webp",
-      "_MG_9234 1.webp",
-      "_MG_9276.webp",
-      "_MG_9290.webp",
-      "_MG_9293.webp"
+      "fangtayuan01.webp",
+      "fangtayuan02.webp",
+      "fangtayuan03.webp",
+      "fangtayuan04.webp",
+      "fangtayuan05.webp",
+      "fangtayuan06.webp",
+      "fangtayuan07.webp",
+      "fangtayuan08.webp",
+      "fangtayuan09.webp",
+      "fangtayuan10.webp",
+      "fangtayuan11.webp",
+      "fangtayuan12.webp",
+      "fangtayuan13.webp",
+      "fangtayuan14.webp",
+      "fangtayuan15.webp",
+      "fangtayuan16.webp",
+      "fangtayuan17.webp"
     ]
   },
   {
@@ -3656,48 +3565,48 @@ const projectsData = [
     "year": 2026,
     "title": "曾孝濂美术馆",
     "titleEn": "Zeng Xiaolian Museum of Art",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "曾孝濂美术馆",
     "assetBase": "FieldTrip",
-    "cover": "_DSF4231.webp",
+    "cover": "cover.webp",
     "address": "昆明世博园",
     "location": "昆明",
     "locationEn": "Kunming",
     "coordinates": [
-      102.70854,
-      25.03944
+      102.7606,
+      25.0903
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "_DSF4231.webp",
-      "_DSF4227.webp",
-      "_DSF4233.webp",
-      "_DSF4236.webp",
-      "_DSF4237.webp",
-      "_DSF4241.webp",
-      "_DSF4242.webp",
-      "_DSF4254.webp",
-      "_DSF4259.webp",
-      "_DSF4263 1.webp",
-      "_DSF4267.webp",
-      "_DSF4269.webp",
-      "_DSF4272.webp",
-      "_DSF4274.webp",
-      "_DSF4290.webp",
-      "_DSF4292.webp",
-      "_DSF4296.webp",
-      "_DSF4307.webp",
-      "_DSF4311.webp",
-      "_DSF4313.webp",
-      "_DSF4320.webp",
-      "_DSF4322.webp",
-      "_DSF4328.webp",
-      "_DSF4330.webp"
+      "zengxiaolian01.webp",
+      "zengxiaolian02.webp",
+      "zengxiaolian03.webp",
+      "zengxiaolian04.webp",
+      "zengxiaolian05.webp",
+      "zengxiaolian06.webp",
+      "zengxiaolian07.webp",
+      "zengxiaolian08.webp",
+      "zengxiaolian09.webp",
+      "zengxiaolian10.webp",
+      "zengxiaolian11.webp",
+      "zengxiaolian12.webp",
+      "zengxiaolian13.webp",
+      "zengxiaolian14.webp",
+      "zengxiaolian15.webp",
+      "zengxiaolian16.webp",
+      "zengxiaolian17.webp",
+      "zengxiaolian18.webp",
+      "zengxiaolian19.webp",
+      "zengxiaolian20.webp",
+      "zengxiaolian21.webp",
+      "zengxiaolian22.webp",
+      "zengxiaolian23.webp",
+      "zengxiaolian24.webp"
     ]
   },
   {
@@ -3705,8 +3614,8 @@ const projectsData = [
     "year": 2022,
     "title": "索尼中心",
     "titleEn": "The Center Potsdamer Platz (The Sony Center)",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "柏林SONY中心",
     "assetBase": "FieldTrip",
     "cover": "DSC02147.webp",
@@ -3714,10 +3623,10 @@ const projectsData = [
     "location": "柏林",
     "locationEn": "Berlin",
     "coordinates": [
-      13.395131,
-      52.517389
+      13.405,
+      52.52
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3736,36 +3645,36 @@ const projectsData = [
     "year": 2022,
     "title": "新德国国会大厦",
     "titleEn": "Reichstag Building",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "柏林德国国会大厦",
     "assetBase": "FieldTrip",
-    "cover": "DSC02331.webp",
+    "cover": "cover.webp",
     "address": "Berlin, Germany",
     "location": "柏林",
     "locationEn": "Berlin",
     "coordinates": [
-      13.395131,
-      52.517389
+      13.405,
+      52.52
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "DSC02331.webp",
-      "DSC02283.webp",
-      "DSC02286.webp",
-      "DSC02294.webp",
-      "DSC02297.webp",
-      "DSC02301.webp",
-      "DSC02302.webp",
-      "DSC02310.webp",
-      "DSC02317.webp",
-      "DSC02318.webp",
-      "DSC02328.webp",
-      "DSC02332.webp"
+      "reichstag01.webp",
+      "reichstag02.webp",
+      "reichstag03.webp",
+      "reichstag04.webp",
+      "reichstag05.webp",
+      "reichstag06.webp",
+      "reichstag07.webp",
+      "reichstag08.webp",
+      "reichstag09.webp",
+      "reichstag10.webp",
+      "reichstag11.webp",
+      "reichstag12.webp"
     ]
   },
   {
@@ -3773,34 +3682,34 @@ const projectsData = [
     "year": 2022,
     "title": "柏林犹太博物馆",
     "titleEn": "Berlin Jewish Museum",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "柏林犹太人博物馆",
     "assetBase": "FieldTrip",
-    "cover": "DSC01693.webp",
+    "cover": "cover.webp",
     "address": "Berlin, Germany",
     "location": "柏林",
     "locationEn": "Berlin",
     "coordinates": [
-      13.395131,
-      52.517389
+      13.405,
+      52.52
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
     ],
     "images": [
-      "DSC01693.webp",
-      "DSC01626.webp",
-      "DSC01671.webp",
-      "DSC01695.webp",
-      "DSC01710.webp",
-      "DSC01711.webp",
-      "DSC01713.webp",
-      "DSC01723.webp",
-      "DSC01725.webp",
-      "DSC01727.webp"
+      "jewish01.webp",
+      "jewish02.webp",
+      "jewish03.webp",
+      "jewish04.webp",
+      "jewish05.webp",
+      "jewish06.webp",
+      "jewish07.webp",
+      "jewish08.webp",
+      "jewish09.webp",
+      "jewish10.webp"
     ]
   },
   {
@@ -3808,8 +3717,8 @@ const projectsData = [
     "year": 2023,
     "title": "海牙市立博物馆",
     "titleEn": "Hague Municipal Museum",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "海牙美术馆",
     "assetBase": "FieldTrip",
     "cover": "DSC01296.webp",
@@ -3817,10 +3726,10 @@ const projectsData = [
     "location": "海牙",
     "locationEn": "The Hague",
     "coordinates": [
-      4.316776,
-      52.076885
+      4.3007,
+      52.0705
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3839,8 +3748,8 @@ const projectsData = [
     "year": 2026,
     "title": "淀山湖渔村",
     "titleEn": "Fishing Village of Dianshan Lake",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "淀山湖渔村",
     "assetBase": "FieldTrip",
     "cover": "_DSF1172.webp",
@@ -3848,10 +3757,10 @@ const projectsData = [
     "location": "上海",
     "locationEn": "Shanghai",
     "coordinates": [
-      117.09752,
-      38.05337
+      121.0408,
+      31.0941
     ],
-    "coordinatePrecision": "detailed",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3877,8 +3786,8 @@ const projectsData = [
     "year": 2016,
     "title": "美国西部景观",
     "titleEn": "Views of the American West",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "美国西部",
     "assetBase": "FieldTrip",
     "cover": "roadtripCBCO.webp",
@@ -3886,10 +3795,10 @@ const projectsData = [
     "location": "新墨西哥",
     "locationEn": "New Mexico",
     "coordinates": [
-      -105.998351,
-      34.324856
+      -106.0181,
+      34.5199
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"
@@ -3915,8 +3824,8 @@ const projectsData = [
     "year": 2023,
     "title": "城市山谷",
     "titleEn": "Valley",
-    "designer": "",
-    "designerEn": "",
+    "designer": "(习作)",
+    "designerEn": "(Field Trip)",
     "folder": "阿姆斯特丹Valley",
     "assetBase": "FieldTrip",
     "cover": "DSC01401.webp",
@@ -3924,10 +3833,10 @@ const projectsData = [
     "location": "阿姆斯特丹",
     "locationEn": "Amsterdam",
     "coordinates": [
-      4.9,
-      52.378
+      4.9041,
+      52.3676
     ],
-    "coordinatePrecision": "approximate",
+    "coordinatePrecision": "estimated",
     "mapOnly": false,
     "categories": [
       "field-trip"

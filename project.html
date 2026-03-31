@@ -32,6 +32,7 @@
     <div class="carousel-track" id="carousel-track">
       <div class="carousel-item" id="panel-prev">
         <img src="" alt="" class="main-image" draggable="false">
+        <div class="image-status" aria-live="polite"></div>
       </div>
       <div class="carousel-item" id="panel-curr">
         <!-- 中间这一张保持 id="main-image"，兼容现有 JS 逻辑 -->
@@ -42,9 +43,11 @@
           class="main-image"
           draggable="false"
         >
+        <div class="image-status" aria-live="polite"></div>
       </div>
       <div class="carousel-item" id="panel-next">
         <img src="" alt="" class="main-image" draggable="false">
+        <div class="image-status" aria-live="polite"></div>
       </div>
     </div>
   </div>

@@ -8,33 +8,60 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_DIR = ROOT / "img" / "programs"
-OUTPUT_DIR = ROOT / "img" / "programs-thumbs"
+IMAGE_ROOT = ROOT / "img"
+SOURCE_DIRS = {
+    "programs": IMAGE_ROOT / "programs",
+    "FieldTrip": IMAGE_ROOT / "FieldTrip",
+}
+OUTPUT_DIRS = {
+    "programs": IMAGE_ROOT / "programs-thumbs",
+    "FieldTrip": IMAGE_ROOT / "FieldTrip-thumbs",
+}
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".avif"}
 MAGICK = Path("/Applications/MAMP/Library/bin/magick")
 
 
-def iter_images(folder_filters: list[str] | None = None) -> list[Path]:
-    search_roots = [SOURCE_DIR]
-    if folder_filters:
-        search_roots = [SOURCE_DIR / folder_filter for folder_filter in folder_filters]
+def resolve_search_roots(folder_filters: list[str] | None = None) -> list[tuple[str, Path]]:
+    if not folder_filters:
+        return list(SOURCE_DIRS.items())
 
-    images: list[Path] = []
-    for search_root in search_roots:
+    roots: list[tuple[str, Path]] = []
+    for folder_filter in folder_filters:
+        normalized = folder_filter.strip().strip("/")
+        parts = Path(normalized).parts
+        if not parts:
+            continue
+
+        asset_base = parts[0]
+        source_root = SOURCE_DIRS.get(asset_base)
+        if source_root is None:
+            continue
+
+        if len(parts) == 1:
+            roots.append((asset_base, source_root))
+        else:
+            roots.append((asset_base, source_root.joinpath(*parts[1:])))
+
+    return roots
+
+
+def iter_images(folder_filters: list[str] | None = None) -> list[tuple[str, Path]]:
+    images: list[tuple[str, Path]] = []
+    for asset_base, search_root in resolve_search_roots(folder_filters):
         if not search_root.exists():
             continue
         images.extend(
-            path
+            (asset_base, path)
             for path in search_root.rglob("*")
             if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
         )
 
-    return sorted(images)
+    return sorted(images, key=lambda item: (item[0], str(item[1])))
 
 
-def thumbnail_path_for(source_path: Path) -> Path:
-    relative = source_path.relative_to(SOURCE_DIR)
-    return OUTPUT_DIR / relative.with_suffix(".webp")
+def thumbnail_path_for(asset_base: str, source_path: Path) -> Path:
+    relative = source_path.relative_to(SOURCE_DIRS[asset_base])
+    return OUTPUT_DIRS[asset_base] / relative.with_suffix(".webp")
 
 
 def needs_regeneration(source_path: Path, target_path: Path) -> bool:
@@ -68,15 +95,19 @@ def generate_thumbnail(source_path: Path, target_path: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("folders", nargs="*", help="Optional folder filters relative to img/programs")
+    parser.add_argument(
+        "folders",
+        nargs="*",
+        help="Optional folder filters relative to img, e.g. programs/合尘建筑 or FieldTrip/柏林德国国会大厦",
+    )
     args = parser.parse_args()
 
     images = iter_images(args.folders or None)
     to_generate: list[tuple[Path, Path]] = []
     skipped = 0
 
-    for source_path in images:
-        target_path = thumbnail_path_for(source_path)
+    for asset_base, source_path in images:
+        target_path = thumbnail_path_for(asset_base, source_path)
         if needs_regeneration(source_path, target_path):
             to_generate.append((source_path, target_path))
         else:
@@ -90,7 +121,7 @@ def main() -> None:
 
     print(
         f"Processed {len(images)} images: generated {generated}, skipped {skipped}. "
-        f"Output root: {OUTPUT_DIR.relative_to(ROOT)}"
+        f"Output roots: {', '.join(str(path.relative_to(ROOT)) for path in OUTPUT_DIRS.values())}"
     )
 
 

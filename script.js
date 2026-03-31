@@ -14,12 +14,25 @@ function getProjectAssetBase(project) {
   return project.assetBase || "programs";
 }
 
+function encodePathSegments(...parts) {
+  return parts
+    .flatMap((part) => String(part).split("/"))
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+}
+
 function buildProgramImagePath(project, imageName = project.cover) {
-  return encodeURI(`./img/${getProjectAssetBase(project)}/${project.folder}/${imageName}`);
+  return `./${encodePathSegments("img", getProjectAssetBase(project), project.folder, imageName)}`;
 }
 
 function buildProjectCardImagePath(project, imageName = project.cover) {
-  return encodeURI(`./img/${getProjectAssetBase(project)}-cards/${project.folder}/${imageName.replace(/\.[^.]+$/, '.webp')}`);
+  return `./${encodePathSegments(
+    "img",
+    `${getProjectAssetBase(project)}-cards`,
+    project.folder,
+    imageName.replace(/\.[^.]+$/, '.webp')
+  )}`;
 }
 
 const PROJECTS_VIEW_STATE_KEY = "indexProjectsViewState";
@@ -38,6 +51,12 @@ function writeProjectsViewState(partialState) {
 }
 
 function getProjectMetaText(project, isZh) {
+  const isFieldTrip = Array.isArray(project.categories) && project.categories.includes('field-trip');
+  if (isFieldTrip) {
+    return isZh
+      ? `习作。拍摄于${project.year}年。`
+      : `Field Trip. Photographed in ${project.year}.`;
+  }
   const client = isZh ? project.designer : project.designerEn;
   if (client) {
     return isZh
@@ -89,7 +108,7 @@ const filmLibrary = [
   { file: "龙湖银泰.mp4", title: "龙湖银泰", titleEn: "Longfor Yintai" },
 ].map((film) => ({
   ...film,
-  src: encodeURI(`./film/${film.file}`),
+  src: `./${encodePathSegments("film", film.file)}`,
 }));
 
 (() => {

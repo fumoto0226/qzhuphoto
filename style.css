@@ -109,6 +109,12 @@ body.unlock-scroll .viewport {
   line-height: 1.1;
 }
 
+body.lang-zh .title-text {
+  letter-spacing: 0.08em;
+  font-size: 26px;
+  font-weight: 560;
+}
+
 /* 黑色标题：在白色区域，z-index 在遮罩下面 */
 .title-black {
   position: absolute;

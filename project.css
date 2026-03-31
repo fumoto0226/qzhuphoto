@@ -59,7 +59,7 @@ body {
 .main-image-container {
   flex: 1;
   display: block;               /* 使用普通块级容器，避免 flex 布局导致轨道水平居中计算异常 */
-  padding: 80px 40px 40px;      /* 上边距80px，避开标题区域 */
+  padding: 80px 40px 100px;     /* 给底部缩略图条留足空间，避免主图被遮住 */
   overflow: hidden;
   position: relative;           /* 为左右箭头提供定位参考 */
 }
@@ -80,6 +80,7 @@ body {
   justify-content: center;
   padding: 0 40px;              /* 每张大图左右各留 15px，图与图之间总共 30px 间距 */
   box-sizing: border-box;
+  position: relative;
 }
 
 .main-image {
@@ -92,6 +93,32 @@ body {
   user-select: none;
   -webkit-user-drag: none;
   -webkit-user-select: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.carousel-item.is-ready .main-image {
+  opacity: 1;
+}
+
+.image-status {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(17, 17, 17, 0.48);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.carousel-item.is-loading .image-status,
+.carousel-item.is-error .image-status {
+  opacity: 1;
 }
 
 /* 底部缩略图滚动条 */
@@ -266,11 +293,15 @@ body {
   }
 
   .main-image-container {
-    padding: 120px 0 130px;     /* 移动端：为第二行标题留出空间，左右去掉 padding 让图片铺满 */
+    padding: 120px 0 150px;     /* 移动端额外给底部缩略图与系统栏留出空间 */
   }
   
   .carousel-item {
     padding: 0 15px;            /* 移动端：减少左右间距，让图片更宽 */
+  }
+
+  .main-image {
+    max-height: 100%;
   }
 
   .thumbnail-strip {

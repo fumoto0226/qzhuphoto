@@ -78,11 +78,8 @@ FIELD_TRIP_MATCH_OVERRIDES = {
 }
 
 IMAGE_COVER_OVERRIDES = {
-    ("", "曾孝濂美术馆"): "_DSF4231.webp",
     ("", "美国西部"): "roadtripCBCO.webp",
     ("", "淀山湖渔村"): "_DSF1172.webp",
-    ("", "柏林德国国会大厦"): "DSC02331.webp",
-    ("", "柏林犹太人博物馆"): "DSC01693.webp",
 }
 
 PROJECT_DISPLAY_OVERRIDES = {
@@ -134,6 +131,9 @@ PROJECT_DISPLAY_OVERRIDES = {
     ("ACZ + 猜一建筑", "下水那天 THE LAUNCH"): {
         "coordinates": [121.55572, 31.27361],
     },
+    ("谢杰建筑事务所", "小公园"): {
+        "coordinates": [121.5128, 31.3031],
+    },
 }
 
 LOCATION_OVERRIDES = {
@@ -161,6 +161,8 @@ FIELD_TRIP_LOCATION_TRANSLATIONS = {
     "Innsbruck, Austria": ("因斯布鲁克", "Innsbruck", [11.4041, 47.2692]),
     "The Hague, The Netherlands": ("海牙", "The Hague", [4.3007, 52.0705]),
 }
+
+FIELD_TRIP_CLIENT_OVERRIDES = {}
 
 LOCATION_METADATA = {
     "上海": {"locationEn": "Shanghai", "coordinates": [121.469102, 31.232344]},
@@ -284,6 +286,11 @@ ADDRESS_KEYWORD_COORDINATES = [
     {
         "keywords": ["元江路3883", "703媒体园区", "剑川路940", "电气文通"],
         "coordinates": [121.398474, 31.020366],
+        "precision": "estimated",
+    },
+    {
+        "keywords": ["上海 运光路", "运光路小公园"],
+        "coordinates": [121.5128, 31.3031],
         "precision": "estimated",
     },
     {
@@ -671,7 +678,7 @@ def geocode_address(raw_address: str, fallback_coordinates: list[float]) -> tupl
     best_coordinates: list[float] | None = None
 
     if not MAPBOX_ACCESS_TOKEN:
-        return None, "estimated"
+        return fallback_coordinates, "estimated"
 
     for query in queries:
         if not query or query in seen_queries:
@@ -725,12 +732,17 @@ def list_images(folder: ProgramFolder) -> tuple[str, list[str]]:
     if not image_names:
         raise RuntimeError(f"No images found in {folder.path}")
 
-    override_cover = IMAGE_COVER_OVERRIDES.get(folder.key)
-    if override_cover in image_names:
-        cover = override_cover
+    explicit_cover = next((name for name in image_names if Path(name).stem.lower() == "cover"), None)
+    if explicit_cover:
+        cover = explicit_cover
+        ordered_images = [name for name in image_names if name != explicit_cover]
     else:
-        cover = next((name for name in image_names if Path(name).stem.lower() == "cover"), image_names[0])
-    ordered_images = [cover] + [name for name in image_names if name != cover]
+        override_cover = IMAGE_COVER_OVERRIDES.get(folder.key)
+        if override_cover in image_names:
+            cover = override_cover
+        else:
+            cover = image_names[0]
+        ordered_images = [cover] + [name for name in image_names if name != cover]
     return cover, ordered_images
 
 
@@ -780,13 +792,18 @@ def build_project_entry(
     if "coordinates" in display_override:
         coordinate_precision = "detailed"
 
+    if is_field_trip:
+        designer, designer_en = FIELD_TRIP_CLIENT_OVERRIDES.get(title, ("(习作)", "(Field Trip)"))
+    else:
+        designer, designer_en = row.get("D", folder.client), row.get("E", folder.client)
+
     return {
         "id": index,
         "year": excel_serial_to_year(row.get("B" if is_field_trip else "C", "")),
         "title": title,
         "titleEn": title_en,
-        "designer": "" if is_field_trip else row.get("D", folder.client),
-        "designerEn": "" if is_field_trip else row.get("E", folder.client),
+        "designer": designer,
+        "designerEn": designer_en,
         "folder": folder.folder_path,
         "assetBase": folder.asset_base,
         "cover": cover,

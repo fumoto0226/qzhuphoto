@@ -491,6 +491,7 @@ body.is-desktop .scroll-arrow {
   z-index: 5;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
 }
 
 .preview-view-all-btn:hover {
@@ -608,6 +609,15 @@ body.is-desktop .scroll-arrow {
 
 .project-list-table tbody tr:hover {
   background-color: #f2f2f2;
+}
+
+.project-list-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-list-link:hover {
+  text-decoration: underline;
 }
 
 #project-list-body tr:first-child td {
@@ -895,6 +905,7 @@ body.is-desktop .scroll-arrow {
   cursor: pointer;
   display: none; /* 默认隐藏，手机端再打开 */
   z-index: 5;
+  text-decoration: none;
 }
 
 .image-card-view-all:hover {
@@ -943,6 +954,14 @@ body.is-desktop .scroll-arrow {
 .image-card:hover .image-card-overlay,
 .image-card.active .image-card-overlay {
   opacity: 1;
+}
+
+.noscript-seo {
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 0 20px;
+  color: #111111;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #map {

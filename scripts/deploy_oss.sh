@@ -7,6 +7,13 @@ OSS_BUCKET="${OSS_BUCKET:-}"
 OSS_PREFIX="${OSS_PREFIX:-}"
 OSS_DEST="oss://${OSS_BUCKET}"
 
+if command -v node >/dev/null 2>&1; then
+  echo "Generating SEO assets"
+  node "${ROOT_DIR}/scripts/generate_seo_assets.js"
+else
+  echo "Skipping SEO asset generation because node is not installed."
+fi
+
 if [[ -n "${OSS_PREFIX}" ]]; then
   OSS_DEST="${OSS_DEST%/}/${OSS_PREFIX#/}"
 fi

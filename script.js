@@ -35,6 +35,16 @@ function buildProjectCardImagePath(project, imageName = project.cover) {
   )}`;
 }
 
+function buildProjectDetailUrl(projectId, from, category = 'all') {
+  const params = new URLSearchParams();
+  params.set('id', String(projectId));
+  if (from) params.set('from', from);
+  if (category && category !== 'all') {
+    params.set('category', category);
+  }
+  return `project.html?${params.toString()}`;
+}
+
 const PROJECTS_VIEW_STATE_KEY = "indexProjectsViewState";
 
 function readProjectsViewState() {
@@ -1222,6 +1232,13 @@ const filmLibrary = [
     const isZh = document.body.classList.contains('lang-zh');
     const displayTitle = isZh ? project.title : project.titleEn;
     const displayDescription = getProjectMetaText(project, isZh);
+    const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
+    const previewProjectUrl = buildProjectDetailUrl(project.id, 'indexPreview', category);
+
+    if (previewViewAllBtn) {
+      previewViewAllBtn.dataset.projectId = String(project.id);
+      previewViewAllBtn.href = previewProjectUrl;
+    }
 
     // 先预加载图片，加载完成后再切换，避免闪白
     const img = new Image();
@@ -1229,7 +1246,6 @@ const filmLibrary = [
       if (previewImage) previewImage.src = getProjectCover(project);
       if (previewTitle) previewTitle.textContent = displayTitle;
       if (previewDescription) previewDescription.textContent = displayDescription;
-      if (previewViewAllBtn) previewViewAllBtn.dataset.projectId = String(project.id);
     };
     img.src = getProjectCover(project);
 
@@ -1294,8 +1310,9 @@ const filmLibrary = [
       writeProjectsViewState({ previewProjectId: projectId });
     }
 
-    const url = `project.html?from=indexPreview&category=${encodeURIComponent(category)}` +
-      (projectId != null ? `&id=${encodeURIComponent(projectId)}` : '');
+    const url = projectId != null
+      ? buildProjectDetailUrl(projectId, 'indexPreview', category)
+      : `project.html?from=indexPreview`;
 
     window.location.href = url;
   }
@@ -1386,6 +1403,7 @@ const filmLibrary = [
   // 预览图右上角 “View All” 按钮：跳转到当前选中项目的作品页
   if (previewViewAllBtn) {
     previewViewAllBtn.addEventListener('click', (event) => {
+      event.preventDefault();
       event.stopPropagation();
       navigateToPreviewProject();
     });
@@ -1436,9 +1454,10 @@ const filmLibrary = [
       const card = document.createElement('div');
       card.className = 'image-card';
       const viewAllText = isZh ? '查看全部' : 'View All';
+      const viewAllUrl = buildProjectDetailUrl(project.id, 'indexImagesViewAll', category);
       card.innerHTML = `
         <img src="${cardSrc}" alt="${displayTitle}" loading="lazy" decoding="async" fetchpriority="low" />
-        <button class="image-card-view-all" type="button" data-en="View All" data-zh="查看全部">${viewAllText}</button>
+        <a class="image-card-view-all" href="${viewAllUrl}" data-en="View All" data-zh="查看全部">${viewAllText}</a>
         <div class="image-card-overlay">
           <h3>${displayTitle}</h3>
           <p>${displayDescription}</p>
@@ -1493,15 +1512,14 @@ const filmLibrary = [
       // 右上角 "View All" 按钮：无论手机还是桌面，直接进入对应作品页
       if (viewAllBtn) {
         viewAllBtn.addEventListener('click', (event) => {
+          event.preventDefault();
           event.stopPropagation(); // 不触发卡片自身的点击逻辑
           writeProjectsViewState({
             view: 'images',
             imagesScrollTop: imagesGrid ? imagesGrid.scrollTop : 0,
             previewProjectId: project.id,
           });
-          const category = window.getCurrentCategory ? window.getCurrentCategory() : 'all';
-          const url = `project.html?id=${project.id}&from=indexImagesViewAll&category=${encodeURIComponent(category)}`;
-          window.location.href = url;
+          window.location.href = viewAllBtn.href;
         });
       }
 
@@ -1663,8 +1681,8 @@ const filmLibrary = [
     } else if (hash === '#projects-section') {
       showMap();
     } else {
-      // 正常进入首页，默认显示 Map
-      showMap();
+      // 正常进入首页，默认显示 List
+      showList();
     }
   }
   

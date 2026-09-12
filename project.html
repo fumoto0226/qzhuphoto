@@ -1,9 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title">Loading...</title>
+  <title id="page-title">Project | QingYan Studio 清言筑语</title>
+  <meta
+    id="meta-description"
+    name="description"
+    content="Architectural photography project by QingYan Studio 清言筑语."
+  >
+  <meta
+    name="keywords"
+    content="清言筑语, QingYan Studio, 朱清言, Qingyan Zhu, 建筑摄影, architectural photography"
+  >
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link id="canonical-link" rel="canonical" href="https://qingyan.studio/project.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="QingYan Studio 清言筑语">
+  <meta id="og-title" property="og:title" content="Project | QingYan Studio 清言筑语">
+  <meta id="og-description" property="og:description" content="Architectural photography project by QingYan Studio 清言筑语.">
+  <meta id="og-url" property="og:url" content="https://qingyan.studio/project.html">
+  <meta id="og-image" property="og:image" content="https://qingyan.studio/img/QingyanZhu.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta id="twitter-title" name="twitter:title" content="Project | QingYan Studio 清言筑语">
+  <meta id="twitter-description" name="twitter:description" content="Architectural photography project by QingYan Studio 清言筑语.">
+  <meta id="twitter-image" name="twitter:image" content="https://qingyan.studio/img/QingyanZhu.webp">
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var projectId = params.get('id');
+      if (!projectId) return;
+      var canonicalUrl = 'https://qingyan.studio/project.html?id=' + encodeURIComponent(projectId);
+      var canonicalLink = document.getElementById('canonical-link');
+      var ogUrl = document.getElementById('og-url');
+      if (canonicalLink) canonicalLink.setAttribute('href', canonicalUrl);
+      if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+    })();
+  </script>
+  <script type="application/ld+json" id="structured-data">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Project | QingYan Studio 清言筑语",
+      "url": "https://qingyan.studio/project.html",
+      "description": "Architectural photography project by QingYan Studio 清言筑语."
+    }
+  </script>
   <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
   <link rel="stylesheet" href="./project.css" />
 </head>

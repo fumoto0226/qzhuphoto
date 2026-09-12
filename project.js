@@ -1,4 +1,6 @@
 (() => {
+  const SITE_URL = 'https://qingyan.studio';
+
   // 从 URL 获取项目 ID
   const params = new URLSearchParams(window.location.search);
   const projectId = params.get('id') ? parseInt(params.get('id'), 10) : null;
@@ -39,6 +41,56 @@
     return lang === 'zh' ? `（委托方：${client}）` : `（Client: ${client}）`;
   }
 
+  function toAbsoluteSiteUrl(relativePath) {
+    return new URL(relativePath.replace(/^\.\//, ''), `${SITE_URL}/`).href;
+  }
+
+  function setMetaContent(id, value) {
+    const element = document.getElementById(id);
+    if (element && value) {
+      element.setAttribute('content', value);
+    }
+  }
+
+  function setLinkHref(id, value) {
+    const element = document.getElementById(id);
+    if (element && value) {
+      element.setAttribute('href', value);
+    }
+  }
+
+  function getProjectSeoTitle(projectData, lang) {
+    const title = lang === 'zh' ? projectData.title : projectData.titleEn;
+    const alternateTitle = lang === 'zh' ? projectData.titleEn : projectData.title;
+    return `${title}${alternateTitle ? ` | ${alternateTitle}` : ''} | QingYan Studio 清言筑语`;
+  }
+
+  function getProjectSeoDescription(projectData, lang) {
+    const title = lang === 'zh' ? projectData.title : projectData.titleEn;
+    const client = lang === 'zh'
+      ? (projectData.designer || projectData.designerEn || '')
+      : (projectData.designerEn || projectData.designer || '');
+    const location = lang === 'zh'
+      ? (projectData.location || projectData.locationEn || '')
+      : (projectData.locationEn || projectData.location || '');
+    const year = projectData.year ? String(projectData.year) : '';
+    const suffix = [];
+
+    if (client) suffix.push(lang === 'zh' ? `委托方：${client}` : `Client: ${client}`);
+    if (location) suffix.push(lang === 'zh' ? `地点：${location}` : `Location: ${location}`);
+    if (year) suffix.push(lang === 'zh' ? `拍摄年份：${year}` : `Photographed in ${year}`);
+
+    if (lang === 'zh') {
+      return suffix.length > 0
+        ? `${title}，由 QingYan Studio 清言筑语拍摄。${suffix.join('。')}。`
+        : `${title}，由 QingYan Studio 清言筑语拍摄。`;
+    }
+
+    return suffix.length > 0
+      ? `${title} is an architectural photography project by QingYan Studio 清言筑语. ${suffix.join('. ')}.`
+      : `${title} is an architectural photography project by QingYan Studio 清言筑语.`;
+  }
+
   // 构建图片路径数组（对路径进行 URL 编码以支持中文和空格）
   const images = project.images.map((img) =>
     `./${encodePathSegments('img', getProjectAssetBase(project), project.folder, img)}`
@@ -74,9 +126,40 @@
   function updateProjectTitle() {
     const title = currentLang === 'zh' ? project.title : project.titleEn;
     const designerInfo = getProjectMetaSuffix(project, currentLang);
+    const seoTitle = getProjectSeoTitle(project, currentLang);
+    const seoDescription = getProjectSeoDescription(project, currentLang);
+    const canonicalUrl = `${SITE_URL}/project.html?id=${encodeURIComponent(project.id)}`;
+    const socialImage = images[0] ? toAbsoluteSiteUrl(images[0]) : 'https://qingyan.studio/img/QingyanZhu.webp';
 
-    document.getElementById('page-title').textContent = title;
+    document.title = seoTitle;
+    document.getElementById('page-title').textContent = seoTitle;
     document.getElementById('project-title').textContent = title + designerInfo;
+    setMetaContent('meta-description', seoDescription);
+    setMetaContent('og-title', seoTitle);
+    setMetaContent('og-description', seoDescription);
+    setMetaContent('og-url', canonicalUrl);
+    setMetaContent('og-image', socialImage);
+    setMetaContent('twitter-title', seoTitle);
+    setMetaContent('twitter-description', seoDescription);
+    setMetaContent('twitter-image', socialImage);
+    setLinkHref('canonical-link', canonicalUrl);
+
+    const structuredDataElement = document.getElementById('structured-data');
+    if (structuredDataElement) {
+      structuredDataElement.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: seoTitle,
+        url: canonicalUrl,
+        description: seoDescription,
+        isPartOf: {
+          '@type': 'WebSite',
+          name: 'QingYan Studio 清言筑语',
+          url: `${SITE_URL}/`,
+        },
+        primaryImageOfPage: socialImage,
+      });
+    }
   }
   
   updateProjectTitle();

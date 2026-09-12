@@ -681,55 +681,6 @@ const projectsData = [
   },
   {
     "id": 16,
-    "year": 2025,
-    "title": "中化大厦",
-    "titleEn": "Sinochem Headquarters",
-    "designer": "SOM",
-    "designerEn": "SOM",
-    "folder": "SOM/中化",
-    "assetBase": "programs",
-    "cover": "cover.webp",
-    "address": "河北 雄安",
-    "location": "雄安",
-    "locationEn": "Xiong'an",
-    "coordinates": [
-      115.973611,
-      38.994444
-    ],
-    "coordinatePrecision": "estimated",
-    "mapOnly": false,
-    "categories": [
-      "architecture",
-      "workspace"
-    ],
-    "images": [
-      "sinochem01.webp",
-      "sinochem02.webp",
-      "sinochem03.webp",
-      "sinochem04.webp",
-      "sinochem05.webp",
-      "sinochem06.webp",
-      "sinochem07.webp",
-      "sinochem08.webp",
-      "sinochem09.webp",
-      "sinochem10.webp",
-      "sinochem11.webp",
-      "sinochem12.webp",
-      "sinochem13.webp",
-      "sinochem14.webp",
-      "sinochem15.webp",
-      "sinochem16.webp",
-      "sinochem17.webp",
-      "sinochem18.webp",
-      "sinochem19.webp",
-      "sinochem20.webp",
-      "sinochem21.webp",
-      "sinochem22.webp",
-      "sinochem23.webp"
-    ]
-  },
-  {
-    "id": 17,
     "year": 2023,
     "title": "望朝中心",
     "titleEn": "Wangchao Center",
@@ -795,7 +746,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 18,
+    "id": 17,
     "year": 2024,
     "title": "Top芯联科技办公园",
     "titleEn": "Xinlian Tech Office Park",
@@ -840,7 +791,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 19,
+    "id": 18,
     "year": 2024,
     "title": "光源",
     "titleEn": "HEPS",
@@ -877,7 +828,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 20,
+    "id": 19,
     "year": 2024,
     "title": "英诺赛科",
     "titleEn": "Innoscience",
@@ -912,7 +863,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 21,
+    "id": 20,
     "year": 2024,
     "title": "南京竹蜻蜓儿童友好街区",
     "titleEn": "Nanjing Zhuxin Road Renovation",
@@ -954,7 +905,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 22,
+    "id": 21,
     "year": 2020,
     "title": "浙江亚麻博物馆",
     "titleEn": "The Linen Gallery",
@@ -993,7 +944,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 23,
+    "id": 22,
     "year": 2023,
     "title": "上海继电器厂改造",
     "titleEn": "Renovation of Shanghai Relay Factory",
@@ -1065,7 +1016,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 24,
+    "id": 23,
     "year": 2021,
     "title": "上海西岸办公楼改造",
     "titleEn": "Office Renovation on Shanghai West Bund",
@@ -1124,7 +1075,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 25,
+    "id": 24,
     "year": 2020,
     "title": "建筑师住宅",
     "titleEn": "Architect Residence",
@@ -1169,7 +1120,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 26,
+    "id": 25,
     "year": 2023,
     "title": "扭转塔和螺旋站",
     "titleEn": "Twisting Tower and Spiral Station",
@@ -1227,7 +1178,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 27,
+    "id": 26,
     "year": 2022,
     "title": "浦东红窑改造设计",
     "titleEn": "Renovation of a Hoffmann Kiln",
@@ -1281,7 +1232,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 28,
+    "id": 27,
     "year": 2024,
     "title": "海岸生态驿站",
     "titleEn": "Ecological Pavilions by the Sea",
@@ -1349,7 +1300,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 29,
+    "id": 28,
     "year": 2023,
     "title": "红砖概念图书馆",
     "titleEn": "Twisted Brick Shell Concept Library",
@@ -1400,7 +1351,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 30,
+    "id": 29,
     "year": 2021,
     "title": "航天产业园书吧",
     "titleEn": "Coffee and Reading Space in Warehouse Renovation",
@@ -1439,7 +1390,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 31,
+    "id": 30,
     "year": 2024,
     "title": "资产管理公司办公室",
     "titleEn": "Asset Management Company Office",
@@ -1484,7 +1435,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 32,
+    "id": 31,
     "year": 2025,
     "title": "重景环：罗浮山绿屏石滩驿站",
     "titleEn": "Resting Loop with Views",
@@ -1534,7 +1485,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 33,
+    "id": 32,
     "year": 2022,
     "title": "陆家嘴金融办公室",
     "titleEn": "Quant-tech Office",
@@ -1573,7 +1524,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 34,
+    "id": 33,
     "year": 2024,
     "title": "保利C+国际博览中心",
     "titleEn": "Poly C+ International Expo Center",
@@ -1619,7 +1570,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 35,
+    "id": 34,
     "year": 2023,
     "title": "上海易成办公室",
     "titleEn": "Transaction Succeed Office",
@@ -1658,7 +1609,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 36,
+    "id": 35,
     "year": 2023,
     "title": "天空人上海长宁来福士店",
     "titleEn": "SKYPEOPLE Changning Raffles City",
@@ -1692,7 +1643,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 37,
+    "id": 36,
     "year": 2023,
     "title": "天空人北京三里屯店",
     "titleEn": "SKYPEOPLE Sanlitun",
@@ -1727,7 +1678,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 38,
+    "id": 37,
     "year": 2023,
     "title": "天空人北京国贸店",
     "titleEn": "SKYPEOPLE China World Mall",
@@ -1762,7 +1713,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 39,
+    "id": 38,
     "year": 2020,
     "title": "元祖梦世界",
     "titleEn": "Ganzo Dream World",
@@ -1795,7 +1746,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 40,
+    "id": 39,
     "year": 2021,
     "title": "一室亦园",
     "titleEn": "One Room One Garden",
@@ -1830,7 +1781,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 41,
+    "id": 40,
     "year": 2022,
     "title": "肉仙来",
     "titleEn": "Rou Xian Lai",
@@ -1861,7 +1812,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 42,
+    "id": 41,
     "year": 2022,
     "title": "新华路私宅",
     "titleEn": "Private Residence",
@@ -1902,7 +1853,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 43,
+    "id": 42,
     "year": 2024,
     "title": "上海信托办公室",
     "titleEn": "Shanghai Trust",
@@ -1939,7 +1890,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 44,
+    "id": 43,
     "year": 2025,
     "title": "公牛总部园区",
     "titleEn": "Goneo HQ Campus",
@@ -2023,7 +1974,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 45,
+    "id": 44,
     "year": 2024,
     "title": "本真设计办公室",
     "titleEn": "BNJN Office",
@@ -2059,7 +2010,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 46,
+    "id": 45,
     "year": 2022,
     "title": "轩尼诗中国总部",
     "titleEn": "Moët Hennessy Diageo HQ",
@@ -2100,7 +2051,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 47,
+    "id": 46,
     "year": 2022,
     "title": "雅戈尔上海办公室",
     "titleEn": "Yongor Shanghi Office",
@@ -2137,7 +2088,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 48,
+    "id": 47,
     "year": 2021,
     "title": "鸿商集团总部",
     "titleEn": "CFC",
@@ -2196,7 +2147,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 49,
+    "id": 48,
     "year": 2024,
     "title": "舜山万怡酒店",
     "titleEn": "Marriott Courtyard Shunshan",
@@ -2236,7 +2187,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 50,
+    "id": 49,
     "year": 2024,
     "title": "MAX科技园",
     "titleEn": "MAX Science Park",
@@ -2277,7 +2228,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 51,
+    "id": 50,
     "year": 2025,
     "title": "常州天安会",
     "titleEn": "Tian An Clubhouse Changzhou",
@@ -2340,7 +2291,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 52,
+    "id": 51,
     "year": 2022,
     "title": "成都太古里极氪中心",
     "titleEn": "Zeekr Center · Taikoo Li",
@@ -2381,7 +2332,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 53,
+    "id": 52,
     "year": 2023,
     "title": "数字江海招商展示中心",
     "titleEn": "International Digital Sea Investment & Exhibition Center",
@@ -2423,7 +2374,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 54,
+    "id": 53,
     "year": 2025,
     "title": "深圳总部小米之家",
     "titleEn": "Mi Home Shenzhen HQ",
@@ -2466,7 +2417,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 55,
+    "id": 54,
     "year": 2024,
     "title": "复旦附中徐汇分校",
     "titleEn": "High School Affiliated to Fudan University, Xuhui Campus",
@@ -2502,7 +2453,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 56,
+    "id": 55,
     "year": 2025,
     "title": "科学城中心",
     "titleEn": "Science City Center",
@@ -2538,7 +2489,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 57,
+    "id": 56,
     "year": 2022,
     "title": "上海均匀设计",
     "titleEn": "Junuy Design Office",
@@ -2573,7 +2524,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 58,
+    "id": 57,
     "year": 2021,
     "title": "北京广渠门光禾作用",
     "titleEn": "Convenience Store in Beijing",
@@ -2608,7 +2559,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 59,
+    "id": 58,
     "year": 2023,
     "title": "彭宅",
     "titleEn": "Peng's House",
@@ -2663,7 +2614,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 60,
+    "id": 59,
     "year": 2021,
     "title": "大零号湾行政服务中心",
     "titleEn": "Neobay Administrative Service Center",
@@ -2700,7 +2651,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 61,
+    "id": 60,
     "year": 2021,
     "title": "安吉私宅",
     "titleEn": "Private Residence in Anji",
@@ -2737,7 +2688,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 62,
+    "id": 61,
     "year": 2023,
     "title": "宝莉斑马小学",
     "titleEn": "Pony Elementary School",
@@ -2780,7 +2731,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 63,
+    "id": 62,
     "year": 2022,
     "title": "心蒙幼儿园",
     "titleEn": "Xinmeng Kindergarten",
@@ -2824,7 +2775,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 64,
+    "id": 63,
     "year": 2022,
     "title": "教师发展中心与人才公寓",
     "titleEn": "Teacher Development Center and Talent Apartment",
@@ -2860,7 +2811,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 65,
+    "id": 64,
     "year": 2022,
     "title": "汕头幼儿师范高等专科学校",
     "titleEn": "Campus by the Sea",
@@ -2910,7 +2861,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 66,
+    "id": 65,
     "year": 2025,
     "title": "田野聚落",
     "titleEn": "Pastoral Hub",
@@ -2950,7 +2901,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 67,
+    "id": 66,
     "year": 2023,
     "title": "晋城铺头小学",
     "titleEn": "Jingcheng Putou Elementary School",
@@ -2989,7 +2940,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 68,
+    "id": 67,
     "year": 2023,
     "title": "青咖墨茶",
     "titleEn": "MO Coffee",
@@ -3029,7 +2980,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 69,
+    "id": 68,
     "year": 2022,
     "title": "南京江北虹悦城",
     "titleEn": "Nanjing Jiangbei Hongyue City",
@@ -3065,7 +3016,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 70,
+    "id": 69,
     "year": 2022,
     "title": "南昌万象城",
     "titleEn": "MixC Nanchang",
@@ -3108,7 +3059,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 71,
+    "id": 70,
     "year": 2024,
     "title": "郑州龙湖金融岛/银泰inPARK",
     "titleEn": "Longhu Financial Island / Yintai InPARK",
@@ -3153,7 +3104,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 72,
+    "id": 71,
     "year": 2022,
     "title": "天物力场",
     "titleEn": "Tianwu Space",
@@ -3188,7 +3139,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 73,
+    "id": 72,
     "year": 2025,
     "title": "运光路小公园",
     "titleEn": "Community Park Renovation",
@@ -3234,7 +3185,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 74,
+    "id": 73,
     "year": 2024,
     "title": "徐汇区档案馆新馆",
     "titleEn": "Xuhui New Archives Center",
@@ -3276,7 +3227,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 75,
+    "id": 74,
     "year": 2024,
     "title": "网易西岸研发中心",
     "titleEn": "NetEase Shanghai West Bund Research and Development Center",
@@ -3314,7 +3265,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 76,
+    "id": 75,
     "year": 2023,
     "title": "上海赛艇公开赛· 海泰展亭",
     "titleEn": "The Eddy Pavilion",
@@ -3351,7 +3302,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 77,
+    "id": 76,
     "year": 2015,
     "title": "墨西哥景观",
     "titleEn": "Mexican Views",
@@ -3386,7 +3337,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 78,
+    "id": 77,
     "year": 2016,
     "title": "The Grand Calumet River",
     "titleEn": "The Grand Calumet River",
@@ -3422,7 +3373,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 79,
+    "id": 78,
     "year": 2023,
     "title": "CopenHill",
     "titleEn": "CopenHill",
@@ -3453,7 +3404,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 80,
+    "id": 79,
     "year": 2022,
     "title": "Hungerburg缆车站",
     "titleEn": "Hungerburgbahn",
@@ -3485,7 +3436,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 81,
+    "id": 80,
     "year": 2025,
     "title": "大吉酒店茶室",
     "titleEn": "Daji Resort Teahouse",
@@ -3519,7 +3470,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 82,
+    "id": 81,
     "year": 2025,
     "title": "方塔园",
     "titleEn": "Fangta Garden",
@@ -3561,7 +3512,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 83,
+    "id": 82,
     "year": 2026,
     "title": "曾孝濂美术馆",
     "titleEn": "Zeng Xiaolian Museum of Art",
@@ -3610,7 +3561,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 84,
+    "id": 83,
     "year": 2022,
     "title": "索尼中心",
     "titleEn": "The Center Potsdamer Platz (The Sony Center)",
@@ -3641,7 +3592,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 85,
+    "id": 84,
     "year": 2022,
     "title": "新德国国会大厦",
     "titleEn": "Reichstag Building",
@@ -3678,7 +3629,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 86,
+    "id": 85,
     "year": 2022,
     "title": "柏林犹太博物馆",
     "titleEn": "Berlin Jewish Museum",
@@ -3713,7 +3664,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 87,
+    "id": 86,
     "year": 2023,
     "title": "海牙市立博物馆",
     "titleEn": "Hague Municipal Museum",
@@ -3744,7 +3695,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 88,
+    "id": 87,
     "year": 2026,
     "title": "淀山湖渔村",
     "titleEn": "Fishing Village of Dianshan Lake",
@@ -3782,7 +3733,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 89,
+    "id": 88,
     "year": 2016,
     "title": "美国西部景观",
     "titleEn": "Views of the American West",
@@ -3820,7 +3771,7 @@ const projectsData = [
     ]
   },
   {
-    "id": 90,
+    "id": 89,
     "year": 2023,
     "title": "城市山谷",
     "titleEn": "Valley",

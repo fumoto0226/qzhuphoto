@@ -15,6 +15,10 @@ function buildProjectImagePath(project, imageName = project.cover) {
   return encodeURI(`./img/${getProjectAssetBase(project)}/${project.folder}/${imageName}`);
 }
 
+function buildProjectPageUrl(projectId) {
+  return `./project.html?id=${encodeURIComponent(projectId)}&from=fullList`;
+}
+
 const listProjects = projectsData
   .filter((project) => !project.mapOnly)
   .map((project) => ({
@@ -45,7 +49,7 @@ function renderRows() {
 
     tr.innerHTML = `
       <td class="col-year">${project.year}</td>
-      <td class="col-title">${project.titleEn}</td>
+      <td class="col-title"><a class="project-list-link" href="${buildProjectPageUrl(project.id)}">${project.titleEn}</a></td>
       <td class="col-designer">${project.designerEn}</td>
       <td class="col-location">${project.locationEn || project.location}</td>
     `;
@@ -61,7 +65,7 @@ function renderRows() {
     });
 
     tr.addEventListener("click", () => {
-      window.location.href = `project.html?id=${project.id}&from=fullList`;
+      window.location.href = buildProjectPageUrl(project.id);
     });
 
     tbody.appendChild(tr);

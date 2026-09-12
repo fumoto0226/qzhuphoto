@@ -164,6 +164,11 @@ FIELD_TRIP_LOCATION_TRANSLATIONS = {
 
 FIELD_TRIP_CLIENT_OVERRIDES = {}
 
+# 临时隐藏项目：需要恢复时直接从这里移除即可
+TEMP_HIDDEN_PROJECT_KEYS = {
+    ("SOM", "中化"),
+}
+
 LOCATION_METADATA = {
     "上海": {"locationEn": "Shanghai", "coordinates": [121.469102, 31.232344]},
     "南京": {"locationEn": "Nanjing", "coordinates": [118.796877, 32.060255]},
@@ -754,6 +759,10 @@ def is_video_only(row: dict[str, str]) -> bool:
     return "仅视频" in row.get("B", "") or "仅视频" in row.get("K", "")
 
 
+def is_temporarily_hidden(folder: ProgramFolder) -> bool:
+    return folder.key in TEMP_HIDDEN_PROJECT_KEYS
+
+
 def build_project_entry(
     index: int,
     folder: ProgramFolder,
@@ -843,6 +852,8 @@ def main() -> None:
     projects: list[dict[str, object]] = []
     next_id = 0
     for folder in folders:
+        if is_temporarily_hidden(folder):
+            continue
         row = match_folder_to_row(folder, project_rows, rows_by_client)
         if is_video_only(row) or is_map_only(row):
             continue
